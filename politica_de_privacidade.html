@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Política de Privacidade — CasaSync</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-slate-900 text-white shadow-md sticky top-0 z-30">
+    <div class="max-w-4xl mx-auto px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center text-slate-950 font-bold text-base shadow-xs">
+          CS
+        </div>
+        <div>
+          <span class="font-bold text-base tracking-tight">CasaSync</span>
+          <span class="ml-2 text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Documento Oficial</span>
+          <p class="text-xs text-slate-400">Política de Privacidade Pública & Conformidade Google OAuth 2.0 / LGPD</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btnDownloadPrivacyHtml" type="button" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow-xs">
+          ⬇️ Baixar Arquivo (politica-de-privacidade.html)
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-8">
+    <article class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm space-y-6">
+
+      <div class="border-b border-slate-100 pb-6 space-y-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold">
+          <span>🔒 Política de Privacidade Pública</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Política de Privacidade do CasaSync</h1>
+        <p class="text-xs sm:text-sm text-slate-500">
+          <strong>Última atualização:</strong> 14 de outubro de 2026 • <strong>Aplicativo:</strong> CasaSync — Gestão Completa da Casa e Rotina
+        </p>
+      </div>
+
+      <!-- 1. Introdução -->
+      <section class="space-y-2">
+        <h2 class="text-lg font-bold text-slate-900">1. Visão Geral e Compromisso com a Privacidade</h2>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          O <strong>CasaSync</strong> é uma aplicação web progressiva voltada à organização doméstica e pessoal (incluindo agenda diária, controle de hábitos, lista de compras de rotina, tarefas domésticas, planilha de gastos, acompanhamento de aquisições e controle de despensa). Esta Política de Privacidade descreve de forma transparente como tratamos, armazenamos e protegemos os dados dos usuários que acessam o aplicativo no Windows, Linux e Android.
+        </p>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          O CasaSync foi projetado sob a arquitetura <strong>"Zero-Server / Client-Side First"</strong>: nós <strong>não possuímos servidores intermediários de banco de dados</strong> para coletar ou explorar suas informações pessoais. Todos os dados que você registra pertencem exclusivamente a você e ficam salvos apenas no navegador do seu dispositivo (<code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">localStorage</code>) e, quando autorizado por você, diretamente na sua própria conta do <strong>Google Drive</strong>.
+        </p>
+      </section>
+
+      <!-- 2. Dados Coletados via Google OAuth 2.0 -->
+      <section class="space-y-3">
+        <h2 class="text-lg font-bold text-slate-900">2. Dados Acessados por Meio da Conta Google (Google OAuth 2.0)</h2>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          Quando você opta por clicar em <strong>"Entrar com conta Google"</strong>, o CasaSync solicita permissão por meio da tela oficial de consentimento do Google OAuth 2.0 exclusivamente para os seguintes escopos restritos:
+        </p>
+        <ul class="list-disc pl-5 space-y-2 text-sm text-slate-600">
+          <li>
+            <strong>Identificação básica do perfil (<code class="bg-slate-100 px-1 rounded text-xs">userinfo.email</code> e <code class="bg-slate-100 px-1 rounded text-xs">userinfo.profile</code>):</strong> utilizado apenas para exibir seu nome e endereço de e-mail no topo do aplicativo e isolar localmente os seus registros caso mais de uma pessoa utilize o mesmo computador ou celular.
+          </li>
+          <li>
+            <strong>Acesso restrito a arquivos criados pelo próprio aplicativo no Google Drive (<code class="bg-slate-100 px-1 rounded text-xs">https://www.googleapis.com/auth/drive.file</code>):</strong> utilizado exclusivamente para criar a pasta dedicada <code class="bg-slate-100 px-1 rounded text-xs">CasaSync_Backups</code> no seu Google Drive e gravar/sincronizar os seus arquivos de backup estruturados em formato JSON (<code class="bg-slate-100 px-1 rounded text-xs">casasync_dados_*.json</code> e <code class="bg-slate-100 px-1 rounded text-xs">backup_casa_*.json</code>).
+          </li>
+        </ul>
+        <div class="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200 text-xs sm:text-sm text-emerald-950">
+          <strong>Importante sobre a permissão <code class="font-mono">drive.file</code>:</strong> O CasaSync <strong>NÃO tem acesso</strong> a nenhum outro arquivo, foto, documento ou pasta já existente no seu Google Drive. A API do Google restringe tecnicamente a visibilidade do aplicativo apenas aos arquivos de backup que o próprio CasaSync criou para você.
+        </div>
+      </section>
+
+      <!-- 3. Declaração Obrigatória Google API Services User Data Policy (Limited Use) -->
+      <section class="space-y-2">
+        <h2 class="text-lg font-bold text-slate-900">3. Conformidade com a Política de Dados do Usuário dos Serviços de API do Google (Limited Use)</h2>
+        <div class="p-4 rounded-2xl bg-slate-900 text-slate-100 space-y-2 text-xs sm:text-sm leading-relaxed">
+          <p>
+            O uso e a transferência pelo <strong>CasaSync</strong> para qualquer outro aplicativo de informações recebidas das APIs do Google obedecerão estritamente à <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer" class="text-emerald-400 underline font-semibold">Política de Dados do Usuário dos Serviços de API do Google (Google API Services User Data Policy)</a>, incluindo os requisitos de <strong>Uso Limitado (Limited Use)</strong>.
+          </p>
+          <p class="text-slate-300">
+            <em>(English Compliance Statement for Google OAuth Verification): CasaSync's use and transfer to any other app of information received from Google APIs will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes" target="_blank" rel="noopener noreferrer" class="text-emerald-400 underline">Google API Services User Data Policy</a>, including the Limited Use requirements.</em>
+          </p>
+        </div>
+      </section>
+
+      <!-- 4. Compartilhamento e Armazenamento -->
+      <section class="space-y-2">
+        <h2 class="text-lg font-bold text-slate-900">4. Armazenamento, Segurança e Não Compartilhamento com Terceiros</h2>
+        <ul class="list-disc pl-5 space-y-1.5 text-sm text-slate-600">
+          <li><strong>Sem venda ou compartilhamento de dados:</strong> Nós jamais vendemos, alugamos, transferimos ou compartilhamos seus dados pessoais ou financeiros com anunciantes, corretores de dados ou terceiros.</li>
+          <li><strong>Sem treinamento de IA externa:</strong> Nenhum dado inserido no CasaSync ou sincronizado com seu Google Drive é utilizado para treinar modelos de inteligência artificial ou perfis publicitários.</li>
+          <li><strong>Transmissão criptografada (HTTPS/TLS):</strong> Toda comunicação entre o seu navegador e as APIs oficiais do Google (<code class="bg-slate-100 px-1 rounded text-xs">googleapis.com</code>) ocorre diretamente via conexão segura HTTPS com criptografia TLS.</li>
+        </ul>
+      </section>
+
+      <!-- 5. Revogação e Exclusão (LGPD) -->
+      <section class="space-y-2">
+        <h2 class="text-lg font-bold text-slate-900">5. Seus Direitos (LGPD), Revogação de Acesso e Exclusão de Dados</h2>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          Em conformidade com a Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018 — LGPD), você detém controle total sobre seus dados a qualquer momento:
+        </p>
+        <ul class="list-disc pl-5 space-y-1.5 text-sm text-slate-600">
+          <li><strong>Como revogar o acesso do aplicativo à sua Conta Google:</strong> você pode desconectar sua conta diretamente pelo botão <em>"Sair / Trocar Conta"</em> no topo do CasaSync ou revogar a permissão diretamente no painel de segurança do Google em <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer" class="text-indigo-600 underline font-medium">https://myaccount.google.com/permissions</a>.</li>
+          <li><strong>Como excluir seus dados:</strong> você pode apagar diretamente a pasta <code class="bg-slate-100 px-1 rounded text-xs">CasaSync_Backups</code> no seu Google Drive e limpar os dados locais do navegador quando desejar.</li>
+        </ul>
+      </section>
+
+      <!-- 6. Contato -->
+      <section class="space-y-2 pt-2 border-t border-slate-100">
+        <h2 class="text-lg font-bold text-slate-900">6. Contato do Responsável</h2>
+        <p class="text-sm text-slate-600">
+          Em caso de dúvidas sobre esta Política de Privacidade ou sobre o tratamento de dados no CasaSync, entre em contato pelo canal de suporte oficial do administrador do projeto.
+        </p>
+      </section>
+
+    </article>
+  </main>
+
+  <script>
+    document.getElementById('btnDownloadPrivacyHtml').addEventListener('click', () => {
+      const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'politica-de-privacidade.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
