@@ -185,10 +185,58 @@
           <div class="space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
-                <h2 class="text-lg font-bold text-slate-900">Acesse ou Crie sua Conta</h2>
-                <p class="text-xs text-slate-500">Vincule sua Conta Google para isolar e sincronizar seus dados</p>
+                <h2 class="text-lg font-bold text-slate-900">Login Oficial com Conta Google</h2>
+                <p class="text-xs text-slate-500">Autenticação OAuth 2.0 com permissão de gravação no seu Google Drive</p>
               </div>
               <span class="text-2xl">🔐</span>
+            </div>
+
+            <!-- OFFICIAL GOOGLE OAUTH 2.0 BUTTON + API CONFIG PANEL -->
+            <div class="p-4 rounded-2xl bg-slate-50 border-2 border-indigo-200 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-900">Conexão Oficial Google (OAuth 2.0 + Drive API)</span>
+                <button id="btnToggleGoogleApiConfig" type="button" class="text-[11px] font-semibold text-indigo-600 hover:underline">
+                  ⚙️ Configurar Client ID / API
+                </button>
+              </div>
+
+              <!-- Collapsible Google API Credentials Form -->
+              <div id="googleApiConfigPanel" class="space-y-2.5 pt-2 border-t border-indigo-100">
+                <div>
+                  <label class="block text-[10px] font-bold uppercase text-slate-600 mb-1">Google OAuth Client ID (do Google Cloud Console)</label>
+                  <input id="inputGoogleClientId" type="text" value="781685938825-oghdgl8pv81c7ghntfqffdgoticvg680.apps.googleusercontent.com" placeholder="Ex.: 123456789-abc.apps.googleusercontent.com" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white font-mono" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold uppercase text-slate-600 mb-1">Ou Token de Acesso OAuth Direto (Opcional p/ Teste Rápido)</label>
+                  <input id="inputGoogleDirectToken" type="password" value="ya29.a0AX07CmunDCuxcuxLVs5zgcu6VAyoqi4IBokh8YWoT9z3nCiiG_CnwQhJ41IWQIah5EnqGwFlJI-MyEpKjC0vZEhZC54xDkTElG7F89A7drqz5h9GHr64b4f4PSlb9uxZEVm5259oT4YE3a4YXqw7fRnw_nLM0NjHA85x8tODqzZ1zLUgtayqgLqazM0rsPSCh-yfAxkaCgYKARgSARISFQHGX2Mih38RXIt-f_V4XU3edXly1A0206" placeholder="Cole um Access Token (ya29...) se estiver testando sem domínio" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white font-mono" />
+                </div>
+                <div class="flex items-center justify-between gap-2">
+                  <span id="googleApiCredStatus" class="text-[11px] font-bold text-emerald-700">✅ Client ID & Access Token Configurados!</span>
+                  <button id="btnSaveGoogleApiConfig" type="button" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition">
+                    Salvar Credenciais API
+                  </button>
+                </div>
+              </div>
+
+              <!-- Real "Fazer login com o Google" Button -->
+              <button id="btnRealGoogleOAuthLogin" type="button" class="w-full py-3 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-sm border-2 border-slate-300 hover:border-indigo-500 transition shadow-sm flex items-center justify-center gap-3">
+                <svg class="w-5 h-5" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                  <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24z"/>
+                  <path fill="#FBBC05" d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14z"/>
+                  <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96z"/>
+                </svg>
+                <span>Continuar com o Google (Pedir Permissão do Drive)</span>
+              </button>
+              <p class="text-[11px] text-slate-500 text-center leading-tight">
+                Abre a janela oficial da Google para autorizar a pasta <code class="bg-slate-200 px-1 rounded">CasaSync_Backups</code> no seu Google Drive.
+              </p>
+            </div>
+
+            <div class="relative flex py-1 items-center">
+              <div class="flex-grow border-t border-slate-200"></div>
+              <span class="flex-shrink mx-3 text-[11px] font-semibold uppercase text-slate-400">Ou Modo Offline / Local</span>
+              <div class="flex-grow border-t border-slate-200"></div>
             </div>
 
             <!-- Auth Mode Tabs: Entrar vs Criar Conta Google -->
@@ -1730,9 +1778,23 @@
           <p id="modalDriveUserAccount" class="text-sm font-bold mt-0.5">usuario@gmail.com</p>
           <p id="modalDriveFolderPath" class="text-xs text-slate-400">Pasta no Google Drive: /CasaSync_Backups/</p>
         </div>
-        <button id="btnSimulateGoogleDriveSyncNow" type="button" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow">
-          🔄 Sincronizar Agora com Meu Google Drive
-        </button>
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="btnPullFromGoogleDriveReal" type="button" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700 font-semibold text-xs transition">
+            ⬇️ Baixar do Meu Google Drive
+          </button>
+          <button id="btnSimulateGoogleDriveSyncNow" type="button" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow">
+            🔄 Sincronizar Agora com Meu Google Drive
+          </button>
+        </div>
+      </div>
+
+      <!-- Real Google Drive API Status Banner inside Modal -->
+      <div id="realDriveApiStatusBanner" class="p-3.5 rounded-xl bg-indigo-950 text-indigo-100 border border-indigo-800 text-xs flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <span class="font-bold text-white">Status da API do Google Drive:</span>
+          <span id="realDriveApiStatusText" class="ml-1 text-indigo-200">Modo Local (Configure o Client ID ou faça login com o botão oficial da Google para enviar direto ao Drive).</span>
+        </div>
+        <span id="realDriveFileIdBadge" class="px-2 py-0.5 rounded bg-indigo-900 text-emerald-300 font-mono text-[11px]">Pasta: CasaSync_Backups</span>
       </div>
 
       <!-- Export / Import Controls -->
@@ -1813,6 +1875,8 @@
       const STORAGE_KEY = 'casasync_state_v1';
       const ACCOUNTS_REGISTRY_KEY = 'casasync_google_accounts_v1';
       const ACTIVE_SESSION_KEY = 'casasync_active_google_user_v1';
+      const GOOGLE_API_CONFIG_KEY = 'casasync_google_api_config_v1';
+      const GOOGLE_DRIVE_SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
       const TODAY_STR = new Date().toISOString().slice(0, 10);
 
       function getTomorrowStr(dateStr) {
@@ -2522,6 +2586,26 @@
         }
       }
 
+      let autoDriveSyncTimer = null;
+      function scheduleAutoGoogleDriveSync() {
+        if (!currentUser || !googleApiConfig || !googleApiConfig.accessToken) return;
+        if (autoDriveSyncTimer) clearTimeout(autoDriveSyncTimer);
+        autoDriveSyncTimer = setTimeout(async () => {
+          try {
+            const syncEl = document.getElementById('lastSyncText');
+            if (syncEl) syncEl.textContent = '☁️ Salvando no Google Drive...';
+            const folderId = googleApiConfig.driveFolderId || await getOrCreateDriveFolder(googleApiConfig.accessToken);
+            googleApiConfig.driveFolderId = folderId;
+            const slug = currentUser.email.split('@')[0].replace(/[^a-z0-9]/gi, '_');
+            const mainFileName = `casasync_dados_${slug}.json`;
+            await uploadJsonToGoogleDrive(googleApiConfig.accessToken, mainFileName, state, folderId);
+            if (syncEl) syncEl.textContent = `☁️ Salvo no Google Drive às ${state.lastUpdated}`;
+          } catch (e) {
+            // Silent fallback if offline
+          }
+        }, 1800);
+      }
+
       function saveState() {
         state.lastUpdated = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         try {
@@ -2534,6 +2618,7 @@
         if (syncEl) {
           syncEl.textContent = `Sincronizado às ${state.lastUpdated}`;
         }
+        scheduleAutoGoogleDriveSync();
       }
 
       let toastTimer = null;
@@ -2596,6 +2681,305 @@
           bLogin.className = 'py-2 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs transition';
           bReg.className = 'py-2 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition';
         }
+      }
+
+      const EMBEDDED_CLIENT_ID = '781685938825-oghdgl8pv81c7ghntfqffdgoticvg680.apps.googleusercontent.com';
+      const EMBEDDED_ACCESS_TOKEN = 'ya29.a0AX07CmunDCuxcuxLVs5zgcu6VAyoqi4IBokh8YWoT9z3nCiiG_CnwQhJ41IWQIah5EnqGwFlJI-MyEpKjC0vZEhZC54xDkTElG7F89A7drqz5h9GHr64b4f4PSlb9uxZEVm5259oT4YE3a4YXqw7fRnw_nLM0NjHA85x8tODqzZ1zLUgtayqgLqazM0rsPSCh-yfAxkaCgYKARgSARISFQHGX2Mih38RXIt-f_V4XU3edXly1A0206';
+
+      function loadGoogleApiConfig() {
+        const defaults = {
+          clientId: EMBEDDED_CLIENT_ID,
+          accessToken: EMBEDDED_ACCESS_TOKEN,
+          driveFolderId: '',
+          driveFileId: ''
+        };
+        try {
+          const raw = localStorage.getItem(GOOGLE_API_CONFIG_KEY);
+          if (!raw) return defaults;
+          const parsed = JSON.parse(raw);
+          return {
+            clientId: parsed.clientId || EMBEDDED_CLIENT_ID,
+            accessToken: EMBEDDED_ACCESS_TOKEN || parsed.accessToken || '',
+            driveFolderId: parsed.driveFolderId || '',
+            driveFileId: parsed.driveFileId || ''
+          };
+        } catch (e) {
+          return defaults;
+        }
+      }
+
+      function saveGoogleApiConfig(cfg) {
+        try {
+          localStorage.setItem(GOOGLE_API_CONFIG_KEY, JSON.stringify(cfg));
+        } catch (e) {}
+      }
+
+      let googleApiConfig = loadGoogleApiConfig();
+      let gisScriptLoaded = false;
+
+      function ensureGoogleIdentityScriptLoaded(callback) {
+        if (window.google && window.google.accounts && window.google.accounts.oauth2) {
+          callback(true);
+          return;
+        }
+        if (gisScriptLoaded) {
+          setTimeout(() => callback(!!(window.google && window.google.accounts)), 600);
+          return;
+        }
+        gisScriptLoaded = true;
+        const script = document.createElement('script');
+        script.src = 'https://accounts.google.com/gsi/client';
+        script.async = true;
+        script.defer = true;
+        script.onload = () => callback(true);
+        script.onerror = () => callback(false);
+        document.head.appendChild(script);
+      }
+
+      // Real Google Drive API v3: Find or create folder 'CasaSync_Backups'
+      async function getOrCreateDriveFolder(accessToken) {
+        const q = encodeURIComponent("name='CasaSync_Backups' and mimeType='application/vnd.google-apps.folder' and trashed=false");
+        const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)`, {
+          headers: { Authorization: 'Bearer ' + accessToken }
+        });
+        if (!searchResp.ok) {
+          throw new Error('Falha ao consultar pasta no Google Drive (verifique se a Google Drive API está ativada e o token é válido).');
+        }
+        const searchData = await searchResp.json();
+        if (searchData.files && searchData.files.length > 0) {
+          return searchData.files[0].id;
+        }
+        const createResp = await fetch('https://www.googleapis.com/drive/v3/files', {
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: 'CasaSync_Backups',
+            mimeType: 'application/vnd.google-apps.folder'
+          })
+        });
+        if (!createResp.ok) {
+          throw new Error('Não foi possível criar a pasta CasaSync_Backups no Google Drive.');
+        }
+        const created = await createResp.json();
+        return created.id;
+      }
+
+      // Real Google Drive API v3: Upload or update JSON file inside 'CasaSync_Backups'
+      async function uploadJsonToGoogleDrive(accessToken, fileName, jsonPayload, folderId) {
+        const q = encodeURIComponent(`name='${fileName}' and '${folderId}' in parents and trashed=false`);
+        const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)`, {
+          headers: { Authorization: 'Bearer ' + accessToken }
+        });
+        const searchData = searchResp.ok ? await searchResp.json() : { files: [] };
+        const existingFileId = searchData.files && searchData.files.length > 0 ? searchData.files[0].id : null;
+
+        const metadata = existingFileId
+          ? { name: fileName, mimeType: 'application/json' }
+          : { name: fileName, mimeType: 'application/json', parents: [folderId] };
+
+        const boundary = 'casasync_multipart_boundary_' + Date.now();
+        const delimiter = `--${boundary}\r\n`;
+        const closeDelimiter = `\r\n--${boundary}--`;
+        const bodyContent =
+          delimiter +
+          'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
+          JSON.stringify(metadata) +
+          '\r\n' +
+          delimiter +
+          'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
+          JSON.stringify(jsonPayload, null, 2) +
+          closeDelimiter;
+
+        const url = existingFileId
+          ? `https://www.googleapis.com/upload/drive/v3/files/${existingFileId}?uploadType=multipart&fields=id,name,webViewLink`
+          : 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,webViewLink';
+
+        const uploadResp = await fetch(url, {
+          method: existingFileId ? 'PATCH' : 'POST',
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+            'Content-Type': `multipart/related; boundary=${boundary}`
+          },
+          body: bodyContent
+        });
+
+        if (!uploadResp.ok) {
+          throw new Error('Erro ao gravar arquivo no Google Drive (' + uploadResp.status + ').');
+        }
+        return await uploadResp.json();
+      }
+
+      // Real Google Drive API v3: Download user's main database file from 'CasaSync_Backups'
+      async function downloadUserDatabaseFromGoogleDrive(accessToken, email) {
+        const folderId = await getOrCreateDriveFolder(accessToken);
+        const slug = email.split('@')[0].replace(/[^a-z0-9]/gi, '_');
+        const mainFileName = `casasync_dados_${slug}.json`;
+
+        const q = encodeURIComponent(`name='${mainFileName}' and '${folderId}' in parents and trashed=false`);
+        const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,modifiedTime)`, {
+          headers: { Authorization: 'Bearer ' + accessToken }
+        });
+        if (!searchResp.ok) return null;
+        const searchData = await searchResp.json();
+        if (!searchData.files || searchData.files.length === 0) return null;
+
+        const fileId = searchData.files[0].id;
+        const fileResp = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
+          headers: { Authorization: 'Bearer ' + accessToken }
+        });
+        if (!fileResp.ok) return null;
+        return await fileResp.json();
+      }
+
+      // Complete OAuth Login flow after receiving real Google Access Token
+      async function handleRealGoogleAccessToken(accessToken) {
+        try {
+          showToast('Conectando à sua Conta Google e verificando Google Drive...', '⏳');
+          googleApiConfig.accessToken = accessToken;
+          saveGoogleApiConfig(googleApiConfig);
+
+          // 1. Fetch real Google profile from Drive API v3 (works with drive.file scope!) or OAuth2 userinfo
+          let userEmail = 'minhaconta.google@gmail.com';
+          let userName = 'Minha Conta Google';
+          try {
+            const driveAboutResp = await fetch('https://www.googleapis.com/drive/v3/about?fields=user(displayName,emailAddress,photoLink)', {
+              headers: { Authorization: 'Bearer ' + accessToken }
+            });
+            if (driveAboutResp.ok) {
+              const aboutData = await driveAboutResp.json();
+              if (aboutData && aboutData.user) {
+                if (aboutData.user.emailAddress) userEmail = aboutData.user.emailAddress.toLowerCase();
+                if (aboutData.user.displayName) userName = aboutData.user.displayName;
+              }
+            } else {
+              const profResp = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: 'Bearer ' + accessToken }
+              });
+              if (profResp.ok) {
+                const prof = await profResp.json();
+                if (prof.email) userEmail = prof.email.toLowerCase();
+                if (prof.name) userName = prof.name;
+              }
+            }
+          } catch (e) {}
+
+          // 2. Register or update account in local registry
+          let acc = accountsRegistry.find(a => a.email.toLowerCase() === userEmail);
+          if (!acc) {
+            acc = {
+              name: userName,
+              email: userEmail,
+              pin: '',
+              driveFolder: '/CasaSync_Backups/',
+              isRealGoogleOAuth: true,
+              createdAt: TODAY_STR
+            };
+            accountsRegistry.unshift(acc);
+            saveAccountsRegistry(accountsRegistry);
+          } else {
+            acc.isRealGoogleOAuth = true;
+            acc.name = userName || acc.name;
+          }
+
+          // 3. Try to load existing database from the user's real Google Drive, or upload current state
+          const folderId = await getOrCreateDriveFolder(accessToken);
+          googleApiConfig.driveFolderId = folderId;
+          saveGoogleApiConfig(googleApiConfig);
+
+          const cloudData = await downloadUserDatabaseFromGoogleDrive(accessToken, userEmail);
+          if (cloudData && Array.isArray(cloudData.plans)) {
+            localStorage.setItem(getUserStorageKey(userEmail), JSON.stringify(cloudData));
+            loginWithGoogleAccount(acc);
+            updateRealDriveStatusUI(true, `Sincronizado da nuvem (/CasaSync_Backups/)`);
+            showToast(`Login Google concluído! Seus dados foram carregados direto do seu Google Drive!`, '☁️');
+          } else {
+            loginWithGoogleAccount(acc);
+            const slug = userEmail.split('@')[0].replace(/[^a-z0-9]/gi, '_');
+            const mainFileName = `casasync_dados_${slug}.json`;
+            const uploaded = await uploadJsonToGoogleDrive(accessToken, mainFileName, state, folderId);
+            await uploadJsonToGoogleDrive(accessToken, `backup_casa_${slug}_${TODAY_STR}.json`, state, folderId);
+            updateRealDriveStatusUI(true, `Arquivo criado no Drive: ${mainFileName}`);
+            showToast(`Login Google concluído! Pasta "CasaSync_Backups" e arquivo criados no seu Google Drive!`, '🎉');
+          }
+        } catch (err) {
+          showToast(err.message || 'Erro ao acessar a API do Google Drive.', '⚠️');
+        }
+      }
+
+      function updateRealDriveStatusUI(isConnected, detailText) {
+        const statusText = document.getElementById('realDriveApiStatusText');
+        const badge = document.getElementById('realDriveFileIdBadge');
+        const credStatus = document.getElementById('googleApiCredStatus');
+        if (statusText && detailText) {
+          statusText.textContent = detailText;
+        }
+        if (badge) {
+          badge.textContent = isConnected ? '🟢 Google Drive API Conectada' : 'Pasta: CasaSync_Backups';
+        }
+        if (credStatus) {
+          credStatus.textContent = googleApiConfig.clientId
+            ? '✅ Client ID salvo'
+            : googleApiConfig.accessToken
+            ? '✅ Token OAuth ativo'
+            : 'Status: Aguardando Client ID';
+        }
+      }
+
+      function triggerRealGoogleOAuthPopup() {
+        const clientIdInput = document.getElementById('inputGoogleClientId');
+        const directTokenInput = document.getElementById('inputGoogleDirectToken');
+        if (clientIdInput && clientIdInput.value.trim()) {
+          googleApiConfig.clientId = clientIdInput.value.trim();
+        }
+        if (directTokenInput && directTokenInput.value.trim()) {
+          googleApiConfig.accessToken = directTokenInput.value.trim();
+        }
+        saveGoogleApiConfig(googleApiConfig);
+
+        // Use the active OAuth Access Token immediately to connect & create CasaSync_Backups on Google Drive
+        if (googleApiConfig.accessToken) {
+          handleRealGoogleAccessToken(googleApiConfig.accessToken);
+          return;
+        }
+
+        if (!googleApiConfig.clientId) {
+          const panel = document.getElementById('googleApiConfigPanel');
+          if (panel) panel.classList.remove('hidden');
+          if (clientIdInput) clientIdInput.focus();
+          showToast('Informe seu Google Client ID (ou Token de Teste) no campo acima para abrir o login da Google!', '⚙️');
+          return;
+        }
+
+        ensureGoogleIdentityScriptLoaded((loaded) => {
+          if (loaded && window.google && window.google.accounts && window.google.accounts.oauth2) {
+            try {
+              const tokenClient = window.google.accounts.oauth2.initTokenClient({
+                client_id: googleApiConfig.clientId,
+                scope: GOOGLE_DRIVE_SCOPES,
+                callback: (tokenResponse) => {
+                  if (tokenResponse && tokenResponse.access_token) {
+                    handleRealGoogleAccessToken(tokenResponse.access_token);
+                  } else {
+                    showToast('Permissão não concedida ou cancelada pelo usuário.', '⚠️');
+                  }
+                }
+              });
+              tokenClient.requestAccessToken({ prompt: 'consent' });
+            } catch (err) {
+              showToast('Erro ao iniciar popup OAuth da Google. Verifique o Client ID.', '⚠️');
+            }
+          } else {
+            // Fallback: Standard Google OAuth 2.0 URL in new tab/popup
+            const redirectUri = encodeURIComponent(window.location.origin + window.location.pathname);
+            const scopeEnc = encodeURIComponent(GOOGLE_DRIVE_SCOPES);
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(googleApiConfig.clientId)}&redirect_uri=${redirectUri}&response_type=token&scope=${scopeEnc}&include_granted_scopes=true&prompt=consent`;
+            window.open(authUrl, '_blank', 'width=520,height=640');
+            showToast('Janela de autorização do Google aberta!', '🔑');
+          }
+        });
       }
 
       function loginWithGoogleAccount(accountObj) {
@@ -5836,19 +6220,90 @@
           showToast(`Conta Google "${email}" criada com banco de dados 100% isolado!`, '🎉');
         });
 
-        document.getElementById('btnSimulateGoogleDriveSyncNow').addEventListener('click', () => {
+        // Initialize Google API Config inputs
+        const cfgClientIdEl = document.getElementById('inputGoogleClientId');
+        if (cfgClientIdEl && googleApiConfig.clientId) cfgClientIdEl.value = googleApiConfig.clientId;
+        updateRealDriveStatusUI(!!googleApiConfig.accessToken);
+
+        document.getElementById('btnToggleGoogleApiConfig').addEventListener('click', () => {
+          const p = document.getElementById('googleApiConfigPanel');
+          p.classList.toggle('hidden');
+        });
+
+        document.getElementById('btnSaveGoogleApiConfig').addEventListener('click', () => {
+          const cid = document.getElementById('inputGoogleClientId').value.trim();
+          const tok = document.getElementById('inputGoogleDirectToken').value.trim();
+          googleApiConfig.clientId = cid;
+          if (tok) googleApiConfig.accessToken = tok;
+          saveGoogleApiConfig(googleApiConfig);
+          updateRealDriveStatusUI(!!googleApiConfig.accessToken);
+          showToast('Credenciais da API Google salvas! Agora clique em "Continuar com o Google".', '✅');
+        });
+
+        document.getElementById('btnRealGoogleOAuthLogin').addEventListener('click', triggerRealGoogleOAuthPopup);
+
+        document.getElementById('btnPullFromGoogleDriveReal').addEventListener('click', async () => {
+          if (!currentUser) return;
+          if (!googleApiConfig.accessToken) {
+            showToast('Faça login com o botão oficial da Google (OAuth 2.0) primeiro para baixar direto do Google Drive!', '🔑');
+            return;
+          }
+          try {
+            showToast('Buscando arquivo atualizado na pasta CasaSync_Backups do seu Google Drive...', '⏳');
+            const cloudData = await downloadUserDatabaseFromGoogleDrive(googleApiConfig.accessToken, currentUser.email);
+            if (cloudData && Array.isArray(cloudData.plans)) {
+              state = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), cloudData);
+              saveState();
+              renderAll();
+              showToast('Dados baixados e atualizados direto do seu Google Drive!', '☁️');
+            } else {
+              showToast('Nenhum arquivo encontrado ainda na pasta CasaSync_Backups do seu Drive. Clique em Sincronizar Agora para criar!', 'ℹ️');
+            }
+          } catch (err) {
+            showToast(err.message || 'Erro ao baixar do Google Drive.', '⚠️');
+          }
+        });
+
+        document.getElementById('btnSimulateGoogleDriveSyncNow').addEventListener('click', async () => {
           if (!currentUser) return;
           const timeNow = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-          const emailSlug = currentUser.email.split('@')[0];
+          const emailSlug = currentUser.email.split('@')[0].replace(/[^a-z0-9]/gi, '_');
+
+          if (googleApiConfig.accessToken) {
+            try {
+              showToast('Enviando arquivos para a pasta CasaSync_Backups no seu Google Drive...', '⏳');
+              const folderId = await getOrCreateDriveFolder(googleApiConfig.accessToken);
+              const mainFileName = `casasync_dados_${emailSlug}.json`;
+              const dailyFileName = `backup_casa_${emailSlug}_${TODAY_STR}.json`;
+              await uploadJsonToGoogleDrive(googleApiConfig.accessToken, mainFileName, state, folderId);
+              await uploadJsonToGoogleDrive(googleApiConfig.accessToken, dailyFileName, state, folderId);
+
+              state.backups.unshift({
+                id: 'bkp_drive_' + Date.now(),
+                timestamp: `${TODAY_STR} ${timeNow}`,
+                label: `☁️ Gravado via API no Google Drive: /CasaSync_Backups/${dailyFileName}`
+              });
+              saveState();
+              renderBackupSnapshots();
+              renderHomeScreen();
+              updateRealDriveStatusUI(true, `Último upload real às ${timeNow} (${mainFileName})`);
+              showToast(`Sucesso! Arquivo salvo na pasta "CasaSync_Backups" do seu Google Drive!`, '☁️');
+              return;
+            } catch (err) {
+              showToast('Falha no upload via API (' + err.message + '). Verifique se o token OAuth ainda está ativo.', '⚠️');
+              return;
+            }
+          }
+
           state.backups.unshift({
             id: 'bkp_drive_' + Date.now(),
             timestamp: `${TODAY_STR} ${timeNow}`,
-            label: `Sincronizado no Google Drive de ${emailSlug} (${currentUser.driveFolder || '/CasaSync/'})`
+            label: `Snapshot local de ${emailSlug} (Configure o Client ID OAuth para gravar direto na nuvem)`
           });
           saveState();
           renderBackupSnapshots();
           renderHomeScreen();
-          showToast(`Dados sincronizados com o Google Drive de ${currentUser.email}!`, '☁️');
+          showToast('Snapshot local salvo! Para enviar direto ao site do Google Drive, conecte sua conta via OAuth 2.0.', 'ℹ️');
         });
 
         renderAll();
