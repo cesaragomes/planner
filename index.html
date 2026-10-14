@@ -201,14 +201,14 @@
               </div>
 
               <!-- Collapsible Google API Credentials Form -->
-              <div id="googleApiConfigPanel" class="space-y-2.5 pt-2 border-t border-indigo-100">
+              <div id="googleApiConfigPanel" class="hidden space-y-2.5 pt-2 border-t border-indigo-100">
                 <div>
                   <label class="block text-[10px] font-bold uppercase text-slate-600 mb-1">Google OAuth Client ID (do Google Cloud Console)</label>
                   <input id="inputGoogleClientId" type="text" value="781685938825-oghdgl8pv81c7ghntfqffdgoticvg680.apps.googleusercontent.com" placeholder="Ex.: 123456789-abc.apps.googleusercontent.com" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white font-mono" />
                 </div>
                 <div>
                   <label class="block text-[10px] font-bold uppercase text-slate-600 mb-1">Ou Token de Acesso OAuth Direto (Opcional p/ Teste Rápido)</label>
-                  <input id="inputGoogleDirectToken" type="password" value="ya29.a0AX07CmunDCuxcuxLVs5zgcu6VAyoqi4IBokh8YWoT9z3nCiiG_CnwQhJ41IWQIah5EnqGwFlJI-MyEpKjC0vZEhZC54xDkTElG7F89A7drqz5h9GHr64b4f4PSlb9uxZEVm5259oT4YE3a4YXqw7fRnw_nLM0NjHA85x8tODqzZ1zLUgtayqgLqazM0rsPSCh-yfAxkaCgYKARgSARISFQHGX2Mih38RXIt-f_V4XU3edXly1A0206" placeholder="Cole um Access Token (ya29...) se estiver testando sem domínio" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white font-mono" />
+                  <input id="inputGoogleDirectToken" type="password" value="" placeholder="Cole um Access Token (ya29...) se estiver testando sem domínio" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white font-mono" />
                 </div>
                 <div class="flex items-center justify-between gap-2">
                   <span id="googleApiCredStatus" class="text-[11px] font-bold text-emerald-700">✅ Client ID & Access Token Configurados!</span>
@@ -226,7 +226,7 @@
                   <path fill="#FBBC05" d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14z"/>
                   <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96z"/>
                 </svg>
-                <span>Continuar com o Google (Pedir Permissão do Drive)</span>
+                <span>Entrar com conta Google</span>
               </button>
               <p class="text-[11px] text-slate-500 text-center leading-tight">
                 Abre a janela oficial da Google para autorizar a pasta <code class="bg-slate-200 px-1 rounded">CasaSync_Backups</code> no seu Google Drive.
@@ -2684,12 +2684,11 @@
       }
 
       const EMBEDDED_CLIENT_ID = '781685938825-oghdgl8pv81c7ghntfqffdgoticvg680.apps.googleusercontent.com';
-      const EMBEDDED_ACCESS_TOKEN = 'ya29.a0AX07CmunDCuxcuxLVs5zgcu6VAyoqi4IBokh8YWoT9z3nCiiG_CnwQhJ41IWQIah5EnqGwFlJI-MyEpKjC0vZEhZC54xDkTElG7F89A7drqz5h9GHr64b4f4PSlb9uxZEVm5259oT4YE3a4YXqw7fRnw_nLM0NjHA85x8tODqzZ1zLUgtayqgLqazM0rsPSCh-yfAxkaCgYKARgSARISFQHGX2Mih38RXIt-f_V4XU3edXly1A0206';
 
       function loadGoogleApiConfig() {
         const defaults = {
           clientId: EMBEDDED_CLIENT_ID,
-          accessToken: EMBEDDED_ACCESS_TOKEN,
+          accessToken: '',
           driveFolderId: '',
           driveFileId: ''
         };
@@ -2699,9 +2698,9 @@
           const parsed = JSON.parse(raw);
           return {
             clientId: parsed.clientId || EMBEDDED_CLIENT_ID,
-            accessToken: EMBEDDED_ACCESS_TOKEN || parsed.accessToken || '',
-            driveFolderId: parsed.driveFolderId || '',
-            driveFileId: parsed.driveFileId || ''
+            accessToken: '',
+            driveFolderId: '',
+            driveFileId: ''
           };
         } catch (e) {
           return defaults;
@@ -2934,22 +2933,9 @@
         if (clientIdInput && clientIdInput.value.trim()) {
           googleApiConfig.clientId = clientIdInput.value.trim();
         }
-        if (directTokenInput && directTokenInput.value.trim()) {
-          googleApiConfig.accessToken = directTokenInput.value.trim();
-        }
-        saveGoogleApiConfig(googleApiConfig);
-
-        // Use the active OAuth Access Token immediately to connect & create CasaSync_Backups on Google Drive
-        if (googleApiConfig.accessToken) {
-          handleRealGoogleAccessToken(googleApiConfig.accessToken);
-          return;
-        }
-
-        if (!googleApiConfig.clientId) {
-          const panel = document.getElementById('googleApiConfigPanel');
-          if (panel) panel.classList.remove('hidden');
-          if (clientIdInput) clientIdInput.focus();
-          showToast('Informe seu Google Client ID (ou Token de Teste) no campo acima para abrir o login da Google!', '⚙️');
+        const manualDevToken = directTokenInput ? directTokenInput.value.trim() : '';
+        if (manualDevToken) {
+          handleRealGoogleAccessToken(manualDevToken);
           return;
         }
 
@@ -2957,27 +2943,28 @@
           if (loaded && window.google && window.google.accounts && window.google.accounts.oauth2) {
             try {
               const tokenClient = window.google.accounts.oauth2.initTokenClient({
-                client_id: googleApiConfig.clientId,
+                client_id: googleApiConfig.clientId || EMBEDDED_CLIENT_ID,
                 scope: GOOGLE_DRIVE_SCOPES,
                 callback: (tokenResponse) => {
                   if (tokenResponse && tokenResponse.access_token) {
                     handleRealGoogleAccessToken(tokenResponse.access_token);
                   } else {
-                    showToast('Permissão não concedida ou cancelada pelo usuário.', '⚠️');
+                    showToast('Seleção de conta ou permissão cancelada.', '⚠️');
                   }
                 }
               });
-              tokenClient.requestAccessToken({ prompt: 'consent' });
+              // Abre o pop-up oficial da Google para escolher a Conta Google e confirmar as permissões do Drive
+              tokenClient.requestAccessToken({ prompt: 'select_account consent' });
             } catch (err) {
-              showToast('Erro ao iniciar popup OAuth da Google. Verifique o Client ID.', '⚠️');
+              showToast('Erro ao abrir o pop-up da Google. Verifique as Origens JavaScript Autorizadas no Cloud Console.', '⚠️');
             }
           } else {
-            // Fallback: Standard Google OAuth 2.0 URL in new tab/popup
             const redirectUri = encodeURIComponent(window.location.origin + window.location.pathname);
             const scopeEnc = encodeURIComponent(GOOGLE_DRIVE_SCOPES);
-            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(googleApiConfig.clientId)}&redirect_uri=${redirectUri}&response_type=token&scope=${scopeEnc}&include_granted_scopes=true&prompt=consent`;
+            const cid = encodeURIComponent(googleApiConfig.clientId || EMBEDDED_CLIENT_ID);
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${cid}&redirect_uri=${redirectUri}&response_type=token&scope=${scopeEnc}&include_granted_scopes=true&prompt=select_account%20consent`;
             window.open(authUrl, '_blank', 'width=520,height=640');
-            showToast('Janela de autorização do Google aberta!', '🔑');
+            showToast('Pop-up de seleção de Conta Google aberto!', '🔑');
           }
         });
       }
@@ -3008,11 +2995,13 @@
 
       function logoutCurrentAccount() {
         currentUser = null;
+        googleApiConfig.accessToken = '';
+        googleApiConfig.driveFolderId = '';
         try {
           localStorage.removeItem(ACTIVE_SESSION_KEY);
         } catch (e) {}
         openWelcomeAuthView();
-        showToast('Sessão encerrada com segurança. Selecione ou crie outra Conta Google.', '🚪');
+        showToast('Sessão encerrada com segurança. Clique em "Entrar com conta Google" para escolher outra conta.', '🚪');
       }
 
       function renderWelcomeSavedAccounts() {
