@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Termos de Serviço — CasaSync</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-slate-900 text-white shadow-md sticky top-0 z-30">
+    <div class="max-w-4xl mx-auto px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center text-slate-950 font-bold text-base shadow-xs">
+          CS
+        </div>
+        <div>
+          <span class="font-bold text-base tracking-tight">CasaSync</span>
+          <span class="ml-2 text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Documento Oficial</span>
+          <p class="text-xs text-slate-400">Termos de Serviço Públicos & Condições de Uso</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btnDownloadTermsHtml" type="button" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow-xs">
+          ⬇️ Baixar Arquivo (termos-de-servico.html)
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-8">
+    <article class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm space-y-6">
+
+      <div class="border-b border-slate-100 pb-6 space-y-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-800 border border-indigo-200 text-xs font-semibold">
+          <span>📜 Termos de Serviço Públicos</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Termos de Serviço do CasaSync</h1>
+        <p class="text-xs sm:text-sm text-slate-500">
+          <strong>Última atualização:</strong> 14 de outubro de 2026 • <strong>Aplicativo:</strong> CasaSync — Gestão Completa da Casa e Rotina
+        </p>
+      </div>
+
+      <!-- 1. Aceitação dos Termos -->
+      <section class="space-y-2">
+        <h2 class="text-lg font-bold text-slate-900">1. Aceitação dos Termos</h2>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          Ao acessar e utilizar o aplicativo <strong>CasaSync</strong> (disponível para navegadores em sistemas Windows, Linux e dispositivos móveis Android), você concorda com estes Termos de Serviço e com a nossa Política de Privacidade. Caso não concorde com qualquer disposição destes termos, recomendamos que não utilize o serviço.
+        </p>
+      </section>
+
+      <!-- 2. Descrição do Serviço -->
+      <section class="space-y-2">
+        <h2 class="text-lg font-bold text-slate-900">2. Descrição do Serviço e Módulos</h2>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          O CasaSync fornece uma plataforma modular de organização doméstica e pessoal composta por 6 módulos integrados:
+        </p>
+        <ul class="list-disc pl-5 space-y-1 text-sm text-slate-600">
+          <li><strong>Módulo 1:</strong> Planos para o Dia e Rastreador de Hábitos Pessoais;</li>
+          <li><strong>Módulo 2:</strong> Lista de Compras de Rotina com Modo Mercado e Histórico de Variação de Preços;</li>
+          <li><strong>Módulo 3:</strong> Lista de Tarefas Domésticas e Cronograma de Limpeza Recorrente;</li>
+          <li><strong>Módulo 4:</strong> Planilha de Gastos, Contas Fixas (Boletos) e Metas de Orçamento;</li>
+          <li><strong>Módulo 5:</strong> Planejamento de Aquisições da Casa, Garantias e Manutenção Preventiva;</li>
+          <li><strong>Módulo 6:</strong> Controle de Despensa, Alertas de Validade e Cardápio Semanal.</li>
+        </ul>
+      </section>
+
+      <!-- 3. Conta Google e Armazenamento no Google Drive -->
+      <section class="space-y-2">
+        <h2 class="text-lg font-bold text-slate-900">3. Autenticação Google OAuth e Uso do Google Drive</h2>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          Para permitir que cada usuário acesse exclusivamente seus próprios dados e mantenha cópias de segurança em nuvem entre diferentes dispositivos (PC e celular), o CasaSync integra-se ao login oficial do Google (OAuth 2.0) e à API do Google Drive (<code class="bg-slate-100 px-1 rounded text-xs">drive.file</code>).
+        </p>
+        <ul class="list-disc pl-5 space-y-1.5 text-sm text-slate-600">
+          <li>Cada usuário é responsável pela segurança da sua própria Conta Google e pelo gerenciamento do espaço disponível em seu próprio Google Drive.</li>
+          <li>Os arquivos de sincronização são gravados na pasta <code class="bg-slate-100 px-1 rounded text-xs">CasaSync_Backups</code> dentro do Google Drive do próprio usuário autenticado.</li>
+          <li>O usuário pode exportar cópias locais (<code class="bg-slate-100 px-1 rounded text-xs">.json</code>) ou revogar a conexão com o Google Drive a qualquer momento.</li>
+        </ul>
+      </section>
+
+      <!-- 4. Responsabilidades e Isenção de Garantias -->
+      <section class="space-y-2">
+        <h2 class="text-lg font-bold text-slate-900">4. Uso Adequado e Limitação de Responsabilidade</h2>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          O CasaSync é fornecido <em>"no estado em que se encontra" (as is)</em>, como ferramenta de auxílio à organização cotidiana e planejamento financeiro doméstico. O aplicativo não presta consultoria financeira, contábil ou jurídica profissional. O usuário é o único responsável pela exatidão dos valores, datas de vencimento de boletos e prazos de validade de produtos inseridos manualmente na plataforma.
+        </p>
+      </section>
+
+      <!-- 5. Modificações e Legislação Aplicável -->
+      <section class="space-y-2 pt-2 border-t border-slate-100">
+        <h2 class="text-lg font-bold text-slate-900">5. Alterações nos Termos e Foro</h2>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          Estes Termos de Serviço podem ser atualizados periodicamente para refletir melhorias nos módulos ou exigências legais. Este documento é regido pelas leis da República Federativa do Brasil, incluindo o Marco Civil da Internet (Lei nº 12.965/2014) e a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).
+        </p>
+      </section>
+
+    </article>
+  </main>
+
+  <script>
+    document.getElementById('btnDownloadTermsHtml').addEventListener('click', () => {
+      const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'termos-de-servico.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
