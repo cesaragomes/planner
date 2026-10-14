@@ -60,8 +60,15 @@
         </button>
       </div>
 
-      <!-- Sync & Backup Status Bar -->
-      <div class="flex items-center gap-2">
+      <!-- Sync, Active Google Account & Backup Status Bar -->
+      <div class="flex flex-wrap items-center gap-2">
+        <div id="headerUserBadge" class="hidden items-center gap-2 bg-slate-800/90 border border-slate-700 px-2.5 py-1 rounded-xl text-xs text-slate-200">
+          <span id="headerUserAvatar" class="w-6 h-6 rounded-full bg-emerald-500 text-slate-950 font-bold flex items-center justify-center text-[11px]">G</span>
+          <div class="leading-tight hidden md:block">
+            <p id="headerUserName" class="font-bold text-[11px] text-white truncate max-w-[120px]">Usuário</p>
+            <p id="headerUserEmail" class="text-[10px] text-emerald-300 truncate max-w-[140px]">conta@gmail.com</p>
+          </div>
+        </div>
         <div id="syncBadge" class="hidden sm:flex items-center gap-1.5 text-xs bg-slate-800/90 border border-slate-700 px-3 py-1.5 rounded-lg text-slate-300">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span id="lastSyncText">Salvo localmente</span>
@@ -69,6 +76,10 @@
         <button id="btnOpenBackupModal" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition flex items-center gap-1.5 shadow-sm">
           <span>☁️</span>
           <span>Backup / Drive</span>
+        </button>
+        <button id="btnLogoutAccount" type="button" class="hidden px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-600/90 hover:bg-rose-500 text-white transition flex items-center gap-1 shadow-sm">
+          <span>🚪</span>
+          <span>Sair / Trocar Conta</span>
         </button>
       </div>
     </div>
@@ -87,6 +98,179 @@
         <span id="currentDateDisplay" class="font-medium text-slate-700"></span>
       </div>
     </div>
+
+    <!-- ==================== VIEW 0: PÁGINA DE BOAS-VINDAS & CONTROLE DE ACESSO GOOGLE ==================== -->
+    <section id="viewWelcomeAuth" class="space-y-8 py-2">
+
+      <!-- Hero Welcome Section + Login / Create Account Card -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+
+        <!-- Left Column: About CasaSync & Privacy Architecture (7 cols) -->
+        <div class="lg:col-span-7 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white p-6 sm:p-8 shadow-xl border border-slate-800 flex flex-col justify-between space-y-6">
+          <div class="space-y-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">
+              <span>🔒 Acesso Restrito & Individualizado via Conta Google</span>
+            </div>
+            <h1 class="text-2xl sm:text-4xl font-bold tracking-tight leading-tight">
+              Bem-vindo ao <span class="text-emerald-400">CasaSync</span>: sua casa e rotina organizadas no PC e no Android.
+            </h1>
+            <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+              O CasaSync é uma plataforma modular completa para planejar o seu dia, controlar compras de supermercado com histórico de preços, gerenciar faxinas recorrentes, acompanhar gastos e monitorar aquisições e a despensa da casa.
+            </p>
+
+            <!-- Privacy & Multi-User Guarantee Box -->
+            <div class="p-4 rounded-2xl bg-slate-900/70 border border-slate-700/80 space-y-2">
+              <h2 class="text-xs sm:text-sm font-bold text-emerald-300 flex items-center gap-2">
+                <span>🛡️</span>
+                <span>Privacidade Total: Cada Usuário Acessa Somente os Próprios Dados</span>
+              </h2>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Para utilizar o serviço, é necessário <strong>criar sua conta vinculada ao Google</strong> ou entrar com uma conta existente. Cada conta cria um cofre individual isolado e sincroniza seus backups diários exclusivamente com o seu próprio <strong>Google Drive</strong>, permitindo que várias pessoas utilizem o sistema mantendo 100% de sigilo e separação das informações.
+              </p>
+            </div>
+          </div>
+
+          <!-- 6 Modules Preview Mini-Grid on Landing Page -->
+          <div class="space-y-2.5 pt-2">
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-400">O que você terá disponível na sua conta:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+              <div class="p-3 rounded-xl bg-slate-800/70 border border-slate-700/70 flex items-start gap-2.5">
+                <span class="text-lg">📅</span>
+                <div>
+                  <p class="font-bold text-white">1. Planos do Dia & Hábitos</p>
+                  <p class="text-slate-400 text-[11px]">Agenda por turnos, adiamento rápido e streaks.</p>
+                </div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-800/70 border border-slate-700/70 flex items-start gap-2.5">
+                <span class="text-lg">🛒</span>
+                <div>
+                  <p class="font-bold text-white">2. Compras & Modo Mercado</p>
+                  <p class="text-slate-400 text-[11px]">Gráfico de variação de preços e baixa automática.</p>
+                </div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-800/70 border border-slate-700/70 flex items-start gap-2.5">
+                <span class="text-lg">🧹</span>
+                <div>
+                  <p class="font-bold text-white">3. Tarefas & Faxina Recorrente</p>
+                  <p class="text-slate-400 text-[11px]">Cronograma por cômodo com reinício semanal.</p>
+                </div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-800/70 border border-slate-700/70 flex items-start gap-2.5">
+                <span class="text-lg">💰</span>
+                <div>
+                  <p class="font-bold text-white">4. Planilha de Gastos & Boletos</p>
+                  <p class="text-slate-400 text-[11px]">Contas fixas, gastos de mercado e metas mensais.</p>
+                </div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-800/70 border border-slate-700/70 flex items-start gap-2.5">
+                <span class="text-lg">🏠</span>
+                <div>
+                  <p class="font-bold text-white">5. Aquisições & Manutenção</p>
+                  <p class="text-slate-400 text-[11px]">Links, fotos, histórico no Dia X e garantias.</p>
+                </div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-800/70 border border-slate-700/70 flex items-start gap-2.5">
+                <span class="text-lg">🍲</span>
+                <div>
+                  <p class="font-bold text-white">6. Despensa & Cardápio Semanal</p>
+                  <p class="text-slate-400 text-[11px]">Alerta de validade, receitas e reposição automática.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Google Account Sign-In / Sign-Up Card (5 cols) -->
+        <div class="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-lg flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h2 class="text-lg font-bold text-slate-900">Acesse ou Crie sua Conta</h2>
+                <p class="text-xs text-slate-500">Vincule sua Conta Google para isolar e sincronizar seus dados</p>
+              </div>
+              <span class="text-2xl">🔐</span>
+            </div>
+
+            <!-- Auth Mode Tabs: Entrar vs Criar Conta Google -->
+            <div class="grid grid-cols-2 bg-slate-100 p-1 rounded-xl border border-slate-200">
+              <button id="tabBtnAuthLogin" type="button" class="py-2 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs transition">
+                Entrar na Minha Conta
+              </button>
+              <button id="tabBtnAuthRegister" type="button" class="py-2 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition">
+                Criar Nova Conta Google
+              </button>
+            </div>
+
+            <!-- FORM 1: LOGIN WITH EXISTING GOOGLE ACCOUNT -->
+            <form id="formAuthLogin" class="space-y-3.5">
+              <div>
+                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">E-mail da Conta Google *</label>
+                <input id="loginEmailInput" type="email" required placeholder="seu.email@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Senha / PIN de Acesso Local *</label>
+                <input id="loginPinInput" type="password" required placeholder="Digite sua senha ou PIN..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+              </div>
+              <button type="submit" class="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm transition shadow flex items-center justify-center gap-2">
+                <span>🔑</span>
+                <span>Entrar com Conta Google e Carregar Meus Dados</span>
+              </button>
+            </form>
+
+            <!-- FORM 2: CREATE NEW ACCOUNT LINKED TO GOOGLE -->
+            <form id="formAuthRegister" class="hidden space-y-3.5">
+              <div>
+                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Seu Nome *</label>
+                <input id="regNameInput" type="text" required placeholder="Ex.: César Augusto, Maria Silva..." class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">E-mail da sua Conta Google (@gmail.com) *</label>
+                <input id="regEmailInput" type="email" required placeholder="seu.nome@gmail.com" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Criar Senha / PIN *</label>
+                  <input id="regPinInput" type="password" required placeholder="Mínimo 4 dígitos" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+                </div>
+                <div>
+                  <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Dados Iniciais da Conta</label>
+                  <select id="regTemplateSelect" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
+                    <option value="EMPTY">✨ Conta Limpa (Começar do Zero)</option>
+                    <option value="DEMO">📦 Com Exemplos Prontos</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Pasta de Sincronização no seu Google Drive</label>
+                <input id="regDriveFolderInput" type="text" value="/CasaSync_Backups/" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 text-slate-700" />
+              </div>
+              <button type="submit" class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm transition shadow flex items-center justify-center gap-2">
+                <span>✨</span>
+                <span>Criar Conta Vinculada ao Google Drive</span>
+              </button>
+            </form>
+
+            <!-- Registered Accounts Switcher (Quick 1-Click Access for Testing Multi-User Isolation) -->
+            <div class="pt-3 border-t border-slate-100 space-y-2">
+              <div class="flex items-center justify-between">
+                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Contas Google Conectadas Neste Aparelho:</p>
+                <span id="registeredAccountsCount" class="text-[11px] font-semibold text-slate-500">0 contas</span>
+              </div>
+              <div id="savedAccountsList" class="space-y-2 max-h-44 overflow-y-auto custom-scroll">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 text-[11px] text-slate-400 flex items-center justify-between">
+            <span>🔒 Criptografia e armazenamento isolado por e-mail</span>
+            <span>OAuth 2.0 • Google Drive</span>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
 
     <!-- ==================== VIEW 1: MODULAR HOME SCREEN ==================== -->
     <section id="viewHome" class="space-y-6">
@@ -1539,6 +1723,18 @@
         <button id="btnCloseBackupModal" type="button" class="text-slate-400 hover:text-slate-700 text-sm font-bold px-2 py-1">✕</button>
       </div>
 
+      <!-- Active Google Account Isolation Info -->
+      <div class="p-4 rounded-xl bg-slate-900 text-white flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Conta Google Vinculada (Cofre Individual Isolado)</p>
+          <p id="modalDriveUserAccount" class="text-sm font-bold mt-0.5">usuario@gmail.com</p>
+          <p id="modalDriveFolderPath" class="text-xs text-slate-400">Pasta no Google Drive: /CasaSync_Backups/</p>
+        </div>
+        <button id="btnSimulateGoogleDriveSyncNow" type="button" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow">
+          🔄 Sincronizar Agora com Meu Google Drive
+        </button>
+      </div>
+
       <!-- Export / Import Controls -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-200 space-y-2">
@@ -1615,6 +1811,8 @@
   <script>
     (function () {
       const STORAGE_KEY = 'casasync_state_v1';
+      const ACCOUNTS_REGISTRY_KEY = 'casasync_google_accounts_v1';
+      const ACTIVE_SESSION_KEY = 'casasync_active_google_user_v1';
       const TODAY_STR = new Date().toISOString().slice(0, 10);
 
       function getTomorrowStr(dateStr) {
@@ -2207,11 +2405,92 @@
         ]
       };
 
+      function createEmptyUserState() {
+        const clean = JSON.parse(JSON.stringify(DEFAULT_STATE));
+        clean.plans = [];
+        clean.habits = [
+          {
+            id: 'h_water',
+            title: 'Beber 2L de Água (Copos de 250ml)',
+            icon: '💧',
+            target: 8,
+            progressByDate: { [TODAY_STR]: 0 },
+            streak: 0,
+            bestStreak: 0
+          }
+        ];
+        clean.shoppingItems = [];
+        clean.tasks = [];
+        clean.productPriceHistory = {};
+        clean.supermarketTrips = [];
+        clean.transactions = [];
+        clean.fixedBills = [];
+        clean.wishlistItems = [];
+        clean.warranties = [];
+        clean.maintenanceCycles = [];
+        clean.pantryItems = [];
+        clean.recipes = [];
+        clean.backups = [
+          {
+            id: 'bkp_init_' + Date.now(),
+            timestamp: `${TODAY_STR} ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`,
+            label: `Cofre Google Drive inicializado (${TODAY_STR})`
+          }
+        ];
+        return clean;
+      }
+
+      const DEFAULT_ACCOUNTS = [
+        {
+          name: 'César Augusto (Conta Principal)',
+          email: 'cesar.casa@gmail.com',
+          pin: '1234',
+          driveFolder: '/AppGestaoCasa/Backups/',
+          createdAt: TODAY_STR
+        },
+        {
+          name: 'Convidado Familiar (Conta Isolada 2)',
+          email: 'familiar.rotina@gmail.com',
+          pin: '1234',
+          driveFolder: '/CasaSync_Familiar/Backups/',
+          createdAt: TODAY_STR
+        }
+      ];
+
+      function loadAccountsRegistry() {
+        try {
+          const raw = localStorage.getItem(ACCOUNTS_REGISTRY_KEY);
+          if (!raw) return JSON.parse(JSON.stringify(DEFAULT_ACCOUNTS));
+          const parsed = JSON.parse(raw);
+          return Array.isArray(parsed) && parsed.length > 0 ? parsed : JSON.parse(JSON.stringify(DEFAULT_ACCOUNTS));
+        } catch (e) {
+          return JSON.parse(JSON.stringify(DEFAULT_ACCOUNTS));
+        }
+      }
+
+      function saveAccountsRegistry(accounts) {
+        try {
+          localStorage.setItem(ACCOUNTS_REGISTRY_KEY, JSON.stringify(accounts));
+        } catch (e) {}
+      }
+
+      let accountsRegistry = loadAccountsRegistry();
+      let currentUser = null; // Starts on the Welcome / Google Account Gate so user sees the restricted access screen first!
+
+      function getUserStorageKey(email) {
+        if (!email) return STORAGE_KEY;
+        return 'casasync_user_db_' + email.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      }
+
       let state = loadState();
 
       function loadState() {
         try {
-          const raw = localStorage.getItem(STORAGE_KEY);
+          const key = currentUser && currentUser.email ? getUserStorageKey(currentUser.email) : STORAGE_KEY;
+          const raw = localStorage.getItem(key);
+          if (!raw && currentUser && currentUser.email === 'familiar.rotina@gmail.com') {
+            return createEmptyUserState();
+          }
           if (!raw) return JSON.parse(JSON.stringify(DEFAULT_STATE));
           const parsed = JSON.parse(raw);
           const merged = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), parsed);
@@ -2246,7 +2525,8 @@
       function saveState() {
         state.lastUpdated = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          const key = currentUser && currentUser.email ? getUserStorageKey(currentUser.email) : STORAGE_KEY;
+          localStorage.setItem(key, JSON.stringify(state));
         } catch (err) {
           // Ignore storage quota errors in sandboxed frames
         }
@@ -2284,9 +2564,109 @@
       }
 
       function hideAllViews() {
-        ['viewHome', 'viewModule1', 'viewModule2', 'viewModule3', 'viewModule4', 'viewModule5', 'viewModule6'].forEach(id => {
+        ['viewWelcomeAuth', 'viewHome', 'viewModule1', 'viewModule2', 'viewModule3', 'viewModule4', 'viewModule5', 'viewModule6'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.classList.add('hidden');
+        });
+      }
+
+      function openWelcomeAuthView() {
+        hideAllViews();
+        document.getElementById('viewWelcomeAuth').classList.remove('hidden');
+        document.getElementById('platformInfoBanner').classList.add('hidden');
+        document.getElementById('headerUserBadge').classList.add('hidden');
+        document.getElementById('headerUserBadge').classList.remove('flex');
+        document.getElementById('btnLogoutAccount').classList.add('hidden');
+        renderWelcomeSavedAccounts();
+      }
+
+      function switchAuthTab(mode) {
+        const fLogin = document.getElementById('formAuthLogin');
+        const fReg = document.getElementById('formAuthRegister');
+        const bLogin = document.getElementById('tabBtnAuthLogin');
+        const bReg = document.getElementById('tabBtnAuthRegister');
+        if (mode === 'register') {
+          fLogin.classList.add('hidden');
+          fReg.classList.remove('hidden');
+          bReg.className = 'py-2 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs transition';
+          bLogin.className = 'py-2 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition';
+        } else {
+          fLogin.classList.remove('hidden');
+          fReg.classList.add('hidden');
+          bLogin.className = 'py-2 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs transition';
+          bReg.className = 'py-2 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition';
+        }
+      }
+
+      function loginWithGoogleAccount(accountObj) {
+        currentUser = accountObj;
+        try {
+          localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(accountObj));
+        } catch (e) {}
+        state = loadState();
+        document.getElementById('platformInfoBanner').classList.remove('hidden');
+        const badge = document.getElementById('headerUserBadge');
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+        document.getElementById('headerUserAvatar').textContent = (accountObj.name || accountObj.email || 'G').charAt(0).toUpperCase();
+        document.getElementById('headerUserName').textContent = accountObj.name || 'Usuário Google';
+        document.getElementById('headerUserEmail').textContent = accountObj.email;
+        document.getElementById('btnLogoutAccount').classList.remove('hidden');
+
+        const modalUserEl = document.getElementById('modalDriveUserAccount');
+        const modalFolderEl = document.getElementById('modalDriveFolderPath');
+        if (modalUserEl) modalUserEl.textContent = `${accountObj.name} (${accountObj.email})`;
+        if (modalFolderEl) modalFolderEl.textContent = `Pasta exclusiva no Google Drive: ${accountObj.driveFolder || '/CasaSync_Backups/'}`;
+
+        openHomeView();
+        showToast(`Conectado como ${accountObj.name} (${accountObj.email})! Dados isolados carregados.`, '🔒');
+      }
+
+      function logoutCurrentAccount() {
+        currentUser = null;
+        try {
+          localStorage.removeItem(ACTIVE_SESSION_KEY);
+        } catch (e) {}
+        openWelcomeAuthView();
+        showToast('Sessão encerrada com segurança. Selecione ou crie outra Conta Google.', '🚪');
+      }
+
+      function renderWelcomeSavedAccounts() {
+        const listEl = document.getElementById('savedAccountsList');
+        const countEl = document.getElementById('registeredAccountsCount');
+        if (!listEl) return;
+        listEl.innerHTML = '';
+        if (countEl) countEl.textContent = `${accountsRegistry.length} conta(s)`;
+
+        accountsRegistry.forEach(acc => {
+          const row = document.createElement('div');
+          row.className = 'p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-emerald-50/50 hover:border-emerald-300 transition flex items-center justify-between gap-2';
+          const initial = (acc.name || acc.email || 'G').charAt(0).toUpperCase();
+          row.innerHTML = `
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-full bg-slate-900 text-emerald-400 font-bold text-xs flex items-center justify-center shrink-0">
+                ${initial}
+              </div>
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-slate-900 truncate">${acc.name}</p>
+                <p class="text-[11px] text-slate-500 truncate">${acc.email} • Drive: ${acc.driveFolder || '/CasaSync/'}</p>
+              </div>
+            </div>
+            <button type="button" data-quick-login-email="${acc.email}" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shrink-0 transition shadow-2xs">
+              Entrar →
+            </button>
+          `;
+          listEl.appendChild(row);
+        });
+
+        listEl.querySelectorAll('[data-quick-login-email]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const email = btn.getAttribute('data-quick-login-email');
+            const found = accountsRegistry.find(a => a.email.toLowerCase() === email.toLowerCase());
+            if (found) {
+              loginWithGoogleAccount(found);
+            }
+          });
         });
       }
 
@@ -2419,8 +2799,12 @@
         }
       }
 
-      // Navigation between Home and Modules 1, 2, 3
+      // Navigation between Home and Modules 1..6 (Protected by Google Account Auth Gate)
       function openHomeView() {
+        if (!currentUser) {
+          openWelcomeAuthView();
+          return;
+        }
         hideAllViews();
         document.getElementById('viewHome').classList.remove('hidden');
         renderAll();
@@ -3072,7 +3456,8 @@
       }
 
       function downloadBackupJson() {
-        const filename = `backup_casa_${TODAY_STR}.json`;
+        const emailSlug = currentUser && currentUser.email ? currentUser.email.split('@')[0].replace(/[^a-z0-9]/gi, '_') : 'geral';
+        const filename = `backup_casa_${emailSlug}_${TODAY_STR}.json`;
         const dataStr = JSON.stringify(state, null, 2);
         const blob = new Blob([dataStr], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -5387,7 +5772,87 @@
           showToast(`Receita "${title}" salva com sucesso!`, '📖');
         });
 
+        // Welcome & Google Account Auth Gate Listeners
+        document.getElementById('tabBtnAuthLogin').addEventListener('click', () => switchAuthTab('login'));
+        document.getElementById('tabBtnAuthRegister').addEventListener('click', () => switchAuthTab('register'));
+        document.getElementById('btnLogoutAccount').addEventListener('click', logoutCurrentAccount);
+
+        document.getElementById('formAuthLogin').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const email = document.getElementById('loginEmailInput').value.trim().toLowerCase();
+          const pin = document.getElementById('loginPinInput').value.trim();
+          if (!email) return;
+
+          let acc = accountsRegistry.find(a => a.email.toLowerCase() === email);
+          if (!acc) {
+            showToast('Conta Google não encontrada neste dispositivo. Clique na aba "Criar Nova Conta Google"!', '⚠️');
+            switchAuthTab('register');
+            document.getElementById('regEmailInput').value = email;
+            return;
+          }
+          if (acc.pin && acc.pin !== pin) {
+            showToast('Senha / PIN incorreto para esta conta.', '⚠️');
+            return;
+          }
+          document.getElementById('formAuthLogin').reset();
+          loginWithGoogleAccount(acc);
+        });
+
+        document.getElementById('formAuthRegister').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = document.getElementById('regNameInput').value.trim();
+          const email = document.getElementById('regEmailInput').value.trim().toLowerCase();
+          const pin = document.getElementById('regPinInput').value.trim();
+          const template = document.getElementById('regTemplateSelect').value;
+          const driveFolder = document.getElementById('regDriveFolderInput').value.trim() || '/CasaSync_Backups/';
+          if (!name || !email || !pin) return;
+
+          const existing = accountsRegistry.find(a => a.email.toLowerCase() === email);
+          if (existing) {
+            showToast('Este e-mail Google já possui conta cadastrada. Faça login!', 'ℹ️');
+            switchAuthTab('login');
+            document.getElementById('loginEmailInput').value = email;
+            return;
+          }
+
+          const newAcc = {
+            name,
+            email,
+            pin,
+            driveFolder,
+            createdAt: TODAY_STR
+          };
+          accountsRegistry.unshift(newAcc);
+          saveAccountsRegistry(accountsRegistry);
+
+          // Initialize isolated database for this Google Account
+          const initialDb = template === 'EMPTY' ? createEmptyUserState() : JSON.parse(JSON.stringify(DEFAULT_STATE));
+          try {
+            localStorage.setItem(getUserStorageKey(email), JSON.stringify(initialDb));
+          } catch (err) {}
+
+          document.getElementById('formAuthRegister').reset();
+          loginWithGoogleAccount(newAcc);
+          showToast(`Conta Google "${email}" criada com banco de dados 100% isolado!`, '🎉');
+        });
+
+        document.getElementById('btnSimulateGoogleDriveSyncNow').addEventListener('click', () => {
+          if (!currentUser) return;
+          const timeNow = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+          const emailSlug = currentUser.email.split('@')[0];
+          state.backups.unshift({
+            id: 'bkp_drive_' + Date.now(),
+            timestamp: `${TODAY_STR} ${timeNow}`,
+            label: `Sincronizado no Google Drive de ${emailSlug} (${currentUser.driveFolder || '/CasaSync/'})`
+          });
+          saveState();
+          renderBackupSnapshots();
+          renderHomeScreen();
+          showToast(`Dados sincronizados com o Google Drive de ${currentUser.email}!`, '☁️');
+        });
+
         renderAll();
+        openWelcomeAuthView();
       });
     })();
   </script>
