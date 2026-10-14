@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CasaSync — Gestão da Casa e Rotina (Fase 4)</title>
+  <title>CasaSync — Gestão Completa da Casa e Rotina (v1.0)</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,7 +41,7 @@
           <div>
             <div class="flex items-center gap-2">
               <span class="font-bold text-base tracking-tight">CasaSync</span>
-              <span class="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Fase 4</span>
+              <span class="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Completo • 6 Módulos</span>
             </div>
             <p class="text-xs text-slate-400">Windows • Linux • Android</p>
           </div>
@@ -155,6 +155,9 @@
         </button>
         <button id="btnShortcutWishlist" type="button" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 text-xs font-medium text-slate-700 shadow-sm transition">
           🏠 Aquisições & Preços
+        </button>
+        <button id="btnShortcutPantry" type="button" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 text-xs font-medium text-slate-700 shadow-sm transition">
+          🍲 Despensa & Cardápio
         </button>
         <button id="btnShortcutExport" type="button" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-indigo-500 text-xs font-medium text-slate-700 shadow-sm transition">
           💾 Exportar Backup (.json)
@@ -1341,6 +1344,164 @@
 
     </section>
 
+    <!-- ==================== VIEW 7: MODULE 6 (DESPENSA, VALIDADES & CARDÁPIO SEMANAL) ==================== -->
+    <section id="viewModule6" class="hidden space-y-6">
+
+      <!-- Module 6 Header -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <button id="btnBackFromMod6" type="button" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+            ← Início
+          </button>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-lg sm:text-xl font-bold text-slate-900">Módulo 6: Despensa, Estoque & Cardápio Semanal</h1>
+              <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800">Ativo na Fase 5</span>
+            </div>
+            <p class="text-xs text-slate-500">Controle de estoque com alerta de validade, receitas e envio automático de faltantes para a Lista de Compras</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+            <button id="tabBtnMod6Pantry" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-900 shadow-xs">
+              🥫 Despensa & Validades
+            </button>
+            <button id="tabBtnMod6Menu" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900">
+              🍽️ Cardápio Semanal & Receitas
+            </button>
+          </div>
+          <button id="btnSyncLowStockToShopping" type="button" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition shadow-sm">
+            🛒 Enviar Itens Acabando p/ Compras
+          </button>
+        </div>
+      </div>
+
+      <!-- Module 6 KPI Summary Bar -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Itens na Despensa</p>
+          <p id="mod6MetricTotalItems" class="text-lg sm:text-xl font-bold text-slate-900 mt-0.5">0 itens</p>
+        </div>
+        <div class="bg-amber-50/90 p-4 rounded-2xl border border-amber-200 shadow-xs">
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-amber-800">⚠️ Estoque Baixo / Em Falta</p>
+          <p id="mod6MetricLowStock" class="text-lg sm:text-xl font-bold text-amber-900 mt-0.5">0 itens</p>
+        </div>
+        <div class="bg-rose-50/90 p-4 rounded-2xl border border-rose-200 shadow-xs">
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-rose-800">⏳ Vencendo em ≤ 7 Dias</p>
+          <p id="mod6MetricExpiring" class="text-lg sm:text-xl font-bold text-rose-700 mt-0.5">0 alertas</p>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Receitas Cadastradas</p>
+          <p id="mod6MetricRecipes" class="text-lg sm:text-xl font-bold text-indigo-600 mt-0.5">0 receitas</p>
+        </div>
+      </div>
+
+      <!-- ==================== SUBVIEW 6A: CONTROLE DE DESPENSA E VALIDADES ==================== -->
+      <div id="subviewMod6Pantry" class="space-y-5">
+
+        <!-- Desktop Manager Form: Add Pantry Item -->
+        <div id="desktopPantryEditorCard" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">💻 Cadastrar Item no Estoque da Casa (Gerenciador PC)</h3>
+            <p class="text-xs text-slate-500">Quando a quantidade chegar ao Estoque Mínimo, o aplicativo envia automaticamente o produto para a Lista de Compras (Módulo 2)</p>
+          </div>
+
+          <form id="formAddPantryItem" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+            <div class="sm:col-span-2">
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Produto no Estoque *</label>
+              <input id="pantryNameInput" type="text" required placeholder="Ex.: Arroz 5kg, Leite Integral, Feijão Carioca..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Local</label>
+              <select id="pantryLocationInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
+                <option value="Armário / Despensa">🥫 Armário / Despensa</option>
+                <option value="Geladeira">🧊 Geladeira</option>
+                <option value="Freezer">❄️ Freezer</option>
+                <option value="Lavanderia">🧼 Lavanderia</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Qtd. Atual</label>
+                <input id="pantryQtyInput" type="number" step="0.5" min="0" value="2" required class="w-full px-2.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Mínimo</label>
+                <input id="pantryMinInput" type="number" step="0.5" min="0" value="1" required class="w-full px-2.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Validade (Opcional)</label>
+              <input id="pantryExpiryInput" type="date" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+            <div class="flex items-end">
+              <button type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm">
+                + Salvar no Estoque
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Pantry Items Grid -->
+        <div id="pantryGridContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Rendered dynamically -->
+        </div>
+
+      </div>
+
+      <!-- ==================== SUBVIEW 6B: CARDÁPIO SEMANAL & BANCO DE RECEITAS ==================== -->
+      <div id="subviewMod6Menu" class="hidden space-y-6">
+
+        <!-- Weekly Meal Planner Grid (Segunda a Domingo) -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">🍽️ Grade do Cardápio da Semana (Almoço & Jantar)</h3>
+              <p class="text-xs text-slate-500">Planeje os pratos da semana no PC e consulte rapidamente na cozinha pelo celular ou tablet</p>
+            </div>
+            <button id="btnGenerateMenuShopping" type="button" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-sm">
+              🛒 Gerar Compras dos Ingredientes Faltantes
+            </button>
+          </div>
+
+          <div id="weeklyMenuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Recipes Bank & Add Recipe Form -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">📖 Livro de Receitas da Casa (Com Ingredientes Vinculados)</h3>
+            <p class="text-xs text-slate-500">Cadastre os pratos que você mais faz e seus ingredientes para cruzar automaticamente com o estoque da Despensa</p>
+          </div>
+
+          <form id="formAddRecipe" class="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-2 border-t border-slate-100">
+            <div class="sm:col-span-2">
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Nome do Prato / Receita *</label>
+              <input id="recipeTitleInput" type="text" required placeholder="Ex.: Strogonoff de Frango, Macarrão à Bolonhesa..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Ingredientes Principais (separe por vírgula) *</label>
+              <input id="recipeIngredientsInput" type="text" required placeholder="Ex.: Peito de Frango Resfriado, Arroz 5kg, Creme de Leite..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+            <div class="flex items-end">
+              <button type="submit" class="w-full py-2 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm">
+                + Salvar Receita
+              </button>
+            </div>
+          </form>
+
+          <div id="recipesListGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
   </main>
 
   <!-- ==================== MODAL 1: PERSONALIZAR TELA INICIAL ==================== -->
@@ -1541,8 +1702,8 @@
             id: 'mod6',
             order: 6,
             visible: true,
-            phase: 'Fase 5',
-            activePhase: false,
+            phase: 'Fase 5 • Ativo',
+            activePhase: true,
             icon: '🍲',
             title: '6. Despensa & Cardápio Semanal',
             subtitle: 'Controle de estoque com alerta de validade, receitas e geração automática de compras.',
@@ -1964,6 +2125,79 @@
             nextDue: addDaysStr(TODAY_STR, 90)
           }
         ],
+        pantryItems: [
+          {
+            id: 'pt1',
+            name: 'Arroz 5kg',
+            location: 'Armário / Despensa',
+            qty: 2,
+            minQty: 1,
+            unit: 'pacote',
+            expiry: addDaysStr(TODAY_STR, 90)
+          },
+          {
+            id: 'pt2',
+            name: 'Leite Integral',
+            location: 'Armário / Despensa',
+            qty: 1,
+            minQty: 3,
+            unit: 'un',
+            expiry: addDaysStr(TODAY_STR, 5)
+          },
+          {
+            id: 'pt3',
+            name: 'Café em Pó 500g',
+            location: 'Armário / Despensa',
+            qty: 0,
+            minQty: 1,
+            unit: 'pacote',
+            expiry: addDaysStr(TODAY_STR, 120)
+          },
+          {
+            id: 'pt4',
+            name: 'Peito de Frango Resfriado',
+            location: 'Freezer',
+            qty: 2,
+            minQty: 1,
+            unit: 'kg',
+            expiry: addDaysStr(TODAY_STR, 4)
+          },
+          {
+            id: 'pt5',
+            name: 'Detergente Neutro',
+            location: 'Lavanderia',
+            qty: 3,
+            minQty: 2,
+            unit: 'un',
+            expiry: addDaysStr(TODAY_STR, 365)
+          }
+        ],
+        weeklyMenu: [
+          { day: 'Segunda', lunch: 'Frango Grelhado com Arroz e Salada', dinner: 'Omelete de Forno com Tomate' },
+          { day: 'Terça', lunch: 'Carne Moída com Purê e Feijão', dinner: 'Sopa Leve de Legumes' },
+          { day: 'Quarta', lunch: 'Strogonoff de Frango com Arroz', dinner: 'Sanduíche Natural de Frango' },
+          { day: 'Quinta', lunch: 'Macarrão ao Molho de Tomate', dinner: 'Crepioca com Queijo' },
+          { day: 'Sexta', lunch: 'Filé de Tilápia com Legumes', dinner: 'Noite de Pizza Caseira' },
+          { day: 'Sábado', lunch: 'Feijoada Leve / Almoço Especial', dinner: 'Lanche Rápido' },
+          { day: 'Domingo', lunch: 'Assado de Domingo em Família', dinner: ' Chá / Café com Torradas' }
+        ],
+        recipes: [
+          {
+            id: 'rc1',
+            title: 'Strogonoff de Frango Caseiro',
+            ingredients: ['Peito de Frango Resfriado', 'Arroz 5kg', 'Creme de Leite', 'Champignon']
+          },
+          {
+            id: 'rc2',
+            title: 'Café da Manhã Completo da Semana',
+            ingredients: ['Café em Pó 500g', 'Leite Integral', 'Pão de Forma', 'Queijo Minas']
+          },
+          {
+            id: 'rc3',
+            title: 'Salada Mediterrânea Fresca',
+            ingredients: ['Tomate Italiano e Folhas Verdes', 'Azeite de Oliva Extra Virgem 500ml', 'Queijo Branco']
+          }
+        ],
         backups: [
           {
             id: 'bkp1',
@@ -1993,6 +2227,9 @@
           if (!Array.isArray(merged.wishlistItems)) merged.wishlistItems = JSON.parse(JSON.stringify(DEFAULT_STATE.wishlistItems));
           if (!Array.isArray(merged.warranties)) merged.warranties = JSON.parse(JSON.stringify(DEFAULT_STATE.warranties));
           if (!Array.isArray(merged.maintenanceCycles)) merged.maintenanceCycles = JSON.parse(JSON.stringify(DEFAULT_STATE.maintenanceCycles));
+          if (!Array.isArray(merged.pantryItems)) merged.pantryItems = JSON.parse(JSON.stringify(DEFAULT_STATE.pantryItems));
+          if (!Array.isArray(merged.weeklyMenu)) merged.weeklyMenu = JSON.parse(JSON.stringify(DEFAULT_STATE.weeklyMenu));
+          if (!Array.isArray(merged.recipes)) merged.recipes = JSON.parse(JSON.stringify(DEFAULT_STATE.recipes));
           if (!merged.selectedWishlistChartId && merged.wishlistItems.length > 0) {
             merged.selectedWishlistChartId = merged.wishlistItems[0].id;
           }
@@ -2047,10 +2284,38 @@
       }
 
       function hideAllViews() {
-        ['viewHome', 'viewModule1', 'viewModule2', 'viewModule3', 'viewModule4', 'viewModule5'].forEach(id => {
+        ['viewHome', 'viewModule1', 'viewModule2', 'viewModule3', 'viewModule4', 'viewModule5', 'viewModule6'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.classList.add('hidden');
         });
+      }
+
+      function openModule6View(subtab) {
+        hideAllViews();
+        document.getElementById('viewModule6').classList.remove('hidden');
+        if (subtab) {
+          switchModule6Tab(subtab);
+        }
+        renderAll();
+      }
+
+      function switchModule6Tab(tab) {
+        const subPantry = document.getElementById('subviewMod6Pantry');
+        const subMenu = document.getElementById('subviewMod6Menu');
+        const btnPantry = document.getElementById('tabBtnMod6Pantry');
+        const btnMenu = document.getElementById('tabBtnMod6Menu');
+
+        if (tab === 'menu') {
+          subPantry.classList.add('hidden');
+          subMenu.classList.remove('hidden');
+          btnMenu.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-900 shadow-xs';
+          btnPantry.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900';
+        } else {
+          subPantry.classList.remove('hidden');
+          subMenu.classList.add('hidden');
+          btnPantry.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-900 shadow-xs';
+          btnMenu.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900';
+        }
       }
 
       function openModule5View(subtab) {
@@ -2242,6 +2507,7 @@
           document.getElementById('desktopFinanceEditorCard').classList.add('hidden');
           document.getElementById('mobileFinanceQuickBar').classList.remove('hidden');
           document.getElementById('desktopWishlistEditorCard').classList.add('hidden');
+          document.getElementById('desktopPantryEditorCard').classList.add('hidden');
         } else {
           btnDesktop.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-emerald-500 text-slate-950 shadow';
           btnMobile.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 text-slate-300 hover:text-white';
@@ -2263,6 +2529,7 @@
           document.getElementById('desktopFinanceEditorCard').classList.remove('hidden');
           document.getElementById('mobileFinanceQuickBar').classList.add('hidden');
           document.getElementById('desktopWishlistEditorCard').classList.remove('hidden');
+          document.getElementById('desktopPantryEditorCard').classList.remove('hidden');
         }
 
         document.getElementById('currentDateDisplay').textContent = `Hoje: ${formatPtDate(TODAY_STR)}`;
@@ -2332,6 +2599,9 @@
             statusMetric = `Mercado: ${formatCurrencyBRL(marketSpent)} • ${state.fixedBills.filter(b => !b.paid).length} boleto(s) aberto(s)`;
           } else if (mod.id === 'mod5') {
             statusMetric = `${state.wishlistItems.length} desejos • ${state.warranties.length} garantias • ${state.maintenanceCycles.length} revisões`;
+          } else if (mod.id === 'mod6') {
+            const lowStock = state.pantryItems.filter(p => Number(p.qty) <= Number(p.minQty)).length;
+            statusMetric = `${state.pantryItems.length} no estoque (${lowStock} acabando) • ${state.recipes.length} receitas`;
           }
 
           card.innerHTML = `
@@ -2370,6 +2640,8 @@
               openModule4View('statement');
             } else if (modId === 'mod5') {
               openModule5View('wishlist');
+            } else if (modId === 'mod6') {
+              openModule6View('pantry');
             } else {
               openFutureModuleModal(modId);
             }
@@ -3924,6 +4196,253 @@
         renderWishlistPriceChart();
       }
 
+      // ==================== MODULE 6: PANTRY, EXPIRY & WEEKLY MENU LOGIC ====================
+      function ensureItemInShoppingList(itemName, qtyToBuy, unitStr) {
+        const clean = (itemName || '').trim();
+        if (!clean) return false;
+        const exists = state.shoppingItems.some(s => s.name.toLowerCase() === clean.toLowerCase());
+        if (exists) return false;
+        const historySeries = state.productPriceHistory[clean];
+        const lastKnownPrice = Array.isArray(historySeries) && historySeries.length > 0
+          ? Number(historySeries[historySeries.length - 1].price)
+          : 0;
+
+        state.shoppingItems.push({
+          id: 'sh_auto_' + Date.now() + Math.random().toString(36).slice(2, 5),
+          name: clean,
+          store: 'Supermercado',
+          aisle: 'Mercearia & Grãos',
+          qty: Math.max(1, Number(qtyToBuy) || 1),
+          unit: unitStr || 'un',
+          price: lastKnownPrice,
+          inCart: false
+        });
+        return true;
+      }
+
+      function renderModule6() {
+        const sevenDaysAhead = addDaysStr(TODAY_STR, 7);
+        const lowStockItems = state.pantryItems.filter(p => Number(p.qty) <= Number(p.minQty));
+        const expiringItems = state.pantryItems.filter(p => p.expiry && p.expiry <= sevenDaysAhead);
+
+        document.getElementById('mod6MetricTotalItems').textContent = `${state.pantryItems.length} produto(s)`;
+        document.getElementById('mod6MetricLowStock').textContent = `${lowStockItems.length} item(ns)`;
+        document.getElementById('mod6MetricExpiring').textContent = `${expiringItems.length} alerta(s)`;
+        document.getElementById('mod6MetricRecipes').textContent = `${state.recipes.length} receita(s)`;
+
+        // 1. Render Pantry Cards
+        const pantryGrid = document.getElementById('pantryGridContainer');
+        pantryGrid.innerHTML = '';
+
+        state.pantryItems.forEach(item => {
+          const isLow = Number(item.qty) <= Number(item.minQty);
+          const isExpiring = item.expiry && item.expiry <= sevenDaysAhead;
+          const card = document.createElement('div');
+          card.className = `p-4 rounded-2xl border bg-white flex flex-col justify-between gap-3 shadow-2xs ${
+            isLow ? 'border-amber-400 bg-amber-50/30' : isExpiring ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200'
+          }`;
+
+          card.innerHTML = `
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[11px] font-semibold">${item.location}</span>
+                ${
+                  isLow
+                    ? `<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">⚠️ Estoque Baixo</span>`
+                    : `<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">✓ Estoque OK</span>`
+                }
+              </div>
+              <h4 class="text-sm font-bold text-slate-900 mt-1">${item.name}</h4>
+              <p class="text-xs text-slate-500 mt-0.5">
+                Atual: <strong class="text-slate-900">${item.qty} ${item.unit || 'un'}</strong> • Mínimo: ${item.minQty} ${item.unit || 'un'}
+              </p>
+              ${
+                item.expiry
+                  ? `<p class="text-[11px] mt-1 font-medium ${isExpiring ? 'text-rose-600 font-bold' : 'text-slate-500'}">
+                      ${isExpiring ? '⏳ Vence logo: ' : 'Validade: '}${formatPtDate(item.expiry)}
+                     </p>`
+                  : ''
+              }
+            </div>
+
+            <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <button type="button" data-pantry-dec="${item.id}" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-800">-</button>
+                <span class="text-xs font-bold px-1">${item.qty}</span>
+                <button type="button" data-pantry-inc="${item.id}" class="w-7 h-7 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white">+</button>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" data-pantry-to-shop="${item.id}" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">
+                  🛒 +Lista
+                </button>
+                ${
+                  state.platformMode === 'desktop'
+                    ? `<button type="button" data-pantry-del="${item.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
+                    : ''
+                }
+              </div>
+            </div>
+          `;
+          pantryGrid.appendChild(card);
+        });
+
+        pantryGrid.querySelectorAll('[data-pantry-dec]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-pantry-dec');
+            const item = state.pantryItems.find(p => p.id === id);
+            if (!item) return;
+            item.qty = Math.max(0, Math.round((Number(item.qty) - 1) * 10) / 10);
+            if (item.qty <= Number(item.minQty)) {
+              const added = ensureItemInShoppingList(item.name, Math.max(1, Number(item.minQty) - item.qty + 1), item.unit);
+              if (added) {
+                showToast(`"${item.name}" atingiu o estoque mínimo e foi enviado para a Lista de Compras!`, '🛒');
+              } else {
+                showToast(`Estoque de "${item.name}" atualizado (${item.qty}). Já está na Lista de Compras.`, '🥫');
+              }
+            }
+            saveState();
+            renderAll();
+          });
+        });
+
+        pantryGrid.querySelectorAll('[data-pantry-inc]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-pantry-inc');
+            const item = state.pantryItems.find(p => p.id === id);
+            if (!item) return;
+            item.qty = Math.round((Number(item.qty) + 1) * 10) / 10;
+            saveState();
+            renderAll();
+          });
+        });
+
+        pantryGrid.querySelectorAll('[data-pantry-to-shop]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-pantry-to-shop');
+            const item = state.pantryItems.find(p => p.id === id);
+            if (!item) return;
+            const added = ensureItemInShoppingList(item.name, 1, item.unit);
+            saveState();
+            renderAll();
+            showToast(added ? `"${item.name}" enviado para a Lista de Compras!` : `"${item.name}" já consta na Lista de Compras.`, '🛒');
+          });
+        });
+
+        pantryGrid.querySelectorAll('[data-pantry-del]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-pantry-del');
+            state.pantryItems = state.pantryItems.filter(p => p.id !== id);
+            saveState();
+            renderAll();
+            showToast('Item removido da Despensa.', '🗑️');
+          });
+        });
+
+        // 2. Render Weekly Menu Grid
+        const menuGrid = document.getElementById('weeklyMenuGrid');
+        menuGrid.innerHTML = '';
+        state.weeklyMenu.forEach((dayObj, idx) => {
+          const card = document.createElement('div');
+          card.className = 'p-3.5 rounded-xl border border-slate-200 bg-slate-50 flex flex-col justify-between gap-2';
+          card.innerHTML = `
+            <div>
+              <p class="text-xs font-bold uppercase tracking-wider text-emerald-800 border-b border-slate-200 pb-1.5 mb-2">${dayObj.day}</p>
+              <div class="space-y-2">
+                <div>
+                  <label class="block text-[10px] font-bold uppercase text-slate-400">☀️ Almoço</label>
+                  <input type="text" data-menu-edit="${idx}|lunch" value="${dayObj.lunch}" class="mt-0.5 w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs text-slate-800 font-medium" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold uppercase text-slate-400">🌙 Jantar</label>
+                  <input type="text" data-menu-edit="${idx}|dinner" value="${dayObj.dinner}" class="mt-0.5 w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs text-slate-800 font-medium" />
+                </div>
+              </div>
+            </div>
+          `;
+          menuGrid.appendChild(card);
+        });
+
+        menuGrid.querySelectorAll('[data-menu-edit]').forEach(inp => {
+          inp.addEventListener('change', () => {
+            const [idxStr, mealKey] = inp.getAttribute('data-menu-edit').split('|');
+            const idx = parseInt(idxStr, 10);
+            if (state.weeklyMenu[idx]) {
+              state.weeklyMenu[idx][mealKey] = inp.value.trim();
+              saveState();
+              showToast(`Cardápio de ${state.weeklyMenu[idx].day} salvo!`, '🍽️');
+            }
+          });
+        });
+
+        // 3. Render Recipes Bank
+        const recipesGrid = document.getElementById('recipesListGrid');
+        recipesGrid.innerHTML = '';
+        state.recipes.forEach(rc => {
+          const card = document.createElement('div');
+          card.className = 'p-4 rounded-2xl border border-slate-200 bg-white flex flex-col justify-between gap-3 shadow-2xs';
+          const ingBadges = (rc.ingredients || []).map(ing => {
+            const inPantry = state.pantryItems.find(p => p.name.toLowerCase() === ing.toLowerCase() && Number(p.qty) > 0);
+            return `<span class="px-2 py-0.5 rounded text-[11px] font-medium border ${
+              inPantry
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                : 'bg-amber-50 text-amber-800 border-amber-200'
+            }">${inPantry ? '✓ ' : '🛒 '}${ing}</span>`;
+          }).join('');
+
+          card.innerHTML = `
+            <div>
+              <h4 class="text-sm font-bold text-slate-900">🍲 ${rc.title}</h4>
+              <p class="text-[11px] text-slate-400 mt-0.5">Verde = Em estoque na Despensa • Amarelo = Falta comprar</p>
+              <div class="flex flex-wrap gap-1.5 mt-2.5">${ingBadges}</div>
+            </div>
+            <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between">
+              <button type="button" data-recipe-buy-missing="${rc.id}" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition">
+                🛒 Enviar Faltantes p/ Lista de Compras
+              </button>
+              ${
+                state.platformMode === 'desktop'
+                  ? `<button type="button" data-recipe-del="${rc.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
+                  : ''
+              }
+            </div>
+          `;
+          recipesGrid.appendChild(card);
+        });
+
+        recipesGrid.querySelectorAll('[data-recipe-buy-missing]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-recipe-buy-missing');
+            const rc = state.recipes.find(r => r.id === id);
+            if (!rc) return;
+            let addedCount = 0;
+            (rc.ingredients || []).forEach(ing => {
+              const inPantry = state.pantryItems.find(p => p.name.toLowerCase() === ing.toLowerCase() && Number(p.qty) > 0);
+              if (!inPantry) {
+                if (ensureItemInShoppingList(ing, 1, 'un')) addedCount++;
+              }
+            });
+            saveState();
+            renderAll();
+            showToast(
+              addedCount > 0
+                ? `${addedCount} ingrediente(s) faltante(s) de "${rc.title}" enviado(s) para a Lista de Compras!`
+                : `Você já tem todos os ingredientes de "${rc.title}" na Despensa ou na Lista!`,
+              '🛒'
+            );
+          });
+        });
+
+        recipesGrid.querySelectorAll('[data-recipe-del]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-recipe-del');
+            state.recipes = state.recipes.filter(r => r.id !== id);
+            saveState();
+            renderAll();
+            showToast('Receita removida.', '🗑️');
+          });
+        });
+      }
+
       function renderAll() {
         renderPlatformModeUI();
         renderHomeScreen();
@@ -3933,6 +4452,7 @@
         renderTasksModule();
         renderFinanceModule();
         renderModule5();
+        renderModule6();
         renderBackupSnapshots();
       }
 
@@ -4272,10 +4792,14 @@
           const paymentMethod = document.getElementById('selectShoppingPayment').value || 'PIX / Débito';
           const totalSpent = inCart.reduce((acc, i) => acc + (Number(i.qty) || 1) * (Number(i.price) || 0), 0);
 
-          // 1. Save each purchased product's unit price into the historical price chart
+          // 1. Save each purchased product's unit price into the historical price chart & replenish Pantry (Module 6)
           inCart.forEach(item => {
             if (Number(item.price) > 0) {
               recordProductPricePoint(item.name, tripDate, Number(item.price), item.store || 'Supermercado');
+            }
+            const pantryMatch = state.pantryItems.find(p => p.name.toLowerCase() === item.name.toLowerCase());
+            if (pantryMatch) {
+              pantryMatch.qty = Math.round((Number(pantryMatch.qty) + (Number(item.qty) || 1)) * 10) / 10;
             }
           });
 
@@ -4769,6 +5293,98 @@
           saveState();
           renderAll();
           showToast('Novo ciclo de manutenção preventiva criado!', '🔧');
+        });
+
+        // Module 6 Navigation & Listeners
+        document.getElementById('btnBackFromMod6').addEventListener('click', openHomeView);
+        document.getElementById('btnShortcutPantry').addEventListener('click', () => openModule6View('pantry'));
+        document.getElementById('tabBtnMod6Pantry').addEventListener('click', () => switchModule6Tab('pantry'));
+        document.getElementById('tabBtnMod6Menu').addEventListener('click', () => switchModule6Tab('menu'));
+
+        document.getElementById('btnSyncLowStockToShopping').addEventListener('click', () => {
+          let addedCount = 0;
+          state.pantryItems.forEach(item => {
+            if (Number(item.qty) <= Number(item.minQty)) {
+              const needQty = Math.max(1, Number(item.minQty) - Number(item.qty) + 1);
+              if (ensureItemInShoppingList(item.name, needQty, item.unit)) {
+                addedCount++;
+              }
+            }
+          });
+          saveState();
+          renderAll();
+          showToast(
+            addedCount > 0
+              ? `${addedCount} produto(s) com estoque baixo enviado(s) para a Lista de Compras!`
+              : 'Todos os itens com estoque baixo já estão na Lista de Compras!',
+            '🛒'
+          );
+        });
+
+        document.getElementById('formAddPantryItem').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = document.getElementById('pantryNameInput').value.trim();
+          const location = document.getElementById('pantryLocationInput').value;
+          const qty = parseFloat(document.getElementById('pantryQtyInput').value) || 0;
+          const minQty = parseFloat(document.getElementById('pantryMinInput').value) || 1;
+          const expiry = document.getElementById('pantryExpiryInput').value;
+          if (!name) return;
+
+          state.pantryItems.push({
+            id: 'pt_' + Date.now(),
+            name,
+            location,
+            qty,
+            minQty,
+            unit: 'un',
+            expiry
+          });
+          if (qty <= minQty) {
+            ensureItemInShoppingList(name, Math.max(1, minQty - qty + 1), 'un');
+          }
+          document.getElementById('formAddPantryItem').reset();
+          saveState();
+          renderAll();
+          showToast(`"${name}" cadastrado no Controle de Despensa!`, '🥫');
+        });
+
+        document.getElementById('btnGenerateMenuShopping').addEventListener('click', () => {
+          let addedCount = 0;
+          state.recipes.forEach(rc => {
+            (rc.ingredients || []).forEach(ing => {
+              const inPantry = state.pantryItems.find(p => p.name.toLowerCase() === ing.toLowerCase() && Number(p.qty) > 0);
+              if (!inPantry) {
+                if (ensureItemInShoppingList(ing, 1, 'un')) addedCount++;
+              }
+            });
+          });
+          saveState();
+          renderAll();
+          showToast(
+            addedCount > 0
+              ? `${addedCount} ingrediente(s) que faltavam na Despensa foram enviados para a Lista de Compras!`
+              : 'Todos os ingredientes das receitas já estão na Despensa ou na Lista de Compras!',
+            '🍽️'
+          );
+        });
+
+        document.getElementById('formAddRecipe').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const title = document.getElementById('recipeTitleInput').value.trim();
+          const rawIngs = document.getElementById('recipeIngredientsInput').value.trim();
+          if (!title || !rawIngs) return;
+          const ingredients = rawIngs.split(',').map(s => s.trim()).filter(Boolean);
+
+          state.recipes.push({
+            id: 'rc_' + Date.now(),
+            title,
+            ingredients
+          });
+          document.getElementById('recipeTitleInput').value = '';
+          document.getElementById('recipeIngredientsInput').value = '';
+          saveState();
+          renderAll();
+          showToast(`Receita "${title}" salva com sucesso!`, '📖');
         });
 
         renderAll();
