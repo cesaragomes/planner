@@ -6,6 +6,9 @@
   <title>CasaSync — Gestão Completa da Casa e Rotina (v1.0)</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -445,7 +448,7 @@
                   <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 text-[11px]">1</span>
                   <div>
                     <p class="font-bold text-slate-800">Seleção de Conta no Pop-up Google</p>
-                    <p class="text-[11px] text-slate-500">Escolha qual conta Google deseja usar e confirme as permissões de acesso restrito ao Drive.</p>
+                    <p class="text-[11px] text-slate-500">Entre uma única vez com sua Conta Google; sua sessão permanece ativa permanentemente com sincronização em tempo real via Firebase.</p>
                   </div>
                 </div>
                 <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
@@ -468,7 +471,7 @@
 
           <div class="pt-4 border-t border-slate-100 text-[11px] text-slate-400 flex items-center justify-between">
             <span>🔒 API configurada internamente no código</span>
-            <span>OAuth 2.0 • Google Drive</span>
+            <span>Firebase Auth & Cloud Firestore (Tempo Real)</span>
           </div>
         </div>
       </div>
@@ -2037,7 +2040,7 @@
       <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
         <div class="flex items-center justify-between gap-2">
           <div>
-            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-800">☁️ Sincronização Direta Google Drive (PC ↔ Celular)</h4>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-800">☁️ Sincronização em Tempo Real — Firebase Cloud (PC ↔ Celular)</h4>
             <p id="modalCloudSyncStatusText" class="text-xs text-slate-500 mt-0.5">Use os botões abaixo caso queira forçar o envio do PC ou baixar a versão mais recente no celular.</p>
           </div>
         </div>
@@ -2888,6 +2891,47 @@
         }
       }
 
+      // ==================== FIREBASE REALTIME CLOUD CONFIGURATION (planner-76385) ====================
+      const firebaseConfig = {
+        apiKey: "AIzaSyA0XnYXum1ODbKtz5KqO6X25qvQJ9XhYOs",
+        authDomain: "planner-76385.firebaseapp.com",
+        projectId: "planner-76385",
+        storageBucket: "planner-76385.firebasestorage.app",
+        messagingSenderId: "836322956914",
+        appId: "1:836322956914:web:d430167a2cff4c660894eb",
+        measurementId: "G-VRXZD8CT55"
+      };
+
+      let fbApp = null;
+      let fbAuth = null;
+      let fbDb = null;
+      let fbUnsubscribeSnapshot = null;
+      let isApplyingRemoteSnapshot = false;
+
+      function initFirebaseServices() {
+        if (fbApp) return true;
+        try {
+          if (typeof firebase === 'undefined' || !firebase.initializeApp) return false;
+          fbApp = firebase.apps && firebase.apps.length > 0 ? firebase.app() : firebase.initializeApp(firebaseConfig);
+          fbAuth = firebase.auth();
+          fbDb = firebase.firestore();
+          if (fbAuth && firebase.auth.Auth && firebase.auth.Auth.Persistence) {
+            fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
+          }
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function getFirestoreDocIdForUser(userObj) {
+        if (!userObj) return null;
+        if (userObj.email) {
+          return 'user_' + userObj.email.toLowerCase().replace(/[^a-z0-9]/g, '_');
+        }
+        return userObj.uid || null;
+      }
+
       let pendingSyncMode = null; // 'push' | 'pull' | 'auto'
 
       function setCloudSyncHeaderState(status, labelText) {
@@ -2911,51 +2955,132 @@
           btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/25 border border-sky-400/40 text-sky-100 transition flex items-center gap-1.5 cursor-pointer';
         } else if (status === 'expired') {
           iconEl.textContent = '⚠️';
-          labelEl.textContent = labelText || 'Reconectar Nuvem';
-          btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/30 hover:bg-amber-500/40 border border-amber-400/50 text-amber-100 transition flex items-center gap-1.5 cursor-pointer animate-pulse';
+          labelEl.textContent = labelText || 'Ativar Nuvem';
+          btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/30 hover:bg-amber-500/40 border border-amber-400/50 text-amber-100 transition flex items-center gap-1.5 cursor-pointer';
           if (modalStatusEl) {
-            modalStatusEl.textContent = '⚠️ O token temporário de 1h da Google expirou neste navegador. Clique em um dos botões abaixo para renovar a conexão e sincronizar.';
+            modalStatusEl.textContent = '⚠️ Clique em "Enviar" ou "Baixar" abaixo para autenticar no Firebase e ativar a sincronização permanente.';
           }
         } else {
           iconEl.textContent = '☁️';
-          labelEl.textContent = labelText || 'Sincronizado';
+          labelEl.textContent = labelText || 'Tempo Real Ativo';
           btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 text-emerald-100 transition flex items-center gap-1.5 cursor-pointer';
           if (modalStatusEl) {
-            modalStatusEl.textContent = `☁️ Última atualização local: ${state.lastUpdated || 'agora'}. Use os botões abaixo para enviar ou baixar da nuvem imediatamente.`;
+            modalStatusEl.textContent = `☁️ Conectado permanentemente ao Firebase (${firebaseConfig.projectId}). Última gravação: ${state.lastUpdated || 'agora'}.`;
           }
         }
       }
 
-      function isGoogleTokenLikelyValid() {
-        if (!googleApiConfig || !googleApiConfig.accessToken) return false;
-        if (googleApiConfig.tokenExpiresAt && Date.now() > googleApiConfig.tokenExpiresAt) return false;
-        return true;
+      async function pushStateToFirestoreNow(showSuccessToast) {
+        if (!currentUser || !initFirebaseServices() || !fbDb) return false;
+        const fbUser = fbAuth && fbAuth.currentUser;
+        if (!fbUser) {
+          setCloudSyncHeaderState('expired', 'Conectar Firebase');
+          return false;
+        }
+        try {
+          setCloudSyncHeaderState('syncing', 'Salvando...');
+          const payload = JSON.parse(JSON.stringify(state));
+          payload.updatedAtMs = Number(state.updatedAtMs || Date.now());
+          payload.ownerEmail = currentUser.email || fbUser.email || '';
+          payload.ownerUid = fbUser.uid;
+
+          // Grava tanto no doc por UID (compatível com regra request.auth.uid == userId) quanto por e-mail se permitido
+          await fbDb.collection('users').doc(fbUser.uid).set(payload, { merge: true });
+          setCloudSyncHeaderState('ok', 'Sincronizado');
+          if (showSuccessToast) {
+            showToast(`Sincronizado no Firebase (${state.habits.length} hábitos • ${state.tasks.length} tarefas)!`, '☁️');
+          }
+          return true;
+        } catch (err) {
+          setCloudSyncHeaderState('expired', 'Verificar Regras');
+          if (showSuccessToast) {
+            showToast('Verifique se o Firestore Database foi criado e as Regras publicadas no console do Firebase.', '⚠️');
+          }
+          return false;
+        }
+      }
+
+      async function pullStateFromFirestoreNow(showSuccessToast) {
+        if (!currentUser || !initFirebaseServices() || !fbDb) return false;
+        const fbUser = fbAuth && fbAuth.currentUser;
+        if (!fbUser) {
+          setCloudSyncHeaderState('expired', 'Conectar Firebase');
+          return false;
+        }
+        try {
+          setCloudSyncHeaderState('syncing', 'Baixando...');
+          const snap = await fbDb.collection('users').doc(fbUser.uid).get({ source: 'server' }).catch(() => fbDb.collection('users').doc(fbUser.uid).get());
+          if (snap && snap.exists) {
+            const cloudData = snap.data();
+            if (cloudData && Array.isArray(cloudData.plans)) {
+              isApplyingRemoteSnapshot = true;
+              localStorage.setItem(getUserStorageKey(currentUser.email), JSON.stringify(cloudData));
+              state = loadState();
+              renderAll();
+              isApplyingRemoteSnapshot = false;
+              setCloudSyncHeaderState('ok', 'Sincronizado');
+              if (showSuccessToast) {
+                showToast(`Dados atualizados do Firebase (${state.habits.length} hábitos • ${state.tasks.length} tarefas)!`, '⬇️');
+              }
+              return true;
+            }
+          }
+          // Se ainda não existe documento na nuvem, sobe o estado atual deste aparelho!
+          await pushStateToFirestoreNow(false);
+          setCloudSyncHeaderState('ok', 'Sincronizado');
+          if (showSuccessToast) {
+            showToast('Seus dados locais foram salvos como base inicial no Firebase!', '☁️');
+          }
+          return true;
+        } catch (err) {
+          setCloudSyncHeaderState('expired', 'Erro Nuvem');
+          return false;
+        }
+      }
+
+      function attachRealtimeFirestoreListener(fbUser) {
+        if (!fbDb || !fbUser) return;
+        if (fbUnsubscribeSnapshot) {
+          try { fbUnsubscribeSnapshot(); } catch (e) {}
+          fbUnsubscribeSnapshot = null;
+        }
+        fbUnsubscribeSnapshot = fbDb.collection('users').doc(fbUser.uid).onSnapshot((docSnap) => {
+          if (isApplyingRemoteSnapshot) return;
+          if (!docSnap.exists) {
+            // Primeiro acesso deste usuário no Firestore: envia os dados locais (ex.: os 5 hábitos + 1 tarefa do PC) para a nuvem!
+            pushStateToFirestoreNow(false);
+            return;
+          }
+          const cloudData = docSnap.data();
+          if (!cloudData || !Array.isArray(cloudData.plans)) return;
+          const cloudMs = Number(cloudData.updatedAtMs || 0);
+          const localMs = Number(state.updatedAtMs || 0);
+
+          if (cloudMs > localMs) {
+            isApplyingRemoteSnapshot = true;
+            localStorage.setItem(getUserStorageKey(currentUser.email), JSON.stringify(cloudData));
+            state = loadState();
+            renderAll();
+            isApplyingRemoteSnapshot = false;
+            setCloudSyncHeaderState('ok', 'Sincronizado');
+          } else if (localMs > cloudMs && ! docSnap.metadata.hasPendingWrites) {
+            // Os dados locais deste aparelho (ex.: PC) são mais novos que os da nuvem -> atualiza a nuvem automaticamente!
+            pushStateToFirestoreNow(false);
+          } else {
+            setCloudSyncHeaderState('ok', 'Sincronizado');
+          }
+        }, () => {
+          setCloudSyncHeaderState('expired', 'Verificar Firestore');
+        });
       }
 
       let autoDriveSyncTimer = null;
       function scheduleAutoGoogleDriveSync() {
-        if (!currentUser) return;
-        if (!isGoogleTokenLikelyValid()) {
-          setCloudSyncHeaderState('syncing', 'Renovando...');
-          pendingSyncMode = 'push';
-          triggerRealGoogleOAuthPopup(true);
-          return;
-        }
-        setCloudSyncHeaderState('syncing', 'Salvando...');
+        if (!currentUser || isApplyingRemoteSnapshot) return;
         if (autoDriveSyncTimer) clearTimeout(autoDriveSyncTimer);
-        autoDriveSyncTimer = setTimeout(async () => {
-          try {
-            const folderId = googleApiConfig.driveFolderId || await getOrCreateDriveFolder(googleApiConfig.accessToken);
-            googleApiConfig.driveFolderId = folderId;
-            saveGoogleApiConfig(googleApiConfig);
-            const slug = currentUser.email.split('@')[0].replace(/[^a-z0-9]/gi, '_');
-            const mainFileName = `casasync_dados_${slug}.json`;
-            await uploadJsonToGoogleDrive(googleApiConfig.accessToken, mainFileName, state, folderId);
-            setCloudSyncHeaderState('ok', 'Sincronizado');
-          } catch (e) {
-            setCloudSyncHeaderState('expired', 'Reconectar Nuvem');
-          }
-        }, 900);
+        autoDriveSyncTimer = setTimeout(() => {
+          pushStateToFirestoreNow(false);
+        }, 650);
       }
 
       function saveState() {
@@ -3325,50 +3450,47 @@
 
       let isRenewingToken = false;
 
-      function triggerRealGoogleOAuthPopup(silentRenew) {
-        if (isRenewingToken) return;
-        ensureGoogleIdentityScriptLoaded((loaded) => {
-          if (loaded && window.google && window.google.accounts && window.google.accounts.oauth2) {
-            try {
-              isRenewingToken = true;
-              const userHint = currentUser && currentUser.email ? currentUser.email : '';
-              const tokenClient = window.google.accounts.oauth2.initTokenClient({
-                client_id: googleApiConfig.clientId || EMBEDDED_CLIENT_ID,
-                scope: GOOGLE_DRIVE_SCOPES,
-                hint: userHint,
-                callback: (tokenResponse) => {
-                  isRenewingToken = false;
-                  if (tokenResponse && tokenResponse.access_token) {
-                    handleRealGoogleAccessToken(tokenResponse.access_token, tokenResponse.expires_in, !!silentRenew);
-                  } else if (!silentRenew) {
-                    showToast('Seleção de conta ou permissão cancelada.', '⚠️');
-                  }
-                },
-                error_callback: () => {
-                  isRenewingToken = false;
-                }
-              });
-              // Se já sabemos quem é o usuário (silentRenew), usamos prompt: '' + hint para renovar sem pedir escolha de conta!
-              if (silentRenew && userHint) {
-                tokenClient.requestAccessToken({ prompt: '', hint: userHint });
-              } else {
-                tokenClient.requestAccessToken({ prompt: 'select_account' });
-              }
-            } catch (err) {
-              isRenewingToken = false;
-              if (!silentRenew) {
-                showToast('Erro ao abrir o pop-up da Google. Verifique as Origens JavaScript Autorizadas no Cloud Console.', '⚠️');
+      async function triggerRealGoogleOAuthPopup(silentRenew) {
+        if (initFirebaseServices() && fbAuth) {
+          try {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            if (currentUser && currentUser.email) {
+              provider.setCustomParameters({ login_hint: currentUser.email });
+            } else {
+              provider.setCustomParameters({ prompt: 'select_account' });
+            }
+            const result = await fbAuth.signInWithPopup(provider);
+            if (result && result.user) {
+              const fbUser = result.user;
+              const acc = {
+                uid: fbUser.uid,
+                name: fbUser.displayName || 'Minha Conta Google',
+                email: (fbUser.email || 'usuario@gmail.com').toLowerCase(),
+                driveFolder: 'Firebase Firestore',
+                isFirebaseAuth: true,
+                createdAt: TODAY_STR
+              };
+              loginWithGoogleAccount(acc, false);
+              attachRealtimeFirestoreListener(fbUser);
+              if (pendingSyncMode === 'push') {
+                pendingSyncMode = null;
+                await pushStateToFirestoreNow(true);
+              } else if (pendingSyncMode === 'pull') {
+                pendingSyncMode = null;
+                await pullStateFromFirestoreNow(true);
               }
             }
-          } else if (!silentRenew) {
-            const redirectUri = encodeURIComponent(window.location.origin + window.location.pathname);
-            const scopeEnc = encodeURIComponent(GOOGLE_DRIVE_SCOPES);
-            const cid = encodeURIComponent(googleApiConfig.clientId || EMBEDDED_CLIENT_ID);
-            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${cid}&redirect_uri=${redirectUri}&response_type=token&scope=${scopeEnc}&include_granted_scopes=true&prompt=select_account`;
-            window.open(authUrl, '_blank', 'width=520,height=640');
-            showToast('Pop-up de seleção de Conta Google aberto!', '🔑');
+          } catch (err) {
+            if (err && err.code === 'auth/popup-blocked') {
+              const provider = new firebase.auth.GoogleAuthProvider();
+              fbAuth.signInWithRedirect(provider);
+            } else if (!silentRenew) {
+              showToast('Verifique se o login Google e seu domínio (github.io) estão ativados em Authentication no Firebase Console.', '⚠️');
+            }
           }
-        });
+          return;
+        }
+        showToast('Biblioteca do Firebase não pôde ser carregada neste ambiente.', '⚠️');
       }
 
       function loginWithGoogleAccount(accountObj, isSilentRestore) {
@@ -3387,21 +3509,24 @@
 
         openHomeView();
         if (!isSilentRestore) {
-          showToast(`Conectado como ${accountObj.name} (${accountObj.email})!`, '🔒');
+          showToast(`Conectado permanentemente como ${accountObj.name} (${accountObj.email})!`, '🔒');
         }
       }
 
-      function logoutCurrentAccount() {
+      async function logoutCurrentAccount() {
+        if (fbUnsubscribeSnapshot) {
+          try { fbUnsubscribeSnapshot(); } catch (e) {}
+          fbUnsubscribeSnapshot = null;
+        }
+        if (fbAuth) {
+          try { await fbAuth.signOut(); } catch (e) {}
+        }
         currentUser = null;
-        googleApiConfig.accessToken = '';
-        googleApiConfig.tokenExpiresAt = 0;
-        googleApiConfig.driveFolderId = '';
-        saveGoogleApiConfig(googleApiConfig);
         try {
           localStorage.removeItem(ACTIVE_SESSION_KEY);
         } catch (e) {}
         openWelcomeAuthView();
-        showToast('Sessão encerrada com segurança. Clique em "Entrar com conta Google" para escolher outra conta.', '🚪');
+        showToast('Sessão encerrada com segurança.', '🚪');
       }
 
 
@@ -7080,129 +7205,64 @@
         renderAll();
         async function executeCloudPushNow() {
           if (!currentUser) return;
-          if (!isGoogleTokenLikelyValid()) {
+          state.updatedAtMs = Date.now();
+          saveState();
+          if (initFirebaseServices() && fbAuth && fbAuth.currentUser) {
+            await pushStateToFirestoreNow(true);
+          } else {
             pendingSyncMode = 'push';
-            triggerRealGoogleOAuthPopup(true);
-            return;
-          }
-          try {
-            setCloudSyncHeaderState('syncing', 'Enviando...');
-            const folderId = googleApiConfig.driveFolderId || await getOrCreateDriveFolder(googleApiConfig.accessToken);
-            googleApiConfig.driveFolderId = folderId;
-            saveGoogleApiConfig(googleApiConfig);
-            const slug = currentUser.email.split('@')[0].replace(/[^a-z0-9]/gi, '_');
-            const mainFileName = `casasync_dados_${slug}.json`;
-            state.updatedAtMs = Date.now();
-            await uploadJsonToGoogleDrive(googleApiConfig.accessToken, mainFileName, state, folderId);
-            setCloudSyncHeaderState('ok', 'Sincronizado');
-            showToast(`Dados enviados para o Google Drive (${state.habits.length} hábitos • ${state.tasks.length} tarefas)!`, '⬆️');
-          } catch (e) {
-            pendingSyncMode = 'push';
-            triggerRealGoogleOAuthPopup(true);
+            triggerRealGoogleOAuthPopup(false);
           }
         }
 
         async function executeCloudPullNow() {
           if (!currentUser) return;
-          if (!isGoogleTokenLikelyValid()) {
+          if (initFirebaseServices() && fbAuth && fbAuth.currentUser) {
+            await pullStateFromFirestoreNow(true);
+          } else {
             pendingSyncMode = 'pull';
-            triggerRealGoogleOAuthPopup(true);
-            return;
-          }
-          try {
-            setCloudSyncHeaderState('syncing', 'Baixando...');
-            const cloudData = await downloadUserDatabaseFromGoogleDrive(googleApiConfig.accessToken, currentUser.email);
-            if (cloudData && Array.isArray(cloudData.plans)) {
-              localStorage.setItem(getUserStorageKey(currentUser.email), JSON.stringify(cloudData));
-              state = loadState();
-              renderAll();
-              setCloudSyncHeaderState('ok', 'Sincronizado');
-              showToast(`Dados atualizados da nuvem (${state.habits.length} hábitos • ${state.tasks.length} tarefas)!`, '⬇️');
-            } else {
-              setCloudSyncHeaderState('ok', 'Sincronizado');
-              showToast('Nenhum arquivo mais recente encontrado na nuvem.', 'ℹ️');
-            }
-          } catch (e) {
-            pendingSyncMode = 'pull';
-            triggerRealGoogleOAuthPopup(true);
+            triggerRealGoogleOAuthPopup(false);
           }
         }
 
         document.getElementById('btnCloudSyncNow').addEventListener('click', () => {
-          if (!isGoogleTokenLikelyValid()) {
-            pendingSyncMode = 'auto';
-            triggerRealGoogleOAuthPopup(true);
+          if (initFirebaseServices() && fbAuth && fbAuth.currentUser) {
+            pullStateFromFirestoreNow(true);
           } else {
-            executeCloudPullNow();
-          }
-        });
-
-        // Renovação automática ao interagir com a página se o token de 1h tiver expirado
-        let lastAutoAttemptMs = 0;
-        document.addEventListener('click', (e) => {
-          if (!currentUser || !currentUser.email) return;
-          if (e.target.closest('#btnLogoutAccount') || e.target.closest('#btnRealGoogleOAuthLogin')) return;
-          const expiresSoon = !googleApiConfig.tokenExpiresAt || (Date.now() > googleApiConfig.tokenExpiresAt - 5 * 60 * 1000);
-          if (expiresSoon && (Date.now() - lastAutoAttemptMs > 60 * 1000)) {
-            lastAutoAttemptMs = Date.now();
             pendingSyncMode = 'auto';
-            triggerRealGoogleOAuthPopup(true);
-          }
-        }, { capture: true });
-
-        // Ao voltar para o aplicativo no celular ou PC (visibilitychange), baixa automaticamente novidades se o token estiver ativo
-        document.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'visible' && currentUser && isGoogleTokenLikelyValid()) {
-            downloadUserDatabaseFromGoogleDrive(googleApiConfig.accessToken, currentUser.email)
-              .then((cloudData) => {
-                if (cloudData && Array.isArray(cloudData.plans)) {
-                  const localMs = Number(state.updatedAtMs || 0);
-                  const cloudMs = Number(cloudData.updatedAtMs || 0);
-                  if (cloudMs > localMs) {
-                    localStorage.setItem(getUserStorageKey(currentUser.email), JSON.stringify(cloudData));
-                    state = loadState();
-                    renderAll();
-                    setCloudSyncHeaderState('ok', 'Sincronizado');
-                  }
-                }
-              })
-              .catch(() => {});
+            triggerRealGoogleOAuthPopup(false);
           }
         });
 
         document.getElementById('btnForcePushToDrive').addEventListener('click', executeCloudPushNow);
         document.getElementById('btnForcePullFromDrive').addEventListener('click', executeCloudPullNow);
 
+        // Inicializa o Firebase e escuta a sessão permanente (nunca expira após 1 hora!)
         if (currentUser && currentUser.email) {
-          // Pré-carrega o script da Google em segundo plano para permitir renovação silenciosa imediata
-          ensureGoogleIdentityScriptLoaded(() => {});
-          // Restaura automaticamente a sessão salva ao atualizar a página (F5) ou reabrir o navegador!
           loginWithGoogleAccount(currentUser, true);
-          if (isGoogleTokenLikelyValid()) {
-            setCloudSyncHeaderState('syncing', 'Verificando nuvem...');
-            downloadUserDatabaseFromGoogleDrive(googleApiConfig.accessToken, currentUser.email)
-              .then((cloudData) => {
-                if (cloudData && Array.isArray(cloudData.plans)) {
-                  const localMs = Number(state.updatedAtMs || 0);
-                  const cloudMs = Number(cloudData.updatedAtMs || 0);
-                  if (localMs === 0 || cloudMs >= localMs) {
-                    localStorage.setItem(getUserStorageKey(currentUser.email), JSON.stringify(cloudData));
-                    state = loadState();
-                    renderAll();
-                  } else {
-                    scheduleAutoGoogleDriveSync();
-                  }
-                }
-                setCloudSyncHeaderState('ok', 'Sincronizado');
-              })
-              .catch(() => {
-                setCloudSyncHeaderState('expired', 'Reconectar Nuvem');
-              });
-          } else {
-            setCloudSyncHeaderState('expired', 'Reconectar Nuvem');
-          }
+          setCloudSyncHeaderState('syncing', 'Conectando Firebase...');
         } else {
           openWelcomeAuthView();
+        }
+
+        if (initFirebaseServices() && fbAuth) {
+          fbAuth.onAuthStateChanged((fbUser) => {
+            if (fbUser) {
+              const acc = {
+                uid: fbUser.uid,
+                name: fbUser.displayName || (currentUser && currentUser.name) || 'Minha Conta Google',
+                email: (fbUser.email || (currentUser && currentUser.email) || 'usuario@gmail.com').toLowerCase(),
+                driveFolder: 'Firebase Firestore',
+                isFirebaseAuth: true,
+                createdAt: TODAY_STR
+              };
+              loginWithGoogleAccount(acc, true);
+              setCloudSyncHeaderState('ok', 'Tempo Real Ativo');
+              attachRealtimeFirestoreListener(fbUser);
+            } else if (currentUser) {
+              setCloudSyncHeaderState('expired', 'Ativar Firebase');
+            }
+          });
         }
       });
     })();
