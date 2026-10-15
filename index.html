@@ -2475,8 +2475,19 @@
         } catch (e) {}
       }
 
+      function loadActiveSession() {
+        try {
+          const raw = localStorage.getItem(ACTIVE_SESSION_KEY);
+          if (!raw) return null;
+          const parsed = JSON.parse(raw);
+          return (parsed && parsed.email) ? parsed : null;
+        } catch (e) {
+          return null;
+        }
+      }
+
       let accountsRegistry = loadAccountsRegistry();
-      let currentUser = null; // Starts on the Welcome / Google Account Gate so user sees the restricted access screen first!
+      let currentUser = loadActiveSession();
 
       function getUserStorageKey(email) {
         if (!email) return STORAGE_KEY;
@@ -2607,6 +2618,7 @@
         const defaults = {
           clientId: EMBEDDED_CLIENT_ID,
           accessToken: '',
+          tokenExpiresAt: 0,
           driveFolderId: '',
           driveFileId: ''
         };
@@ -2616,9 +2628,10 @@
           const parsed = JSON.parse(raw);
           return {
             clientId: parsed.clientId || EMBEDDED_CLIENT_ID,
-            accessToken: '',
-            driveFolderId: '',
-            driveFileId: ''
+            accessToken: parsed.accessToken || '',
+            tokenExpiresAt: parsed.tokenExpiresAt || 0,
+            driveFolderId: parsed.driveFolderId || '',
+            driveFileId: parsed.driveFileId || ''
           };
         } catch (e) {
           return defaults;
@@ -2783,7 +2796,7 @@
             }
           } catch (e) {}
 
-          // 2. Register or update account in local registry
+          // 2. Register or update account in local registry & immediately persist active login session
           let acc = accountsRegistry.find(a => a.email.toLowerCase() === userEmail);
           if (!acc) {
             acc = {
@@ -2795,11 +2808,14 @@
               createdAt: TODAY_STR
             };
             accountsRegistry.unshift(acc);
-            saveAccountsRegistry(accountsRegistry);
           } else {
             acc.isRealGoogleOAuth = true;
             acc.name = userName || acc.name;
           }
+          saveAccountsRegistry(accountsRegistry);
+
+          // Salva imediatamente a sessão ativa no navegador antes mesmo de concluir a sincronização com o Drive
+          loginWithGoogleAccount(acc);
 
           // 3. Try to load existing database from the user's real Google Drive, or upload current state
           const folderId = await getOrCreateDriveFolder(accessToken);
@@ -2809,14 +2825,14 @@
           const cloudData = await downloadUserDatabaseFromGoogleDrive(accessToken, userEmail);
           if (cloudData && Array.isArray(cloudData.plans)) {
             localStorage.setItem(getUserStorageKey(userEmail), JSON.stringify(cloudData));
-            loginWithGoogleAccount(acc);
+            state = loadState();
+            renderAll();
             updateRealDriveStatusUI(true, `Sincronizado da nuvem (/CasaSync_Backups/)`);
             showToast(`Login Google concluído! Seus dados foram carregados direto do seu Google Drive!`, '☁️');
           } else {
-            loginWithGoogleAccount(acc);
             const slug = userEmail.split('@')[0].replace(/[^a-z0-9]/gi, '_');
             const mainFileName = `casasync_dados_${slug}.json`;
-            const uploaded = await uploadJsonToGoogleDrive(accessToken, mainFileName, state, folderId);
+            await uploadJsonToGoogleDrive(accessToken, mainFileName, state, folderId);
             await uploadJsonToGoogleDrive(accessToken, `backup_casa_${slug}_${TODAY_STR}.json`, state, folderId);
             updateRealDriveStatusUI(true, `Arquivo criado no Drive: ${mainFileName}`);
             showToast(`Login Google concluído! Pasta "CasaSync_Backups" e arquivo criados no seu Google Drive!`, '🎉');
@@ -2853,8 +2869,8 @@
                   }
                 }
               });
-              // Abre o pop-up oficial da Google para escolher a Conta Google e confirmar as permissões do Drive
-              tokenClient.requestAccessToken({ prompt: 'select_account consent' });
+              // Abre o pop-up oficial da Google para selecionar a Conta Google (pede permissão apenas no 1º acesso)
+              tokenClient.requestAccessToken({ prompt: 'select_account' });
             } catch (err) {
               showToast('Erro ao abrir o pop-up da Google. Verifique as Origens JavaScript Autorizadas no Cloud Console.', '⚠️');
             }
@@ -2869,7 +2885,7 @@
         });
       }
 
-      function loginWithGoogleAccount(accountObj) {
+      function loginWithGoogleAccount(accountObj, isSilentRestore) {
         currentUser = accountObj;
         try {
           localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(accountObj));
@@ -2890,13 +2906,17 @@
         if (modalFolderEl) modalFolderEl.textContent = `Pasta exclusiva no Google Drive: ${accountObj.driveFolder || '/CasaSync_Backups/'}`;
 
         openHomeView();
-        showToast(`Conectado como ${accountObj.name} (${accountObj.email})! Dados isolados carregados.`, '🔒');
+        if (!isSilentRestore) {
+          showToast(`Conectado como ${accountObj.name} (${accountObj.email})! Sessão mantida neste navegador.`, '🔒');
+        }
       }
 
       function logoutCurrentAccount() {
         currentUser = null;
         googleApiConfig.accessToken = '';
+        googleApiConfig.tokenExpiresAt = 0;
         googleApiConfig.driveFolderId = '';
+        saveGoogleApiConfig(googleApiConfig);
         try {
           localStorage.removeItem(ACTIVE_SESSION_KEY);
         } catch (e) {}
@@ -6131,7 +6151,25 @@
         });
 
         renderAll();
-        openWelcomeAuthView();
+        if (currentUser && currentUser.email) {
+          // Restaura automaticamente a sessão salva ao atualizar a página (F5) ou reabrir o navegador!
+          loginWithGoogleAccount(currentUser, true);
+          if (googleApiConfig.accessToken) {
+            updateRealDriveStatusUI(true, 'Sessão ativa e sincronizada com Google Drive (/CasaSync_Backups/)');
+            // Sincroniza silenciosamente em segundo plano caso haja dados mais novos no Drive
+            downloadUserDatabaseFromGoogleDrive(googleApiConfig.accessToken, currentUser.email)
+              .then((cloudData) => {
+                if (cloudData && Array.isArray(cloudData.plans)) {
+                  state = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), cloudData);
+                  localStorage.setItem(getUserStorageKey(currentUser.email), JSON.stringify(state));
+                  renderAll();
+                }
+              })
+              .catch(() => {});
+          }
+        } else {
+          openWelcomeAuthView();
+        }
       });
     })();
   </script>
