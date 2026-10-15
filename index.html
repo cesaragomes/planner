@@ -48,16 +48,14 @@
         </button>
       </div>
 
-      <!-- Mode Switcher: Desktop Manager (Windows/Linux) vs Mobile Viewer (Android/Tablet) -->
-      <div class="flex items-center gap-2 bg-slate-800 p-1 rounded-xl border border-slate-700">
-        <button id="btnModeDesktop" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-emerald-500 text-slate-950 shadow">
-          <span>💻</span>
-          <span>Modo PC (Windows / Linux)</span>
-        </button>
-        <button id="btnModeMobile" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 text-slate-300 hover:text-white">
-          <span>📱</span>
-          <span>Modo Android (Visualizador)</span>
-        </button>
+      <!-- Automatic 3-Mode Device Detection Indicator (Desktop / Tablet Landscape / Celular) -->
+      <div id="autoDeviceModeBadge" class="flex items-center gap-2 bg-slate-800/90 px-3.5 py-1.5 rounded-xl border border-slate-700 text-xs">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span id="autoDeviceIcon" class="text-sm">💻</span>
+        <div class="leading-tight">
+          <span class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold block">Layout Automático</span>
+          <span id="autoDeviceLabel" class="font-bold text-emerald-300 text-xs">Desktop (Windows / Linux)</span>
+        </div>
       </div>
 
       <!-- Sync, Active Google Account & Backup Status Bar -->
@@ -103,10 +101,10 @@
     <section id="viewWelcomeAuth" class="space-y-8 py-2">
 
       <!-- Hero Welcome Section + Login / Create Account Card -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
 
         <!-- Left Column: About CasaSync & Privacy Architecture (7 cols) -->
-        <div class="lg:col-span-7 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white p-6 sm:p-8 shadow-xl border border-slate-800 flex flex-col justify-between space-y-6">
+        <div class="md:col-span-7 lg:col-span-7 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white p-6 sm:p-8 shadow-xl border border-slate-800 flex flex-col justify-between space-y-6">
           <div class="space-y-4">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">
               <span>🔒 Acesso Restrito & Individualizado via Conta Google</span>
@@ -181,7 +179,7 @@
         </div>
 
         <!-- Right Column: Exclusive Google Account OAuth 2.0 Sign-In Card (5 cols) -->
-        <div class="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-lg flex flex-col justify-between space-y-6">
+        <div class="md:col-span-5 lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-lg flex flex-col justify-between space-y-6">
           <div class="space-y-6">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">
               <div>
@@ -341,7 +339,7 @@
           <h2 class="text-sm font-bold uppercase tracking-wider text-slate-500">Módulos do Sistema</h2>
           <span class="text-xs text-slate-400">Estrutura modular expansível</span>
         </div>
-        <div id="modulesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div id="modulesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <!-- Rendered dynamically by JS -->
         </div>
       </div>
@@ -386,7 +384,7 @@
           </div>
           <span id="habitStripSummary" class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">0/0 concluídos</span>
         </div>
-        <div id="quickHabitStrip" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div id="quickHabitStrip" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
           <!-- Rendered dynamically -->
         </div>
       </div>
@@ -514,7 +512,7 @@
         </div>
 
         <!-- 3 Shift Columns: Manhã, Tarde, Noite -->
-        <div id="shiftsGridContainer" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div id="shiftsGridContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <!-- Manhã -->
           <div class="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col">
             <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-amber-50/60 rounded-t-2xl">
@@ -1615,7 +1613,7 @@
         </div>
 
         <!-- Pantry Items Grid -->
-        <div id="pantryGridContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div id="pantryGridContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <!-- Rendered dynamically -->
         </div>
 
@@ -3090,22 +3088,50 @@
         }
       }
 
-      // Platform Mode Toggle (Desktop Windows/Linux vs Android Mobile Viewer)
-      function setPlatformMode(mode) {
-        state.platformMode = mode;
-        saveState();
-        renderAll();
-        if (mode === 'mobile') {
-          showToast('Modo Android (Visualizador Rápido) ativado!', '📱');
+      // Automatic 3-Mode Device Detection: 'desktop', 'tablet' (landscape desktop-like), or 'mobile' (phone)
+      function detectDeviceLayoutMode() {
+        const w = window.innerWidth || document.documentElement.clientWidth || 1280;
+        const h = window.innerHeight || document.documentElement.clientHeight || 800;
+        const ua = navigator.userAgent || '';
+        const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        const isTabletUA = /iPad|Tablet|PlayBook|Silk/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua)) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isMobilePhoneUA = /iPhone|iPod|Android.*Mobile|Windows Phone|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+
+        // 1. Celular: estreito (< 768px) ou smartphone em modo retrato
+        if (w < 768 && !isTabletUA) {
+          return 'mobile';
+        }
+        // Se for um smartphone em landscape muito compacto (< 900px de largura e altura baixa), mantém celular; se for maior ou tablet, usa modo Tablet
+        if (isMobilePhoneUA && w < 768) {
+          return 'mobile';
+        }
+        // 2. Tablet: detectado via User-Agent de Tablet, dispositivo touch >= 768px, ou janela intermediária (768px a 1279px) usada em landscape
+        if (isTabletUA || (isTouch && w >= 768 && w < 1366) || (w >= 768 && w < 1200)) {
+          return 'tablet';
+        }
+        // 3. Desktop: telas amplas (>= 1200px) em PC Windows / Linux / Mac
+        return 'desktop';
+      }
+
+      function applyAutoDetectedDeviceMode(silent) {
+        const detected = detectDeviceLayoutMode();
+        const changed = state.platformMode !== detected;
+        state.platformMode = detected;
+        if (changed && !silent) {
+          renderAll();
         } else {
-          showToast('Modo PC (Windows / Linux Gerenciador) ativado!', '💻');
+          renderPlatformModeUI();
         }
       }
 
       function renderPlatformModeUI() {
-        const isMobile = state.platformMode === 'mobile';
-        const btnDesktop = document.getElementById('btnModeDesktop');
-        const btnMobile = document.getElementById('btnModeMobile');
+        const detectedMode = detectDeviceLayoutMode();
+        state.platformMode = detectedMode;
+        const isMobile = detectedMode === 'mobile';
+        const isTablet = detectedMode === 'tablet';
+
+        const autoIcon = document.getElementById('autoDeviceIcon');
+        const autoLabel = document.getElementById('autoDeviceLabel');
         const appContainer = document.getElementById('appContainer');
         const bannerIcon = document.getElementById('platformBannerIcon');
         const bannerText = document.getElementById('platformBannerText');
@@ -3114,11 +3140,11 @@
         const desktopHabitCard = document.getElementById('desktopHabitEditorCard');
 
         if (isMobile) {
-          btnMobile.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-emerald-500 text-slate-950 shadow';
-          btnDesktop.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 text-slate-300 hover:text-white';
+          if (autoIcon) autoIcon.textContent = '📱';
+          if (autoLabel) autoLabel.textContent = 'Celular (Compacto)';
           appContainer.className = 'flex-1 max-w-md w-full mx-auto px-3 py-4 transition-all duration-300';
           bannerIcon.textContent = '📱';
-          bannerText.innerHTML = '<strong>Modo Visualizador (Android / Tablet):</strong> Foco em leitura rápida e marcação com 1 toque. Formulários pesados ficam ocultos.';
+          bannerText.innerHTML = '<strong>Detecção Automática — Modo Celular:</strong> Layout vertical compacto para uso rápido com uma mão e barras de adição expressa.';
           desktopPlanCard.classList.add('hidden');
           mobileQuickPlan.classList.remove('hidden');
           desktopHabitCard.classList.add('hidden');
@@ -3130,12 +3156,36 @@
           document.getElementById('mobileFinanceQuickBar').classList.remove('hidden');
           document.getElementById('desktopWishlistEditorCard').classList.add('hidden');
           document.getElementById('desktopPantryEditorCard').classList.add('hidden');
+        } else if (isTablet) {
+          // Modo Tablet: Estrutura visual idêntica ao Desktop (ampla em múltiplas colunas para uso em Landscape)
+          if (autoIcon) autoIcon.textContent = '📟';
+          if (autoLabel) autoLabel.textContent = 'Tablet (Landscape • Layout Desktop)';
+          appContainer.className = 'flex-1 max-w-7xl w-full mx-auto px-4 py-5 transition-all duration-300';
+          bannerIcon.textContent = '📟';
+          bannerText.innerHTML = '<strong>Detecção Automática — Modo Tablet (Landscape):</strong> Estrutura visual em múltiplas colunas similar ao Desktop, com formulários completos, gráficos e edição ativa.';
+          desktopPlanCard.classList.remove('hidden');
+          mobileQuickPlan.classList.add('hidden');
+          desktopHabitCard.classList.remove('hidden');
+          if (state.marketOneHandMode) {
+            document.getElementById('desktopShoppingEditorCard').classList.add('hidden');
+            document.getElementById('mobileShoppingQuickBar').classList.remove('hidden');
+          } else {
+            document.getElementById('desktopShoppingEditorCard').classList.remove('hidden');
+            document.getElementById('mobileShoppingQuickBar').classList.add('hidden');
+          }
+          document.getElementById('desktopTaskEditorCard').classList.remove('hidden');
+          document.getElementById('mobileTaskQuickBar').classList.add('hidden');
+          document.getElementById('desktopFinanceEditorCard').classList.remove('hidden');
+          document.getElementById('mobileFinanceQuickBar').classList.add('hidden');
+          document.getElementById('desktopWishlistEditorCard').classList.remove('hidden');
+          document.getElementById('desktopPantryEditorCard').classList.remove('hidden');
         } else {
-          btnDesktop.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-emerald-500 text-slate-950 shadow';
-          btnMobile.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 text-slate-300 hover:text-white';
+          // Modo Desktop (Windows / Linux)
+          if (autoIcon) autoIcon.textContent = '💻';
+          if (autoLabel) autoLabel.textContent = 'Desktop (Windows / Linux)';
           appContainer.className = 'flex-1 max-w-7xl w-full mx-auto px-4 py-6 transition-all duration-300';
           bannerIcon.textContent = '💻';
-          bannerText.innerHTML = '<strong>Modo Gerenciador (Windows / Linux):</strong> Criação completa de registros, edição de módulos, metas de hábitos e gerenciamento de backups.';
+          bannerText.innerHTML = '<strong>Detecção Automática — Modo Desktop (Windows / Linux):</strong> Criação completa de registros, edição de módulos, metas de hábitos e gerenciamento de backups.';
           desktopPlanCard.classList.remove('hidden');
           mobileQuickPlan.classList.add('hidden');
           desktopHabitCard.classList.remove('hidden');
@@ -3357,7 +3407,7 @@
                 <button type="button" data-habit-inc="${habit.id}" class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white">+1 / Concluir</button>
               </div>
               ${
-                state.platformMode === 'desktop'
+                state.platformMode !== 'mobile'
                   ? `<button type="button" data-habit-del="${habit.id}" class="text-xs font-medium text-rose-600 hover:text-rose-800">Excluir hábito</button>`
                   : ''
               }
@@ -3504,7 +3554,7 @@
                   ⏭️ Adiar para amanhã
                 </button>
                 ${
-                  state.platformMode === 'desktop'
+                  state.platformMode !== 'mobile'
                     ? `<div class="flex items-center gap-2">
                         <button type="button" data-plan-edit="${plan.id}" class="font-semibold text-indigo-600 hover:text-indigo-800">Editar</button>
                         <button type="button" data-plan-del="${plan.id}" class="font-semibold text-rose-600 hover:text-rose-800">Excluir</button>
@@ -3811,7 +3861,7 @@
                   <button type="button" data-shop-qty-inc="${item.id}" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">+</button>
                   <button type="button" data-shop-chart="${item.name}" class="ml-1 px-2 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[11px] font-semibold">📈 Preços</button>
                   ${
-                    state.platformMode === 'desktop' && !state.marketOneHandMode
+                    state.platformMode !== 'mobile' && !state.marketOneHandMode
                       ? `<button type="button" data-shop-edit="${item.id}" class="ml-1 text-xs font-semibold text-indigo-600 hover:text-indigo-800">Editar</button>
                          <button type="button" data-shop-del="${item.id}" class="ml-1 text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
                       : ''
@@ -4177,7 +4227,7 @@
             <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
               <span>Última vez: <strong>${task.lastDone || '—'}</strong> • Próxima: <strong>${task.nextDue || '—'}</strong></span>
               ${
-                state.platformMode === 'desktop'
+                state.platformMode !== 'mobile'
                   ? `<div class="flex items-center gap-2">
                        <button type="button" data-task-edit="${task.id}" class="font-semibold text-indigo-600 hover:text-indigo-800">Editar</button>
                        <button type="button" data-task-del="${task.id}" class="font-semibold text-rose-600 hover:text-rose-800">Excluir</button>
@@ -4313,7 +4363,7 @@
                   ${isIncome ? '+' : '-'} ${formatCurrencyBRL(tx.amount)}
                 </span>
                 ${
-                  state.platformMode === 'desktop'
+                  state.platformMode !== 'mobile'
                     ? `<button type="button" data-tx-del="${tx.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
                     : ''
                 }
@@ -4641,7 +4691,7 @@
                 </button>
               </div>
               ${
-                state.platformMode === 'desktop'
+                state.platformMode !== 'mobile'
                   ? `<button type="button" data-wish-del="${item.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
                   : ''
               }
@@ -4734,7 +4784,7 @@
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
               <span class="font-bold text-slate-800">${formatCurrencyBRL(w.pricePaid || 0)}</span>
               ${
-                state.platformMode === 'desktop'
+                state.platformMode !== 'mobile'
                   ? `<button type="button" data-war-del="${w.id}" class="text-rose-600 hover:text-rose-800 font-semibold">Remover</button>`
                   : ''
               }
@@ -4899,7 +4949,7 @@
                   🛒 +Lista
                 </button>
                 ${
-                  state.platformMode === 'desktop'
+                  state.platformMode !== 'mobile'
                     ? `<button type="button" data-pantry-del="${item.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
                     : ''
                 }
@@ -5023,7 +5073,7 @@
                 🛒 Enviar Faltantes p/ Lista de Compras
               </button>
               ${
-                state.platformMode === 'desktop'
+                state.platformMode !== 'mobile'
                   ? `<button type="button" data-recipe-del="${rc.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
                   : ''
               }
@@ -5104,9 +5154,10 @@
         });
         document.getElementById('btnShortcutExport').addEventListener('click', downloadBackupJson);
 
-        // Platform Mode Switcher
-        document.getElementById('btnModeDesktop').addEventListener('click', () => setPlatformMode('desktop'));
-        document.getElementById('btnModeMobile').addEventListener('click', () => setPlatformMode('mobile'));
+        // Automatic Device Mode Detection (Desktop, Tablet Landscape, Celular) on load, resize, and orientation change
+        applyAutoDetectedDeviceMode(true);
+        window.addEventListener('resize', () => applyAutoDetectedDeviceMode(false));
+        window.addEventListener('orientationchange', () => setTimeout(() => applyAutoDetectedDeviceMode(false), 150));
 
         // Module 1 Subtabs
         document.getElementById('tabBtnPlans').addEventListener('click', () => switchModule1Tab('plans'));
