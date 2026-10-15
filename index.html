@@ -10,10 +10,105 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --theme-primary: #0f172a;
+      --theme-primary-hover: #1e293b;
+      --theme-soft-bg: #f1f5f9;
+      --theme-soft-border: #cbd5e1;
+      --theme-text: #0f172a;
+      --theme-page-bg: #f8fafc;
+      --theme-header-bg: #0f172a;
+      --theme-badge-bg: rgba(255, 255, 255, 0.14);
+    }
+    html[data-category-theme="home"] {
+      --theme-primary: #0f172a;
+      --theme-primary-hover: #334155;
+      --theme-soft-bg: #f1f5f9;
+      --theme-soft-border: #cbd5e1;
+      --theme-text: #0f172a;
+      --theme-page-bg: #f8fafc;
+      --theme-header-bg: #0f172a;
+    }
+    html[data-category-theme="mod1"] {
+      --theme-primary: #059669;
+      --theme-primary-hover: #047857;
+      --theme-soft-bg: #ecfdf5;
+      --theme-soft-border: #a7f3d0;
+      --theme-text: #065f46;
+      --theme-page-bg: #f3faf7;
+      --theme-header-bg: #064e3b;
+    }
+    html[data-category-theme="mod2"] {
+      --theme-primary: #d97706;
+      --theme-primary-hover: #b45309;
+      --theme-soft-bg: #fffbeb;
+      --theme-soft-border: #fde68a;
+      --theme-text: #92400e;
+      --theme-page-bg: #fdfaf3;
+      --theme-header-bg: #78350f;
+    }
+    html[data-category-theme="mod3"] {
+      --theme-primary: #0284c7;
+      --theme-primary-hover: #0369a1;
+      --theme-soft-bg: #f0f9ff;
+      --theme-soft-border: #bae6fd;
+      --theme-text: #075985;
+      --theme-page-bg: #f2f8fd;
+      --theme-header-bg: #0c4a6e;
+    }
+    html[data-category-theme="mod4"] {
+      --theme-primary: #4f46e5;
+      --theme-primary-hover: #4338ca;
+      --theme-soft-bg: #eef2ff;
+      --theme-soft-border: #c7d2fe;
+      --theme-text: #3730a3;
+      --theme-page-bg: #f5f5fd;
+      --theme-header-bg: #312e81;
+    }
+    html[data-category-theme="mod5"] {
+      --theme-primary: #e11d48;
+      --theme-primary-hover: #be123c;
+      --theme-soft-bg: #fff1f2;
+      --theme-soft-border: #fecdd3;
+      --theme-text: #9f1239;
+      --theme-page-bg: #fdf4f5;
+      --theme-header-bg: #881337;
+    }
+    html[data-category-theme="mod6"] {
+      --theme-primary: #0d9488;
+      --theme-primary-hover: #0f766e;
+      --theme-soft-bg: #f0fdfa;
+      --theme-soft-border: #99f6e4;
+      --theme-text: #115e59;
+      --theme-page-bg: #f2fbf9;
+      --theme-header-bg: #134e4a;
+    }
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f8fafc;
+      background-color: var(--theme-page-bg);
       color: #0f172a;
+      transition: background-color 0.25s ease, color 0.2s ease;
+    }
+    #mainAppHeader {
+      background-color: var(--theme-header-bg) !important;
+      transition: background-color 0.25s ease;
+    }
+    #headerLogoBox {
+      background-color: var(--theme-primary) !important;
+      color: #ffffff !important;
+      transition: background-color 0.25s ease;
+    }
+    /* Inside active module views, primary action buttons & accents adapt to the category color */
+    section[id^="viewModule"] .bg-emerald-600,
+    section[id^="viewModule"] .bg-indigo-600 {
+      background-color: var(--theme-primary) !important;
+    }
+    section[id^="viewModule"] .hover\:bg-emerald-500:hover,
+    section[id^="viewModule"] .hover\:bg-indigo-500:hover {
+      background-color: var(--theme-primary-hover) !important;
+    }
+    section[id^="viewModule"] > div:first-child {
+      border-top: 3px solid var(--theme-primary) !important;
     }
     .custom-scroll::-webkit-scrollbar {
       width: 6px;
@@ -142,44 +237,70 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- Top Navigation & Platform Mode Switcher -->
-  <header class="bg-slate-900 text-white shadow-md sticky top-0 z-30">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+  <!-- Minimalist Top Navigation with Dynamic Category Color -->
+  <header id="mainAppHeader" class="bg-slate-900 text-white sticky top-0 z-30 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-3">
-        <button id="btnGoHomeTop" type="button" class="flex items-center gap-2.5 text-left group focus:outline-none">
-          <div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-slate-950 font-bold text-lg shadow-sm group-hover:bg-emerald-400 transition">
+        <button id="btnGoHomeTop" type="button" class="flex items-center gap-2.5 text-left group focus:outline-none cursor-pointer">
+          <div id="headerLogoBox" class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold text-sm shadow-2xs transition">
             CS
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span class="font-bold text-base tracking-tight">CasaSync</span>
-              <span class="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Completo • 6 Módulos</span>
+              <span class="font-bold text-sm sm:text-base tracking-tight">CasaSync</span>
+              <span id="activeCategoryHeaderPill" class="hidden text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-white/15 text-white">Início</span>
             </div>
-            <p class="text-xs text-slate-400">Gestão Completa da Casa e Rotina</p>
           </div>
         </button>
       </div>
 
       <!-- Active Google Account, Theme Switcher & Manual Backup Bar -->
       <div class="flex flex-wrap items-center gap-2">
-        <div id="headerUserBadge" class="hidden items-center gap-2 bg-slate-800/90 border border-slate-700 px-2.5 py-1 rounded-xl text-xs text-slate-200">
-          <span id="headerUserAvatar" class="w-6 h-6 rounded-full bg-emerald-500 text-slate-950 font-bold flex items-center justify-center text-[11px]">G</span>
+        <div id="headerUserBadge" class="hidden items-center gap-2 bg-white/10 px-2.5 py-1 rounded-xl text-xs text-white">
+          <span id="headerUserAvatar" class="w-5 h-5 rounded-full bg-white text-slate-900 font-bold flex items-center justify-center text-[10px]">G</span>
           <div class="leading-tight hidden md:block">
-            <p id="headerUserName" class="font-bold text-[11px] text-white truncate max-w-[120px]">Usuário</p>
-            <p id="headerUserEmail" class="text-[10px] text-emerald-300 truncate max-w-[140px]">conta@gmail.com</p>
+            <p id="headerUserName" class="font-semibold text-[11px] text-white truncate max-w-[120px]">Usuário</p>
+            <p id="headerUserEmail" class="text-[10px] text-white/75 truncate max-w-[140px]">conta@gmail.com</p>
           </div>
         </div>
-        <button id="btnToggleTheme" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+        <button id="btnToggleTheme" type="button" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5 cursor-pointer">
           <span id="themeToggleIcon">🌙</span>
-          <span id="themeToggleLabel">Modo Escuro</span>
+          <span id="themeToggleLabel" class="hidden sm:inline">Modo Escuro</span>
         </button>
-        <button id="btnOpenBackupModal" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+        <button id="btnOpenBackupModal" type="button" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5 cursor-pointer">
           <span>💾</span>
-          <span>Backup Manual</span>
+          <span class="hidden sm:inline">Backup</span>
         </button>
-        <button id="btnLogoutAccount" type="button" class="hidden px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-600/90 hover:bg-rose-500 text-white transition flex items-center gap-1 shadow-sm cursor-pointer">
+        <button id="btnLogoutAccount" type="button" class="hidden px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-rose-600 text-white transition flex items-center gap-1 cursor-pointer">
           <span>🚪</span>
-          <span>Sair / Trocar Conta</span>
+          <span class="hidden sm:inline">Sair</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Minimalist Category Bar (Changes site theme color per category) -->
+    <div id="minimalCategoryNav" class="hidden bg-black/15 border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-4 py-1.5 flex items-center gap-1.5 overflow-x-auto custom-scroll text-xs">
+        <button type="button" data-nav-cat="home" class="px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer bg-white text-slate-900">
+          🏠 Início
+        </button>
+        <button type="button" data-nav-cat="mod1" class="px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer text-white/85 hover:bg-white/10">
+          📅 1. Planos & Hábitos
+        </button>
+        <button type="button" data-nav-cat="mod2" class="px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer text-white/85 hover:bg-white/10">
+          🛒 2. Compras
+        </button>
+        <button type="button" data-nav-cat="mod3" class="px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer text-white/85 hover:bg-white/10">
+          🧹 3. Tarefas da Casa
+        </button>
+        <button type="button" data-nav-cat="mod4" class="px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer text-white/85 hover:bg-white/10">
+          💰 4. Gastos & Contas
+        </button>
+        <button type="button" data-nav-cat="mod5" class="px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer text-white/85 hover:bg-white/10">
+          🏠 5. Aquisições
+        </button>
+        <button type="button" data-nav-cat="mod6" class="px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer text-white/85 hover:bg-white/10">
+          🍲 6. Despensa & Cardápio
         </button>
       </div>
     </div>
@@ -353,49 +474,46 @@
     <!-- ==================== VIEW 1: MODULAR HOME SCREEN ==================== -->
     <section id="viewHome" class="space-y-6">
 
-      <!-- Smart Daily Summary Banner -->
-      <div class="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-950 text-white p-5 sm:p-6 shadow-lg border border-slate-800">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div class="space-y-1.5">
-            <div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-400">
-              <span>⚡ Resumo Inteligente de Hoje</span>
-            </div>
-            <h1 class="text-xl sm:text-2xl font-bold tracking-tight">O que você quer fazer agora?</h1>
-            <p id="smartSummarySubtitle" class="text-sm text-slate-300">Carregando resumo do seu dia...</p>
+      <!-- Minimalist Daily Summary Card -->
+      <div class="rounded-2xl bg-white p-5 border border-slate-200/90 shadow-2xs">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Visão Geral de Hoje</h1>
+            <p id="smartSummarySubtitle" class="text-xs sm:text-sm text-slate-500 mt-0.5">Carregando resumo do seu dia...</p>
           </div>
-          <div class="flex flex-wrap items-center gap-2.5">
-            <button id="btnQuickOpenDayPlans" type="button" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs sm:text-sm transition shadow">
-              Abrir Planos de Hoje →
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="btnQuickOpenDayPlans" type="button" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition cursor-pointer">
+              Agenda de Hoje →
             </button>
-            <button id="btnCustomizeModules" type="button" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs sm:text-sm border border-slate-700 transition">
-              ⚙️ Personalizar Tela Inicial
+            <button id="btnCustomizeModules" type="button" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs transition cursor-pointer">
+              ⚙️ Organizar Módulos
             </button>
           </div>
         </div>
 
-        <!-- Quick Metric Pills -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5 pt-4 border-t border-slate-700/80">
-          <button id="pillPlansToday" type="button" class="text-left bg-slate-800/70 hover:bg-slate-800 p-3 rounded-xl border border-slate-700/70 transition">
-            <p class="text-[11px] uppercase tracking-wider text-slate-400">Planos de Hoje</p>
-            <p id="metricPlansToday" class="text-lg font-bold text-white mt-0.5">0 pendentes</p>
+        <!-- Minimalist Metric Pills -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-4 border-t border-slate-100">
+          <button id="pillPlansToday" type="button" class="text-left bg-slate-50 hover:bg-emerald-50/60 p-3 rounded-xl border border-slate-200/80 transition cursor-pointer">
+            <p class="text-[11px] font-medium text-slate-500">Planos de Hoje</p>
+            <p id="metricPlansToday" class="text-base font-bold text-slate-900 mt-0.5">0 pendentes</p>
           </button>
-          <button id="pillHabitsToday" type="button" class="text-left bg-slate-800/70 hover:bg-slate-800 p-3 rounded-xl border border-slate-700/70 transition">
-            <p class="text-[11px] uppercase tracking-wider text-slate-400">Hábitos do Dia</p>
-            <p id="metricHabitsToday" class="text-lg font-bold text-emerald-400 mt-0.5">0/0 concluídos</p>
+          <button id="pillHabitsToday" type="button" class="text-left bg-slate-50 hover:bg-emerald-50/60 p-3 rounded-xl border border-slate-200/80 transition cursor-pointer">
+            <p class="text-[11px] font-medium text-slate-500">Hábitos de Hoje</p>
+            <p id="metricHabitsToday" class="text-base font-bold text-emerald-600 mt-0.5">0/0 hoje</p>
           </button>
-          <button id="pillBestStreak" type="button" class="text-left bg-slate-800/70 hover:bg-slate-800 p-3 rounded-xl border border-slate-700/70 transition">
-            <p class="text-[11px] uppercase tracking-wider text-slate-400">Maior Sequência</p>
-            <p id="metricBestStreak" class="text-lg font-bold text-amber-400 mt-0.5">🔥 0 dias</p>
+          <button id="pillBestStreak" type="button" class="text-left bg-slate-50 hover:bg-amber-50/60 p-3 rounded-xl border border-slate-200/80 transition cursor-pointer">
+            <p class="text-[11px] font-medium text-slate-500">Maior Sequência</p>
+            <p id="metricBestStreak" class="text-base font-bold text-amber-600 mt-0.5">🔥 0 dias</p>
           </button>
-          <button id="pillBackupStatus" type="button" class="text-left bg-slate-800/70 hover:bg-slate-800 p-3 rounded-xl border border-slate-700/70 transition">
-            <p class="text-[11px] uppercase tracking-wider text-slate-400">Tarefas da Casa</p>
-            <p id="metricBackupStatus" class="text-lg font-bold text-indigo-300 mt-0.5">0 pendentes</p>
+          <button id="pillBackupStatus" type="button" class="text-left bg-slate-50 hover:bg-sky-50/60 p-3 rounded-xl border border-slate-200/80 transition cursor-pointer">
+            <p class="text-[11px] font-medium text-slate-500">Tarefas da Casa</p>
+            <p id="metricBackupStatus" class="text-base font-bold text-sky-600 mt-0.5">0 pendentes</p>
           </button>
         </div>
       </div>
 
-      <!-- Pinned Shortcuts Bar -->
-      <div id="shortcutsContainer" class="flex flex-wrap items-center gap-2">
+      <!-- Pinned Shortcuts Bar (Hidden in minimalist layout to avoid duplicating the 6 category cards) -->
+      <div id="shortcutsContainer" class="hidden flex-wrap items-center gap-2">
         <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 mr-1">Atalhos Rápidos:</span>
         <button id="btnShortcutPlans" type="button" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 text-xs font-medium text-slate-700 shadow-sm transition">
           📅 Agenda de Hoje
@@ -451,7 +569,7 @@
           <div>
             <div class="flex items-center gap-2">
               <h1 class="text-lg sm:text-xl font-bold text-slate-900">Módulo 1: Planos para o Dia & Hábitos</h1>
-              <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800">Ativo na Fase 1</span>
+              
             </div>
             <p class="text-xs text-slate-500">Organize seus compromissos por turno e acompanhe sua rotina diária</p>
           </div>
@@ -776,7 +894,7 @@
           <div>
             <div class="flex items-center gap-2">
               <h1 class="text-lg sm:text-xl font-bold text-slate-900">Módulo 2: Lista de Compras de Rotina</h1>
-              <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800">Ativo na Fase 2</span>
+              
             </div>
             <p class="text-xs text-slate-500">Supermercado, feira e farmácia com Modo Mercado rápido</p>
           </div>
@@ -1084,7 +1202,7 @@
           <div>
             <div class="flex items-center gap-2">
               <h1 class="text-lg sm:text-xl font-bold text-slate-900">Módulo 3: Lista de Tarefas & Rotina da Casa</h1>
-              <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800">Ativo na Fase 2</span>
+              
             </div>
             <p class="text-xs text-slate-500">Tarefas pontuais com prazo e cronograma recorrente de limpeza por cômodo</p>
           </div>
@@ -1129,55 +1247,92 @@
           </button>
         </div>
 
-        <form id="formAddTask" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+        <form id="formAddTask" class="space-y-3.5">
           <input type="hidden" id="editTaskId" value="" />
-          <div class="sm:col-span-2">
-            <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Título da Tarefa *</label>
-            <input id="taskTitleInput" type="text" required placeholder="Ex.: Trocar roupa de cama, Limpar fogão, Ligar para internet..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+            <div class="sm:col-span-2">
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Título da Tarefa *</label>
+              <input id="taskTitleInput" type="text" required placeholder="Ex.: Aspirar a casa, Lavar roupa, Limpar fogão..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Tipo</label>
+              <select id="taskTypeInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
+                <option value="Recorrente">🔄 Recorrente (Casa)</option>
+                <option value="Pontual">📌 Pontual (Única)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Cômodo / Área</label>
+              <select id="taskRoomInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
+                <option value="Sala">🛋️ Sala</option>
+                <option value="Cozinha">🍳 Cozinha</option>
+                <option value="Banheiro">🚿 Banheiro</option>
+                <option value="Quartos">🛏️ Quartos</option>
+                <option value="Lavanderia / Externa">🧺 Lavanderia / Externa</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Frequência / Prazo</label>
+              <select id="taskFreqInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white font-semibold">
+                <option value="Customizado">📅 Customizado (Dias Específicos)</option>
+                <option value="Semanal (7 dias)">Semanal (a cada 7 dias)</option>
+                <option value="Toda Segunda">Toda Segunda-feira</option>
+                <option value="Quinzenal (15 dias)">Quinzenal (a cada 15 dias)</option>
+                <option value="Mensal (30 dias)">Mensal (a cada 30 dias)</option>
+                <option value="Diária">Diária</option>
+                <option value="Esta Semana">Prazo: Esta Semana</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Prioridade</label>
+              <select id="taskPriorityInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
+                <option value="Alta">🔴 Alta</option>
+                <option value="Média" selected>🟡 Média</option>
+                <option value="Baixa">🟢 Baixa</option>
+              </select>
+            </div>
           </div>
-          <div>
-            <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Tipo</label>
-            <select id="taskTypeInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
-              <option value="Recorrente">🔄 Recorrente (Casa)</option>
-              <option value="Pontual">📌 Pontual (Única)</option>
-            </select>
+
+          <!-- Custom Days of the Week Selector Panel for Module 3 -->
+          <div id="taskCustomDaysPanel" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="text-xs font-bold text-slate-700">📅 Escolha os dias específicos da semana para realizar esta tarefa:</span>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button type="button" data-task-preset-days="1,5" class="px-2.5 py-1 rounded-lg bg-white hover:bg-sky-50 text-slate-700 text-[11px] font-semibold border border-slate-200 cursor-pointer">Seg e Sex (Ex.: Aspirar)</button>
+                <button type="button" data-task-preset-days="1,4" class="px-2.5 py-1 rounded-lg bg-white hover:bg-sky-50 text-slate-700 text-[11px] font-semibold border border-slate-200 cursor-pointer">Seg e Qui (Ex.: Lavar Roupa)</button>
+                <button type="button" data-task-preset-days="1,3,5" class="px-2.5 py-1 rounded-lg bg-white hover:bg-sky-50 text-slate-700 text-[11px] font-semibold border border-slate-200 cursor-pointer">Seg, Qua e Sex</button>
+              </div>
+            </div>
+            <div id="taskWeekdayButtons" class="flex flex-wrap items-center gap-2">
+              <button type="button" data-task-day-idx="0" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-600 cursor-pointer transition">Dom</button>
+              <button type="button" data-task-day-idx="1" data-selected="true" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-sky-600 bg-sky-600 text-white cursor-pointer transition">Seg</button>
+              <button type="button" data-task-day-idx="2" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-600 cursor-pointer transition">Ter</button>
+              <button type="button" data-task-day-idx="3" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-600 cursor-pointer transition">Qua</button>
+              <button type="button" data-task-day-idx="4" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-600 cursor-pointer transition">Qui</button>
+              <button type="button" data-task-day-idx="5" data-selected="true" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-sky-600 bg-sky-600 text-white cursor-pointer transition">Sex</button>
+              <button type="button" data-task-day-idx="6" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-600 cursor-pointer transition">Sáb</button>
+            </div>
           </div>
-          <div>
-            <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Cômodo / Área</label>
-            <select id="taskRoomInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
-              <option value="Cozinha">🍳 Cozinha</option>
-              <option value="Banheiro">🚿 Banheiro</option>
-              <option value="Sala">🛋️ Sala</option>
-              <option value="Quartos">🛏️ Quartos</option>
-              <option value="Lavanderia / Externa">🧺 Lavanderia / Externa</option>
-            </select>
+
+          <div class="grid grid-cols-1 sm:grid-cols-6 gap-3 items-end">
+            <div class="sm:col-span-5">
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Checklist de Passos / Subtarefas (separe por vírgula)</label>
+              <input id="taskSubtasksInput" type="text" placeholder="Ex.: Aspirar tapete da sala, Passar nos cantos do sofá..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+            <div>
+              <button id="btnSubmitTask" type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
+                + Salvar Tarefa
+              </button>
+            </div>
           </div>
-          <div>
-            <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Frequência / Prazo</label>
-            <select id="taskFreqInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
-              <option value="Toda Segunda">Toda Segunda-feira</option>
-              <option value="Semanal (7 dias)">Semanal (a cada 7 dias)</option>
-              <option value="Quinzenal (15 dias)">Quinzenal (a cada 15 dias)</option>
-              <option value="Mensal (30 dias)">Mensal (a cada 30 dias)</option>
-              <option value="Diária">Diária</option>
-              <option value="Esta Semana">Prazo: Esta Semana</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Prioridade</label>
-            <select id="taskPriorityInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
-              <option value="Alta">🔴 Alta</option>
-              <option value="Média" selected>🟡 Média</option>
-              <option value="Baixa">🟢 Baixa</option>
-            </select>
-          </div>
-          <div class="sm:col-span-2 lg:col-span-5">
-            <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Checklist de Passos / Subtarefas (separe por vírgula)</label>
-            <input id="taskSubtasksInput" type="text" placeholder="Ex.: Retirar lençóis, Bater colchão, Colocar jogo limpo..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
-          </div>
-          <div class="flex items-end">
-            <button id="btnSubmitTask" type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm">
-              + Salvar Tarefa
+
+          <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 text-xs">
+            <span class="text-[11px] font-semibold uppercase text-slate-400">Adição Rápida Customizada:</span>
+            <button type="button" id="btnQuickTaskAspirar" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-sky-50 text-slate-700 font-medium transition cursor-pointer">
+              + 🧹 Aspirar a casa (Seg e Sex)
+            </button>
+            <button type="button" id="btnQuickTaskLavarRoupa" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-sky-50 text-slate-700 font-medium transition cursor-pointer">
+              + 🧺 Lavar roupa (Seg e Qui)
             </button>
           </div>
         </form>
@@ -1219,7 +1374,7 @@
           <div>
             <div class="flex items-center gap-2">
               <h1 class="text-lg sm:text-xl font-bold text-slate-900">Módulo 4: Planilha de Gastos & Contas Fixas</h1>
-              <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800">Ativo na Fase 3</span>
+              
             </div>
             <p class="text-xs text-slate-500">Controle de boletos fixos, gastos automáticos de supermercado e metas de orçamento</p>
           </div>
@@ -1409,7 +1564,7 @@
           <div>
             <div class="flex items-center gap-2">
               <h1 class="text-lg sm:text-xl font-bold text-slate-900">Módulo 5: Aquisições & Estrutura da Casa</h1>
-              <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800">Ativo na Fase 4</span>
+              
             </div>
             <p class="text-xs text-slate-500">Móveis, eletrodomésticos e utensílios planejados com links, fotos, histórico de preços, garantias e manutenções</p>
           </div>
@@ -1691,7 +1846,7 @@
           <div>
             <div class="flex items-center gap-2">
               <h1 class="text-lg sm:text-xl font-bold text-slate-900">Módulo 6: Despensa, Estoque & Cardápio Semanal</h1>
-              <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800">Ativo na Fase 5</span>
+              
             </div>
             <p class="text-xs text-slate-500">Controle de estoque com alerta de validade, receitas e envio automático de faltantes para a Lista de Compras</p>
           </div>
@@ -2194,6 +2349,38 @@
         taskFilterType: 'ALL',
         taskFilterRoom: 'ALL',
         tasks: [
+          {
+            id: 'tk_aspirar',
+            title: 'Aspirar a casa e tapetes',
+            type: 'Recorrente',
+            room: 'Sala',
+            frequency: 'Customizado (Seg, Sex)',
+            customDays: [1, 5],
+            priority: 'Média',
+            lastDone: TODAY_STR,
+            nextDue: getTomorrowStr(TODAY_STR),
+            done: false,
+            subtasks: [
+              { text: 'Aspirar tapete e embaixo do sofá', done: false },
+              { text: 'Aspirar quartos e corredor', done: false }
+            ]
+          },
+          {
+            id: 'tk_roupa',
+            title: 'Lavar e estender roupas da semana',
+            type: 'Recorrente',
+            room: 'Lavanderia / Externa',
+            frequency: 'Customizado (Seg, Qui)',
+            customDays: [1, 4],
+            priority: 'Alta',
+            lastDone: TODAY_STR,
+            nextDue: getTomorrowStr(TODAY_STR),
+            done: false,
+            subtasks: [
+              { text: 'Separar roupas claras e escuras', done: false },
+              { text: 'Recolher roupas secas do varal', done: false }
+            ]
+          },
           {
             id: 'tk1',
             title: 'Limpeza completa da bancada, fogão e exaustor',
@@ -2732,6 +2919,36 @@
         });
       }
 
+      const CATEGORY_THEME_META = {
+        home: { label: '🏠 Início', accent: '#0f172a' },
+        mod1: { label: '📅 1. Planos & Hábitos', accent: '#059669' },
+        mod2: { label: '🛒 2. Compras & Mercado', accent: '#d97706' },
+        mod3: { label: '🧹 3. Tarefas da Casa', accent: '#0284c7' },
+        mod4: { label: '💰 4. Gastos & Contas', accent: '#4f46e5' },
+        mod5: { label: '🏠 5. Aquisições & Manutenção', accent: '#e11d48' },
+        mod6: { label: '🍲 6. Despensa & Cardápio', accent: '#0d9488' }
+      };
+
+      function applyCategoryTheme(catKey) {
+        const key = CATEGORY_THEME_META[catKey] ? catKey : 'home';
+        document.documentElement.setAttribute('data-category-theme', key);
+        const pill = document.getElementById('activeCategoryHeaderPill');
+        if (pill) {
+          pill.textContent = CATEGORY_THEME_META[key].label;
+          if (currentUser) {
+            pill.classList.remove('hidden');
+          } else {
+            pill.classList.add('hidden');
+          }
+        }
+        document.querySelectorAll('#minimalCategoryNav [data-nav-cat]').forEach(btn => {
+          const bCat = btn.getAttribute('data-nav-cat');
+          btn.className = bCat === key
+            ? 'px-3 py-1 rounded-lg font-semibold whitespace-nowrap transition cursor-pointer bg-white text-slate-900 shadow-2xs'
+            : 'px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer text-white/80 hover:bg-white/10 hover:text-white';
+        });
+      }
+
       function hideAllViews() {
         ['viewWelcomeAuth', 'viewHome', 'viewModule1', 'viewModule2', 'viewModule3', 'viewModule4', 'viewModule5', 'viewModule6'].forEach(id => {
           const el = document.getElementById(id);
@@ -2741,6 +2958,11 @@
 
       function openWelcomeAuthView() {
         hideAllViews();
+        applyCategoryTheme('home');
+        const navBar = document.getElementById('minimalCategoryNav');
+        if (navBar) navBar.classList.add('hidden');
+        const pill = document.getElementById('activeCategoryHeaderPill');
+        if (pill) pill.classList.add('hidden');
         document.getElementById('viewWelcomeAuth').classList.remove('hidden');
         document.getElementById('headerUserBadge').classList.add('hidden');
         document.getElementById('headerUserBadge').classList.remove('flex');
@@ -3048,6 +3270,7 @@
 
       function openModule6View(subtab) {
         hideAllViews();
+        applyCategoryTheme('mod6');
         document.getElementById('viewModule6').classList.remove('hidden');
         if (subtab) {
           switchModule6Tab(subtab);
@@ -3076,6 +3299,7 @@
 
       function openModule5View(subtab) {
         hideAllViews();
+        applyCategoryTheme('mod5');
         document.getElementById('viewModule5').classList.remove('hidden');
         if (subtab) {
           switchModule5Tab(subtab);
@@ -3113,6 +3337,7 @@
 
       function openModule4View(subtab) {
         hideAllViews();
+        applyCategoryTheme('mod4');
         document.getElementById('viewModule4').classList.remove('hidden');
         if (subtab) {
           switchModule4Tab(subtab);
@@ -3182,12 +3407,16 @@
           return;
         }
         hideAllViews();
+        const navBar = document.getElementById('minimalCategoryNav');
+        if (navBar) navBar.classList.remove('hidden');
+        applyCategoryTheme('home');
         document.getElementById('viewHome').classList.remove('hidden');
         renderAll();
       }
 
       function openModule1View(subtab) {
         hideAllViews();
+        applyCategoryTheme('mod1');
         document.getElementById('viewModule1').classList.remove('hidden');
         if (subtab === 'habits') {
           switchModule1Tab('habits');
@@ -3199,12 +3428,14 @@
 
       function openModule2View() {
         hideAllViews();
+        applyCategoryTheme('mod2');
         document.getElementById('viewModule2').classList.remove('hidden');
         renderAll();
       }
 
       function openModule3View() {
         hideAllViews();
+        applyCategoryTheme('mod3');
         document.getElementById('viewModule3').classList.remove('hidden');
         renderAll();
       }
@@ -3355,20 +3586,24 @@
 
         summarySubtitle.textContent = `Hoje: ${pendingToday} compromisso(s) • ${completedHabitsToday}/${state.habits.length} hábitos • ${shopCount} item(ns) na lista de compras • ${pendingTasksCount} tarefa(s) da casa pendente(s).`;
 
+        const MODULE_VISUAL_PALETTE = {
+          mod1: { tag: 'Rotina & Hábitos', accentBorder: '#10b981', pillBg: 'bg-emerald-50 text-emerald-700', btnBg: 'bg-emerald-600 hover:bg-emerald-500 text-white' },
+          mod2: { tag: 'Mercado & Preços', accentBorder: '#f59e0b', pillBg: 'bg-amber-50 text-amber-800', btnBg: 'bg-amber-600 hover:bg-amber-500 text-white' },
+          mod3: { tag: 'Limpeza & Afazeres', accentBorder: '#0ea5e9', pillBg: 'bg-sky-50 text-sky-800', btnBg: 'bg-sky-600 hover:bg-sky-500 text-white' },
+          mod4: { tag: 'Orçamento & Contas', accentBorder: '#6366f1', pillBg: 'bg-indigo-50 text-indigo-800', btnBg: 'bg-indigo-600 hover:bg-indigo-500 text-white' },
+          mod5: { tag: 'Desejos & Garantias', accentBorder: '#f43f5e', pillBg: 'bg-rose-50 text-rose-800', btnBg: 'bg-rose-600 hover:bg-rose-500 text-white' },
+          mod6: { tag: 'Estoque & Receitas', accentBorder: '#14b8a6', pillBg: 'bg-teal-50 text-teal-800', btnBg: 'bg-teal-600 hover:bg-teal-500 text-white' }
+        };
+
         sortedModules.forEach(mod => {
           const card = document.createElement('div');
-          const isActive = mod.activePhase === true || mod.id === 'mod1' || mod.id === 'mod2' || mod.id === 'mod3';
-          card.className = isActive
-            ? 'bg-white rounded-2xl p-5 border-2 border-emerald-500 shadow-sm hover:shadow-md transition flex flex-col justify-between'
-            : 'bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:border-slate-300 transition flex flex-col justify-between';
+          const pal = MODULE_VISUAL_PALETTE[mod.id] || MODULE_VISUAL_PALETTE.mod1;
+          card.className = 'bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs hover:shadow-md transition flex flex-col justify-between cursor-pointer';
+          card.style.borderTop = `3px solid ${pal.accentBorder}`;
 
-          const badgeClass = isActive
-            ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-            : 'bg-slate-100 text-slate-600 border border-slate-200';
-
-          let statusMetric = 'Estrutura pronta no roteiro';
+          let statusMetric = '';
           if (mod.id === 'mod1') {
-            statusMetric = `${pendingToday} plano(s) hoje • ${completedHabitsToday}/${state.habits.length} hábitos`;
+            statusMetric = `${pendingToday} plano(s) • ${completedHabitsToday}/${scheduledHabitsTodayCount} hábitos hoje`;
           } else if (mod.id === 'mod2') {
             statusMetric = `${shopCount} na lista (${shopCartCount} no carrinho)`;
           } else if (mod.id === 'mod3') {
@@ -3377,34 +3612,35 @@
             const marketSpent = state.transactions
               .filter(t => t.type === 'Despesa' && t.category === 'Supermercado & Feira')
               .reduce((a, b) => a + Number(b.amount || 0), 0);
-            statusMetric = `Mercado: ${formatCurrencyBRL(marketSpent)} • ${state.fixedBills.filter(b => !b.paid).length} boleto(s) aberto(s)`;
+            statusMetric = `Mercado: ${formatCurrencyBRL(marketSpent)} • ${state.fixedBills.filter(b => !b.paid).length} boleto(s)`;
           } else if (mod.id === 'mod5') {
-            statusMetric = `${state.wishlistItems.length} desejos • ${state.warranties.length} garantias • ${state.maintenanceCycles.length} revisões`;
+            statusMetric = `${state.wishlistItems.length} desejos • ${state.warranties.length} garantias`;
           } else if (mod.id === 'mod6') {
             const lowStock = state.pantryItems.filter(p => Number(p.qty) <= Number(p.minQty)).length;
-            statusMetric = `${state.pantryItems.length} no estoque (${lowStock} acabando) • ${state.recipes.length} receitas`;
+            statusMetric = `${state.pantryItems.length} no estoque (${lowStock} baixo)`;
           }
 
           card.innerHTML = `
             <div>
-              <div class="flex items-center justify-between gap-2 mb-3">
-                <span class="text-2xl">${mod.icon}</span>
-                <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${badgeClass}">${mod.phase}</span>
+              <div class="flex items-center justify-between gap-2 mb-2.5">
+                <span class="text-xl">${mod.icon}</span>
+                <span class="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${pal.pillBg}">${pal.tag}</span>
               </div>
-              <h3 class="text-base font-bold text-slate-900">${mod.title}</h3>
+              <h3 class="text-sm sm:text-base font-bold text-slate-900">${mod.title}</h3>
               <p class="text-xs text-slate-500 mt-1 leading-relaxed">${mod.subtitle}</p>
             </div>
-            <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
-              <span class="text-xs font-medium text-slate-600">${statusMetric}</span>
-              <button type="button" data-module-id="${mod.id}" class="btn-open-module px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
-                isActive
-                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs'
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-              }">
-                ${isActive ? 'Abrir Módulo →' : 'Ver Escopo'}
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+              <span class="text-[11px] font-medium text-slate-500 truncate">${statusMetric}</span>
+              <button type="button" data-module-id="${mod.id}" class="btn-open-module px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer shrink-0 ${pal.btnBg}">
+                Abrir →
               </button>
             </div>
           `;
+          card.addEventListener('click', (e) => {
+            if (e.target.closest('.btn-open-module')) return;
+            const btn = card.querySelector('.btn-open-module');
+            if (btn) btn.click();
+          });
           grid.appendChild(card);
         });
 
@@ -4501,6 +4737,51 @@
       }
 
       // ==================== MODULE 3: HOUSEHOLD TASKS LOGIC ====================
+      function updateTaskCustomDaysPanelUI() {
+        const freqVal = document.getElementById('taskFreqInput').value;
+        const panel = document.getElementById('taskCustomDaysPanel');
+        if (!panel) return;
+        if (freqVal === 'Customizado') {
+          panel.classList.remove('hidden');
+        } else {
+          panel.classList.add('hidden');
+        }
+      }
+
+      function setSelectedTaskWeekdays(daysArray) {
+        const cleanDays = Array.isArray(daysArray) && daysArray.length > 0 ? daysArray.map(Number) : [1, 5];
+        document.querySelectorAll('#taskWeekdayButtons [data-task-day-idx]').forEach(btn => {
+          const idx = parseInt(btn.getAttribute('data-task-day-idx'), 10);
+          const active = cleanDays.includes(idx);
+          btn.setAttribute('data-selected', active ? 'true' : 'false');
+          btn.className = active
+            ? 'px-3 py-1.5 rounded-xl text-xs font-bold border border-sky-600 bg-sky-600 text-white cursor-pointer transition'
+            : 'px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-600 cursor-pointer transition';
+        });
+      }
+
+      function getSelectedTaskWeekdays() {
+        const selected = [];
+        document.querySelectorAll('#taskWeekdayButtons [data-task-day-idx]').forEach(btn => {
+          if (btn.getAttribute('data-selected') === 'true' || btn.classList.contains('bg-sky-600')) {
+            selected.push(parseInt(btn.getAttribute('data-task-day-idx'), 10));
+          }
+        });
+        return selected.length > 0 ? selected.sort((a, b) => a - b) : [1, 5];
+      }
+
+      function getNextScheduledDateForCustomDays(customDays, fromDateStr) {
+        if (!Array.isArray(customDays) || customDays.length === 0) return addDaysStr(fromDateStr, 7);
+        for (let delta = 1; delta <= 7; delta++) {
+          const candidateStr = addDaysStr(fromDateStr, delta);
+          const dayIdx = getDayOfWeekIndex(candidateStr);
+          if (customDays.includes(dayIdx)) {
+            return candidateStr;
+          }
+        }
+        return addDaysStr(fromDateStr, 7);
+      }
+
       function renderTasksModule() {
         const doneCount = state.tasks.filter(t => t.done).length;
         document.getElementById('tasksProgressBadge').textContent = `${doneCount}/${state.tasks.length} concluídas`;
@@ -4514,15 +4795,15 @@
           const btn = document.getElementById(tabMap[key]);
           if (!btn) return;
           btn.className = state.taskFilterType === key
-            ? 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-900 shadow-xs'
-            : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900';
+            ? 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-900 shadow-xs cursor-pointer'
+            : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer';
         });
 
         document.querySelectorAll('#roomFilterButtons [data-room-filter]').forEach(btn => {
           const rm = btn.getAttribute('data-room-filter');
           btn.className = rm === state.taskFilterRoom
-            ? 'px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white'
-            : 'px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200';
+            ? 'px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white cursor-pointer'
+            : 'px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer';
         });
 
         const filtered = state.tasks.filter(t => {
@@ -4543,10 +4824,19 @@
           return;
         }
 
+        const todayWeekday = getDayOfWeekIndex(TODAY_STR);
+
         filtered.forEach(task => {
+          const hasCustomDays = Array.isArray(task.customDays) && task.customDays.length > 0;
+          const isScheduledToday = hasCustomDays && task.customDays.includes(todayWeekday);
+
           const card = document.createElement('div');
           card.className = `bg-white rounded-2xl p-4 sm:p-5 border transition flex flex-col justify-between gap-3 ${
-            task.done ? 'border-slate-200 opacity-75 bg-slate-50' : 'border-slate-200 hover:border-emerald-400 shadow-xs'
+            task.done
+              ? 'border-slate-200 opacity-75 bg-slate-50'
+              : isScheduledToday
+              ? 'border-sky-400 shadow-2xs'
+              : 'border-slate-200 hover:border-sky-300 shadow-2xs'
           }`;
 
           const prioBadge =
@@ -4558,14 +4848,30 @@
 
           const typeBadge =
             task.type === 'Recorrente'
-              ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
+              ? 'bg-sky-50 text-sky-800 border-sky-200'
               : 'bg-slate-100 text-slate-700 border-slate-200';
+
+          const customDaysStripHtml = hasCustomDays
+            ? `<div class="mt-2.5 flex items-center gap-1">
+                ${WEEKDAY_NAMES_SHORT.map((dName, idx) => {
+                  const active = task.customDays.includes(idx);
+                  const isToday = idx === todayWeekday;
+                  return `<span class="px-2 py-0.5 rounded text-[10px] font-semibold border ${
+                    active && isToday
+                      ? 'bg-sky-600 text-white border-sky-600'
+                      : active
+                      ? 'bg-sky-50 text-sky-800 border-sky-200'
+                      : 'bg-slate-50 text-slate-400 border-slate-200 opacity-60'
+                  }">${dName}</span>`;
+                }).join('')}
+               </div>`
+            : '';
 
           const subtasksHtml = Array.isArray(task.subtasks) && task.subtasks.length > 0
             ? `<div class="mt-3 pt-2.5 border-t border-slate-100 space-y-1.5">
                 ${task.subtasks.map((st, idx) => `
                   <label class="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
-                    <input type="checkbox" data-subtask-toggle="${task.id}|${idx}" ${st.done ? 'checked' : ''} class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
+                    <input type="checkbox" data-subtask-toggle="${task.id}|${idx}" ${st.done ? 'checked' : ''} class="rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
                     <span class="${st.done ? 'line-through text-slate-400' : ''}">${st.text}</span>
                   </label>
                 `).join('')}
@@ -4575,10 +4881,10 @@
           card.innerHTML = `
             <div>
               <div class="flex items-start gap-3">
-                <button type="button" data-task-toggle="${task.id}" class="mt-0.5 w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 transition font-bold ${
+                <button type="button" data-task-toggle="${task.id}" class="mt-0.5 w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 transition font-bold cursor-pointer ${
                   task.done
                     ? 'bg-emerald-600 border-emerald-600 text-white'
-                    : 'bg-white border-slate-300 hover:border-emerald-500 text-transparent'
+                    : 'bg-white border-slate-300 hover:border-sky-500 text-transparent'
                 }">
                   ✓
                 </button>
@@ -4587,8 +4893,14 @@
                     <span class="text-[11px] font-semibold px-2 py-0.5 rounded border ${typeBadge}">${task.type === 'Recorrente' ? '🔄 ' + task.frequency : '📌 Pontual'}</span>
                     <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-700">${task.room}</span>
                     <span class="text-[11px] font-semibold px-2 py-0.5 rounded border ${prioBadge}">${task.priority}</span>
+                    ${
+                      isScheduledToday && !task.done
+                        ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">⚡ Dia programado hoje</span>`
+                        : ''
+                    }
                   </div>
                   <h4 class="text-sm font-bold ${task.done ? 'line-through text-slate-400' : 'text-slate-900'}">${task.title}</h4>
+                  ${customDaysStripHtml}
                   ${subtasksHtml}
                 </div>
               </div>
@@ -4599,8 +4911,8 @@
               ${
                 state.platformMode !== 'mobile'
                   ? `<div class="flex items-center gap-2">
-                       <button type="button" data-task-edit="${task.id}" class="font-semibold text-indigo-600 hover:text-indigo-800">Editar</button>
-                       <button type="button" data-task-del="${task.id}" class="font-semibold text-rose-600 hover:text-rose-800">Excluir</button>
+                       <button type="button" data-task-edit="${task.id}" class="font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">Editar</button>
+                       <button type="button" data-task-del="${task.id}" class="font-semibold text-rose-600 hover:text-rose-800 cursor-pointer">Excluir</button>
                      </div>`
                   : ''
               }
@@ -4617,8 +4929,12 @@
             task.done = !task.done;
             if (task.done) {
               task.lastDone = TODAY_STR;
-              const daysToAdd = task.frequency.includes('15') ? 15 : task.frequency.includes('30') ? 30 : task.frequency.includes('Diária') ? 1 : 7;
-              task.nextDue = addDaysStr(TODAY_STR, daysToAdd);
+              if (Array.isArray(task.customDays) && task.customDays.length > 0) {
+                task.nextDue = getNextScheduledDateForCustomDays(task.customDays, TODAY_STR);
+              } else {
+                const daysToAdd = task.frequency.includes('15') ? 15 : task.frequency.includes('30') ? 30 : task.frequency.includes('Diária') ? 1 : 7;
+                task.nextDue = addDaysStr(TODAY_STR, daysToAdd);
+              }
               showToast(`Tarefa concluída! Próxima programação: ${formatPtDate(task.nextDue)}`, '🧹');
             }
             saveState();
@@ -4649,7 +4965,13 @@
             document.getElementById('taskTitleInput').value = task.title;
             document.getElementById('taskTypeInput').value = task.type;
             document.getElementById('taskRoomInput').value = task.room;
-            document.getElementById('taskFreqInput').value = task.frequency;
+            if (Array.isArray(task.customDays) && task.customDays.length > 0) {
+              document.getElementById('taskFreqInput').value = 'Customizado';
+              setSelectedTaskWeekdays(task.customDays);
+            } else {
+              document.getElementById('taskFreqInput').value = task.frequency;
+            }
+            updateTaskCustomDaysPanelUI();
             document.getElementById('taskPriorityInput').value = task.priority;
             document.getElementById('taskSubtasksInput').value = (task.subtasks || []).map(s => s.text).join(', ');
             document.getElementById('taskFormTitle').textContent = '✏️ Editando Tarefa Selecionada';
@@ -4673,6 +4995,9 @@
       function resetTaskForm() {
         document.getElementById('editTaskId').value = '';
         document.getElementById('formAddTask').reset();
+        document.getElementById('taskFreqInput').value = 'Customizado';
+        setSelectedTaskWeekdays([1, 5]);
+        updateTaskCustomDaysPanelUI();
         document.getElementById('taskFormTitle').textContent = '🧹 Cadastrar Tarefa ou Rotina de Limpeza';
         document.getElementById('btnSubmitTask').textContent = '+ Salvar Tarefa';
         document.getElementById('btnCancelTaskEdit').classList.add('hidden');
@@ -6091,6 +6416,82 @@
           showToast(`Rodízio semanal reiniciado para ${count} tarefa(s) doméstica(s)!`, '🔄');
         });
 
+        // Minimalist Category Bar Navigation
+        document.querySelectorAll('#minimalCategoryNav [data-nav-cat]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const cat = btn.getAttribute('data-nav-cat');
+            if (cat === 'home') openHomeView();
+            else if (cat === 'mod1') openModule1View('plans');
+            else if (cat === 'mod2') openModule2View();
+            else if (cat === 'mod3') openModule3View();
+            else if (cat === 'mod4') openModule4View('statement');
+            else if (cat === 'mod5') openModule5View('wishlist');
+            else if (cat === 'mod6') openModule6View('pantry');
+          });
+        });
+
+        // Module 3 Custom Weekday Selector & Quick Presets
+        setSelectedTaskWeekdays([1, 5]);
+        updateTaskCustomDaysPanelUI();
+        document.getElementById('taskFreqInput').addEventListener('change', updateTaskCustomDaysPanelUI);
+
+        document.querySelectorAll('#taskWeekdayButtons [data-task-day-idx]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const isSel = btn.getAttribute('data-selected') === 'true' || btn.classList.contains('bg-sky-600');
+            btn.setAttribute('data-selected', isSel ? 'false' : 'true');
+            btn.className = !isSel
+              ? 'px-3 py-1.5 rounded-xl text-xs font-bold border border-sky-600 bg-sky-600 text-white cursor-pointer transition'
+              : 'px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-600 cursor-pointer transition';
+          });
+        });
+
+        document.querySelectorAll('[data-task-preset-days]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const days = btn.getAttribute('data-task-preset-days').split(',').map(Number);
+            document.getElementById('taskFreqInput').value = 'Customizado';
+            updateTaskCustomDaysPanelUI();
+            setSelectedTaskWeekdays(days);
+          });
+        });
+
+        document.getElementById('btnQuickTaskAspirar').addEventListener('click', () => {
+          state.tasks.unshift({
+            id: 'tk_' + Date.now(),
+            title: 'Aspirar a casa',
+            type: 'Recorrente',
+            room: 'Sala',
+            frequency: 'Customizado (Seg, Sex)',
+            customDays: [1, 5],
+            priority: 'Média',
+            lastDone: '—',
+            nextDue: getNextScheduledDateForCustomDays([1, 5], addDaysStr(TODAY_STR, -1)),
+            done: false,
+            subtasks: []
+          });
+          saveState();
+          renderAll();
+          showToast('Tarefa "Aspirar a casa (Seg, Sex)" adicionada!', '🧹');
+        });
+
+        document.getElementById('btnQuickTaskLavarRoupa').addEventListener('click', () => {
+          state.tasks.unshift({
+            id: 'tk_' + Date.now(),
+            title: 'Lavar roupa',
+            type: 'Recorrente',
+            room: 'Lavanderia / Externa',
+            frequency: 'Customizado (Seg, Qui)',
+            customDays: [1, 4],
+            priority: 'Alta',
+            lastDone: '—',
+            nextDue: getNextScheduledDateForCustomDays([1, 4], addDaysStr(TODAY_STR, -1)),
+            done: false,
+            subtasks: []
+          });
+          saveState();
+          renderAll();
+          showToast('Tarefa "Lavar roupa (Seg, Qui)" adicionada!', '🧺');
+        });
+
         document.getElementById('formAddTask').addEventListener('submit', (e) => {
           e.preventDefault();
           const editId = document.getElementById('editTaskId').value;
@@ -6098,7 +6499,11 @@
           if (!title) return;
           const type = document.getElementById('taskTypeInput').value;
           const room = document.getElementById('taskRoomInput').value;
-          const frequency = document.getElementById('taskFreqInput').value;
+          const rawFreq = document.getElementById('taskFreqInput').value;
+          const customDays = rawFreq === 'Customizado' ? getSelectedTaskWeekdays() : [];
+          const frequency = rawFreq === 'Customizado'
+            ? `Customizado (${customDays.map(d => WEEKDAY_NAMES_SHORT[d]).join(', ')})`
+            : rawFreq;
           const priority = document.getElementById('taskPriorityInput').value;
           const rawSubs = document.getElementById('taskSubtasksInput').value.trim();
           const subtasks = rawSubs
@@ -6112,20 +6517,22 @@
               task.type = type;
               task.room = room;
               task.frequency = frequency;
+              task.customDays = customDays;
               task.priority = priority;
               task.subtasks = subtasks;
               showToast('Tarefa atualizada com sucesso!', '✏️');
             }
           } else {
-            state.tasks.push({
+            state.tasks.unshift({
               id: 'tk_' + Date.now(),
               title,
               type,
               room,
               frequency,
+              customDays,
               priority,
               lastDone: '—',
-              nextDue: TODAY_STR,
+              nextDue: customDays.length > 0 ? getNextScheduledDateForCustomDays(customDays, addDaysStr(TODAY_STR, -1)) : TODAY_STR,
               done: false,
               subtasks
             });
