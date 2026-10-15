@@ -180,142 +180,81 @@
           </div>
         </div>
 
-        <!-- Right Column: Google Account Sign-In / Sign-Up Card (5 cols) -->
-        <div class="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-lg flex flex-col justify-between space-y-5">
-          <div class="space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <!-- Right Column: Exclusive Google Account OAuth 2.0 Sign-In Card (5 cols) -->
+        <div class="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-lg flex flex-col justify-between space-y-6">
+          <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
               <div>
-                <h2 class="text-lg font-bold text-slate-900">Login Oficial com Conta Google</h2>
-                <p class="text-xs text-slate-500">Autenticação OAuth 2.0 com permissão de gravação no seu Google Drive</p>
+                <span class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 mb-1.5">
+                  ☁️ Sincronização Obrigatória em Nuvem
+                </span>
+                <h2 class="text-xl font-bold text-slate-900">Acesse sua Conta</h2>
+                <p class="text-xs text-slate-500 mt-0.5">Login único e exclusivo via Conta Google</p>
               </div>
-              <span class="text-2xl">🔐</span>
+              <div class="w-12 h-12 rounded-2xl bg-slate-900 text-emerald-400 flex items-center justify-center font-bold text-lg shadow-xs">
+                CS
+              </div>
             </div>
 
-            <!-- OFFICIAL GOOGLE OAUTH 2.0 BUTTON + API CONFIG PANEL -->
-            <div class="p-4 rounded-2xl bg-slate-50 border-2 border-indigo-200 space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-900">Conexão Oficial Google (OAuth 2.0 + Drive API)</span>
-                <button id="btnToggleGoogleApiConfig" type="button" class="text-[11px] font-semibold text-indigo-600 hover:underline">
-                  ⚙️ Configurar Client ID / API
-                </button>
+            <!-- Main Google Sign-In Box -->
+            <div class="p-5 rounded-2xl bg-slate-50 border-2 border-slate-200 space-y-4">
+              <div class="space-y-1.5 text-center">
+                <p class="text-xs sm:text-sm font-bold text-slate-800">
+                  Conecte sua Conta Google para entrar ou criar seu perfil
+                </p>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                  Ao clicar abaixo, o pop-up oficial da Google será aberto para você selecionar sua conta e autorizar o backup automático na pasta <code class="bg-slate-200/80 px-1.5 py-0.5 rounded text-slate-800 font-mono">CasaSync_Backups</code> do seu Google Drive.
+                </p>
               </div>
 
-              <!-- Collapsible Google API Credentials Form -->
-              <div id="googleApiConfigPanel" class="hidden space-y-2.5 pt-2 border-t border-indigo-100">
-                <div>
-                  <label class="block text-[10px] font-bold uppercase text-slate-600 mb-1">Google OAuth Client ID (do Google Cloud Console)</label>
-                  <input id="inputGoogleClientId" type="text" value="781685938825-oghdgl8pv81c7ghntfqffdgoticvg680.apps.googleusercontent.com" placeholder="Ex.: 123456789-abc.apps.googleusercontent.com" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white font-mono" />
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold uppercase text-slate-600 mb-1">Ou Token de Acesso OAuth Direto (Opcional p/ Teste Rápido)</label>
-                  <input id="inputGoogleDirectToken" type="password" value="" placeholder="Cole um Access Token (ya29...) se estiver testando sem domínio" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white font-mono" />
-                </div>
-                <div class="flex items-center justify-between gap-2">
-                  <span id="googleApiCredStatus" class="text-[11px] font-bold text-emerald-700">✅ Client ID & Access Token Configurados!</span>
-                  <button id="btnSaveGoogleApiConfig" type="button" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition">
-                    Salvar Credenciais API
-                  </button>
-                </div>
-              </div>
-
-              <!-- Real "Fazer login com o Google" Button -->
-              <button id="btnRealGoogleOAuthLogin" type="button" class="w-full py-3 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-sm border-2 border-slate-300 hover:border-indigo-500 transition shadow-sm flex items-center justify-center gap-3">
-                <svg class="w-5 h-5" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-                  <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24z"/>
-                  <path fill="#FBBC05" d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14z"/>
-                  <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96z"/>
-                </svg>
+              <!-- Official "Entrar com conta Google" Button -->
+              <button id="btnRealGoogleOAuthLogin" type="button" class="w-full py-3.5 px-5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm transition shadow-md flex items-center justify-center gap-3 cursor-pointer">
+                <span class="w-7 h-7 rounded-lg bg-white flex items-center justify-center shrink-0">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24z"/>
+                    <path fill="#FBBC05" d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14z"/>
+                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96z"/>
+                  </svg>
+                </span>
                 <span>Entrar com conta Google</span>
               </button>
-              <p class="text-[11px] text-slate-500 text-center leading-tight">
-                Abre a janela oficial da Google para autorizar a pasta <code class="bg-slate-200 px-1 rounded">CasaSync_Backups</code> no seu Google Drive.
-              </p>
             </div>
 
-            <div class="relative flex py-1 items-center">
-              <div class="flex-grow border-t border-slate-200"></div>
-              <span class="flex-shrink mx-3 text-[11px] font-semibold uppercase text-slate-400">Ou Modo Offline / Local</span>
-              <div class="flex-grow border-t border-slate-200"></div>
-            </div>
-
-            <!-- Auth Mode Tabs: Entrar vs Criar Conta Google -->
-            <div class="grid grid-cols-2 bg-slate-100 p-1 rounded-xl border border-slate-200">
-              <button id="tabBtnAuthLogin" type="button" class="py-2 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs transition">
-                Entrar na Minha Conta
-              </button>
-              <button id="tabBtnAuthRegister" type="button" class="py-2 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition">
-                Criar Nova Conta Google
-              </button>
-            </div>
-
-            <!-- FORM 1: LOGIN WITH EXISTING GOOGLE ACCOUNT -->
-            <form id="formAuthLogin" class="space-y-3.5">
-              <div>
-                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">E-mail da Conta Google *</label>
-                <input id="loginEmailInput" type="email" required placeholder="seu.email@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-              </div>
-              <div>
-                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Senha / PIN de Acesso Local *</label>
-                <input id="loginPinInput" type="password" required placeholder="Digite sua senha ou PIN..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-              </div>
-              <button type="submit" class="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm transition shadow flex items-center justify-center gap-2">
-                <span>🔑</span>
-                <span>Entrar com Conta Google e Carregar Meus Dados</span>
-              </button>
-            </form>
-
-            <!-- FORM 2: CREATE NEW ACCOUNT LINKED TO GOOGLE -->
-            <form id="formAuthRegister" class="hidden space-y-3.5">
-              <div>
-                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Seu Nome *</label>
-                <input id="regNameInput" type="text" required placeholder="Ex.: César Augusto, Maria Silva..." class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
-              </div>
-              <div>
-                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">E-mail da sua Conta Google (@gmail.com) *</label>
-                <input id="regEmailInput" type="email" required placeholder="seu.nome@gmail.com" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <div>
-                  <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Criar Senha / PIN *</label>
-                  <input id="regPinInput" type="password" required placeholder="Mínimo 4 dígitos" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            <!-- How Google Sync Works Step-by-Step -->
+            <div class="space-y-3 pt-1">
+              <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Como funciona o seu acesso:</p>
+              <div class="space-y-2.5 text-xs text-slate-600">
+                <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                  <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 text-[11px]">1</span>
+                  <div>
+                    <p class="font-bold text-slate-800">Seleção de Conta no Pop-up Google</p>
+                    <p class="text-[11px] text-slate-500">Escolha qual conta Google deseja usar e confirme as permissões de acesso restrito ao Drive.</p>
+                  </div>
                 </div>
-                <div>
-                  <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Dados Iniciais da Conta</label>
-                  <select id="regTemplateSelect" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
-                    <option value="EMPTY">✨ Conta Limpa (Começar do Zero)</option>
-                    <option value="DEMO">📦 Com Exemplos Prontos</option>
-                  </select>
+                <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                  <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 text-[11px]">2</span>
+                  <div>
+                    <p class="font-bold text-slate-800">Criação Automática do Cofre no Drive</p>
+                    <p class="text-[11px] text-slate-500">Se for seu primeiro acesso, sua conta e a pasta <code class="font-mono">CasaSync_Backups</code> são criadas automaticamente.</p>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Pasta de Sincronização no seu Google Drive</label>
-                <input id="regDriveFolderInput" type="text" value="/CasaSync_Backups/" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 text-slate-700" />
-              </div>
-              <button type="submit" class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm transition shadow flex items-center justify-center gap-2">
-                <span>✨</span>
-                <span>Criar Conta Vinculada ao Google Drive</span>
-              </button>
-            </form>
-
-            <!-- Registered Accounts Switcher (Quick 1-Click Access for Testing Multi-User Isolation) -->
-            <div class="pt-3 border-t border-slate-100 space-y-2">
-              <div class="flex items-center justify-between">
-                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Contas Google Conectadas Neste Aparelho:</p>
-                <span id="registeredAccountsCount" class="text-[11px] font-semibold text-slate-500">0 contas</span>
-              </div>
-              <div id="savedAccountsList" class="space-y-2 max-h-44 overflow-y-auto custom-scroll">
-                <!-- Populated dynamically -->
+                <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                  <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 text-[11px]">3</span>
+                  <div>
+                    <p class="font-bold text-slate-800">Sincronização em Tempo Real (PC & Android)</p>
+                    <p class="text-[11px] text-slate-500">Qualquer alteração nos 6 módulos é salva diretamente no seu Google Drive para acesso em qualquer dispositivo.</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="pt-3 border-t border-slate-100 text-[11px] text-slate-400 flex items-center justify-between">
-            <span>🔒 Criptografia e armazenamento isolado por e-mail</span>
+          <div class="pt-4 border-t border-slate-100 text-[11px] text-slate-400 flex items-center justify-between">
+            <span>🔒 API configurada internamente no código</span>
             <span>OAuth 2.0 • Google Drive</span>
           </div>
         </div>
-
       </div>
 
     </section>
@@ -2662,25 +2601,6 @@
         document.getElementById('headerUserBadge').classList.add('hidden');
         document.getElementById('headerUserBadge').classList.remove('flex');
         document.getElementById('btnLogoutAccount').classList.add('hidden');
-        renderWelcomeSavedAccounts();
-      }
-
-      function switchAuthTab(mode) {
-        const fLogin = document.getElementById('formAuthLogin');
-        const fReg = document.getElementById('formAuthRegister');
-        const bLogin = document.getElementById('tabBtnAuthLogin');
-        const bReg = document.getElementById('tabBtnAuthRegister');
-        if (mode === 'register') {
-          fLogin.classList.add('hidden');
-          fReg.classList.remove('hidden');
-          bReg.className = 'py-2 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs transition';
-          bLogin.className = 'py-2 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition';
-        } else {
-          fLogin.classList.remove('hidden');
-          fReg.classList.add('hidden');
-          bLogin.className = 'py-2 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs transition';
-          bReg.className = 'py-2 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition';
-        }
       }
 
       const EMBEDDED_CLIENT_ID = '781685938825-oghdgl8pv81c7ghntfqffdgoticvg680.apps.googleusercontent.com';
@@ -2911,33 +2831,15 @@
       function updateRealDriveStatusUI(isConnected, detailText) {
         const statusText = document.getElementById('realDriveApiStatusText');
         const badge = document.getElementById('realDriveFileIdBadge');
-        const credStatus = document.getElementById('googleApiCredStatus');
         if (statusText && detailText) {
           statusText.textContent = detailText;
         }
         if (badge) {
           badge.textContent = isConnected ? '🟢 Google Drive API Conectada' : 'Pasta: CasaSync_Backups';
         }
-        if (credStatus) {
-          credStatus.textContent = googleApiConfig.clientId
-            ? '✅ Client ID salvo'
-            : googleApiConfig.accessToken
-            ? '✅ Token OAuth ativo'
-            : 'Status: Aguardando Client ID';
-        }
       }
 
       function triggerRealGoogleOAuthPopup() {
-        const clientIdInput = document.getElementById('inputGoogleClientId');
-        const directTokenInput = document.getElementById('inputGoogleDirectToken');
-        if (clientIdInput && clientIdInput.value.trim()) {
-          googleApiConfig.clientId = clientIdInput.value.trim();
-        }
-        const manualDevToken = directTokenInput ? directTokenInput.value.trim() : '';
-        if (manualDevToken) {
-          handleRealGoogleAccessToken(manualDevToken);
-          return;
-        }
 
         ensureGoogleIdentityScriptLoaded((loaded) => {
           if (loaded && window.google && window.google.accounts && window.google.accounts.oauth2) {
@@ -3004,44 +2906,7 @@
         showToast('Sessão encerrada com segurança. Clique em "Entrar com conta Google" para escolher outra conta.', '🚪');
       }
 
-      function renderWelcomeSavedAccounts() {
-        const listEl = document.getElementById('savedAccountsList');
-        const countEl = document.getElementById('registeredAccountsCount');
-        if (!listEl) return;
-        listEl.innerHTML = '';
-        if (countEl) countEl.textContent = `${accountsRegistry.length} conta(s)`;
 
-        accountsRegistry.forEach(acc => {
-          const row = document.createElement('div');
-          row.className = 'p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-emerald-50/50 hover:border-emerald-300 transition flex items-center justify-between gap-2';
-          const initial = (acc.name || acc.email || 'G').charAt(0).toUpperCase();
-          row.innerHTML = `
-            <div class="flex items-center gap-2.5 min-w-0">
-              <div class="w-8 h-8 rounded-full bg-slate-900 text-emerald-400 font-bold text-xs flex items-center justify-center shrink-0">
-                ${initial}
-              </div>
-              <div class="min-w-0">
-                <p class="text-xs font-bold text-slate-900 truncate">${acc.name}</p>
-                <p class="text-[11px] text-slate-500 truncate">${acc.email} • Drive: ${acc.driveFolder || '/CasaSync/'}</p>
-              </div>
-            </div>
-            <button type="button" data-quick-login-email="${acc.email}" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shrink-0 transition shadow-2xs">
-              Entrar →
-            </button>
-          `;
-          listEl.appendChild(row);
-        });
-
-        listEl.querySelectorAll('[data-quick-login-email]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const email = btn.getAttribute('data-quick-login-email');
-            const found = accountsRegistry.find(a => a.email.toLowerCase() === email.toLowerCase());
-            if (found) {
-              loginWithGoogleAccount(found);
-            }
-          });
-        });
-      }
 
       function openModule6View(subtab) {
         hideAllViews();
@@ -6145,90 +6010,9 @@
           showToast(`Receita "${title}" salva com sucesso!`, '📖');
         });
 
-        // Welcome & Google Account Auth Gate Listeners
-        document.getElementById('tabBtnAuthLogin').addEventListener('click', () => switchAuthTab('login'));
-        document.getElementById('tabBtnAuthRegister').addEventListener('click', () => switchAuthTab('register'));
+        // Welcome & Exclusive Google Account OAuth Listeners
         document.getElementById('btnLogoutAccount').addEventListener('click', logoutCurrentAccount);
-
-        document.getElementById('formAuthLogin').addEventListener('submit', (e) => {
-          e.preventDefault();
-          const email = document.getElementById('loginEmailInput').value.trim().toLowerCase();
-          const pin = document.getElementById('loginPinInput').value.trim();
-          if (!email) return;
-
-          let acc = accountsRegistry.find(a => a.email.toLowerCase() === email);
-          if (!acc) {
-            showToast('Conta Google não encontrada neste dispositivo. Clique na aba "Criar Nova Conta Google"!', '⚠️');
-            switchAuthTab('register');
-            document.getElementById('regEmailInput').value = email;
-            return;
-          }
-          if (acc.pin && acc.pin !== pin) {
-            showToast('Senha / PIN incorreto para esta conta.', '⚠️');
-            return;
-          }
-          document.getElementById('formAuthLogin').reset();
-          loginWithGoogleAccount(acc);
-        });
-
-        document.getElementById('formAuthRegister').addEventListener('submit', (e) => {
-          e.preventDefault();
-          const name = document.getElementById('regNameInput').value.trim();
-          const email = document.getElementById('regEmailInput').value.trim().toLowerCase();
-          const pin = document.getElementById('regPinInput').value.trim();
-          const template = document.getElementById('regTemplateSelect').value;
-          const driveFolder = document.getElementById('regDriveFolderInput').value.trim() || '/CasaSync_Backups/';
-          if (!name || !email || !pin) return;
-
-          const existing = accountsRegistry.find(a => a.email.toLowerCase() === email);
-          if (existing) {
-            showToast('Este e-mail Google já possui conta cadastrada. Faça login!', 'ℹ️');
-            switchAuthTab('login');
-            document.getElementById('loginEmailInput').value = email;
-            return;
-          }
-
-          const newAcc = {
-            name,
-            email,
-            pin,
-            driveFolder,
-            createdAt: TODAY_STR
-          };
-          accountsRegistry.unshift(newAcc);
-          saveAccountsRegistry(accountsRegistry);
-
-          // Initialize isolated database for this Google Account
-          const initialDb = template === 'EMPTY' ? createEmptyUserState() : JSON.parse(JSON.stringify(DEFAULT_STATE));
-          try {
-            localStorage.setItem(getUserStorageKey(email), JSON.stringify(initialDb));
-          } catch (err) {}
-
-          document.getElementById('formAuthRegister').reset();
-          loginWithGoogleAccount(newAcc);
-          showToast(`Conta Google "${email}" criada com banco de dados 100% isolado!`, '🎉');
-        });
-
-        // Initialize Google API Config inputs
-        const cfgClientIdEl = document.getElementById('inputGoogleClientId');
-        if (cfgClientIdEl && googleApiConfig.clientId) cfgClientIdEl.value = googleApiConfig.clientId;
         updateRealDriveStatusUI(!!googleApiConfig.accessToken);
-
-        document.getElementById('btnToggleGoogleApiConfig').addEventListener('click', () => {
-          const p = document.getElementById('googleApiConfigPanel');
-          p.classList.toggle('hidden');
-        });
-
-        document.getElementById('btnSaveGoogleApiConfig').addEventListener('click', () => {
-          const cid = document.getElementById('inputGoogleClientId').value.trim();
-          const tok = document.getElementById('inputGoogleDirectToken').value.trim();
-          googleApiConfig.clientId = cid;
-          if (tok) googleApiConfig.accessToken = tok;
-          saveGoogleApiConfig(googleApiConfig);
-          updateRealDriveStatusUI(!!googleApiConfig.accessToken);
-          showToast('Credenciais da API Google salvas! Agora clique em "Continuar com o Google".', '✅');
-        });
-
         document.getElementById('btnRealGoogleOAuthLogin').addEventListener('click', triggerRealGoogleOAuthPopup);
 
         document.getElementById('btnPullFromGoogleDriveReal').addEventListener('click', async () => {
