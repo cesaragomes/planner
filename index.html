@@ -648,38 +648,111 @@
       <!-- SUBVIEW 1B: HÁBITOS E ROTINA PESSOAL -->
       <div id="subviewHabits" class="hidden space-y-5">
 
-        <!-- Desktop Manager Form: Create/Edit Habit -->
-        <div id="desktopHabitEditorCard" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-          <h3 class="text-sm font-bold text-slate-900 mb-1">🔥 Configurar Novo Hábito Pessoal</h3>
-          <p class="text-xs text-slate-500 mb-4">Crie hábitos de marcação única (Sim/Não) ou contadores progressivos (ex.: copos de água)</p>
+        <!-- Form: Create/Edit Habit with Frequency Differentiation (Diário vs Dias Programados vs X vezes na semana) -->
+        <div id="desktopHabitEditorCard" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 id="habitFormTitle" class="text-sm font-bold text-slate-900">🔥 Configurar Hábito ou Rotina Programada</h3>
+              <p class="text-xs text-slate-500">Diferencie hábitos que se repetem todos os dias (ex.: tomar creatina) de treinos ou rotinas com dias programados (ex.: abdominal 3x na semana) sem perder o streak nos dias de descanso</p>
+            </div>
+            <button id="btnCancelHabitEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800 cursor-pointer">
+              Cancelar Edição
+            </button>
+          </div>
 
-          <form id="formAddHabit" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Nome do Hábito *</label>
-              <input id="habitTitleInput" type="text" required placeholder="Ex.: Beber 2L de água, Ler 20 páginas, Tomar vitamina..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+          <form id="formAddHabit" class="space-y-4">
+            <input type="hidden" id="editHabitId" value="" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+              <div class="sm:col-span-2">
+                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Nome do Hábito / Treino *</label>
+                <input id="habitTitleInput" type="text" required placeholder="Ex.: Tomar Creatina 5g, Treino de Abdominal..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Ícone</label>
+                <select id="habitIconInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
+                  <option value="💊">💊 Suplemento / Creatina</option>
+                  <option value="🏋️">🏋️ Exercício / Treino</option>
+                  <option value="💧">💧 Água / Hidratação</option>
+                  <option value="📚">📚 Leitura / Estudo</option>
+                  <option value="🧘">🧘 Meditação / Sono</option>
+                  <option value="🧹">🧹 Ordem em Casa</option>
+                </select>
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Tipo de Recorrência</label>
+                <select id="habitFreqTypeInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white font-semibold">
+                  <option value="daily">🔁 Hábito Diário (Todos os dias)</option>
+                  <option value="specific_days">📅 Dias Programados da Semana (Ex.: Seg, Qua, Sex)</option>
+                  <option value="weekly_flex">🎯 Meta X Vezes na Semana (Dias flexíveis)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Meta no Dia</label>
+                <input id="habitTargetInput" type="number" min="1" max="30" value="1" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+                <span class="text-[10px] text-slate-400">1 = Check único; &gt;1 = Contador</span>
+              </div>
             </div>
-            <div>
-              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Ícone</label>
-              <select id="habitIconInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
-                <option value="💧">💧 Água / Hidratação</option>
-                <option value="📚">📚 Leitura / Estudo</option>
-                <option value="🏋️">🏋️ Exercício / Treino</option>
-                <option value="💊">💊 Remédio / Suplemento</option>
-                <option value="🧘">🧘 Meditação / Sono</option>
-                <option value="🧹">🧹 Ordem em Casa</option>
-              </select>
+
+            <!-- Conditional Panel A: Specific Days of the Week Selector -->
+            <div id="habitSpecificDaysPanel" class="hidden p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="text-xs font-bold text-slate-700">📅 Selecione os dias da semana programados para este hábito:</span>
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <button type="button" data-preset-days="1,3,5" class="px-2 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[11px] font-semibold border border-indigo-200 cursor-pointer">3x (Seg, Qua, Sex)</button>
+                  <button type="button" data-preset-days="2,4" class="px-2 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[11px] font-semibold border border-indigo-200 cursor-pointer">2x (Ter, Qui)</button>
+                  <button type="button" data-preset-days="1,2,3,4,5" class="px-2 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[11px] font-semibold border border-indigo-200 cursor-pointer">5x (Seg a Sex)</button>
+                </div>
+              </div>
+              <div id="habitWeekdayButtons" class="flex flex-wrap items-center gap-2">
+                <button type="button" data-day-idx="0" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-600 cursor-pointer transition">Dom</button>
+                <button type="button" data-day-idx="1" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-emerald-600 bg-emerald-600 text-white cursor-pointer transition">Seg</button>
+                <button type="button" data-day-idx="2" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-600 cursor-pointer transition">Ter</button>
+                <button type="button" data-day-idx="3" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-emerald-600 bg-emerald-600 text-white cursor-pointer transition">Qua</button>
+                <button type="button" data-day-idx="4" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-600 cursor-pointer transition">Qui</button>
+                <button type="button" data-day-idx="5" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-emerald-600 bg-emerald-600 text-white cursor-pointer transition">Sex</button>
+                <button type="button" data-day-idx="6" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-600 cursor-pointer transition">Sáb</button>
+              </div>
+              <p class="text-[11px] text-slate-500">🛡️ Nos dias não selecionados, o hábito fica em <strong>Dia de Descanso</strong> e sua sequência (streak 🔥) permanece 100% protegida.</p>
             </div>
-            <div>
-              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Meta Diária (Unidades)</label>
-              <input id="habitTargetInput" type="number" min="1" max="30" value="1" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
-              <span class="text-[10px] text-slate-400">1 = Check único; &gt;1 = Contador</span>
+
+            <!-- Conditional Panel B: Flexible Weekly Frequency (X times per week) -->
+            <div id="habitWeeklyFlexPanel" class="hidden p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p class="text-xs font-bold text-slate-700">🎯 Quantas vezes por semana você quer realizar este hábito?</p>
+                <p class="text-[11px] text-slate-500">Você escolhe livremente em quais dias da semana concluir; batendo a meta semanal, o streak continua subindo.</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <input id="habitWeeklyGoalInput" type="number" min="1" max="6" value="3" class="w-20 px-3 py-1.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-bold text-center" />
+                <span class="text-xs font-semibold text-slate-700">vezes / semana</span>
+              </div>
             </div>
-            <div class="flex items-end">
-              <button type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm">
-                + Criar Hábito
+
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-[11px] font-semibold uppercase text-slate-400 mr-1">Exemplos Rápidos:</span>
+                <button type="button" id="btnQuickHabitCreatina" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-xs font-medium text-slate-700 transition cursor-pointer">
+                  + 💊 Tomar Creatina (Diário)
+                </button>
+                <button type="button" id="btnQuickHabitAbdominal" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-xs font-medium text-slate-700 transition cursor-pointer">
+                  + 🏋️ Treino de Abdominal (3x na Semana: Seg, Qua, Sex)
+                </button>
+              </div>
+              <button id="btnSubmitHabit" type="submit" class="py-2 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
+                + Salvar Hábito
               </button>
             </div>
           </form>
+        </div>
+
+        <!-- Filter Bar for Habits: All vs Daily vs Scheduled/Weekly -->
+        <div class="bg-white rounded-2xl p-3.5 border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-2">
+          <div class="flex flex-wrap items-center gap-1.5" id="habitFilterButtons">
+            <button type="button" data-habit-filter="ALL" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white cursor-pointer">Todos os Hábitos</button>
+            <button type="button" data-habit-filter="DAILY" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">🔁 Hábitos Diários (Todos os dias)</button>
+            <button type="button" data-habit-filter="SCHEDULED" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">📅 Dias Programados / Semanais</button>
+            <button type="button" data-habit-filter="TODAY" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">⚡ Para Fazer Hoje</button>
+          </div>
+          <span class="text-[11px] text-slate-500">🛡️ Dias de descanso não quebram seu streak</span>
         </div>
 
         <!-- Detailed Habits Cards & Streak History -->
@@ -2012,12 +2085,40 @@
             done: false
           }
         ],
+        habitFilterType: 'ALL',
         habits: [
+          {
+            id: 'h_creatina',
+            title: 'Tomar Creatina (5g)',
+            icon: '💊',
+            target: 1,
+            freqType: 'daily',
+            scheduledDays: [0, 1, 2, 3, 4, 5, 6],
+            weeklyGoal: 7,
+            progressByDate: { [TODAY_STR]: 1 },
+            streak: 12,
+            bestStreak: 21
+          },
+          {
+            id: 'h_abdominal',
+            title: 'Treino de Abdominal',
+            icon: '🏋️',
+            target: 1,
+            freqType: 'specific_days',
+            scheduledDays: [1, 3, 5],
+            weeklyGoal: 3,
+            progressByDate: { [TODAY_STR]: 0 },
+            streak: 6,
+            bestStreak: 9
+          },
           {
             id: 'h1',
             title: 'Beber Água (Copos de 250ml)',
             icon: '💧',
             target: 8,
+            freqType: 'daily',
+            scheduledDays: [0, 1, 2, 3, 4, 5, 6],
+            weeklyGoal: 7,
             progressByDate: { [TODAY_STR]: 5 },
             streak: 6,
             bestStreak: 14
@@ -2027,27 +2128,12 @@
             title: 'Leitura Diária (20 min)',
             icon: '📚',
             target: 1,
+            freqType: 'daily',
+            scheduledDays: [0, 1, 2, 3, 4, 5, 6],
+            weeklyGoal: 7,
             progressByDate: { [TODAY_STR]: 1 },
             streak: 4,
             bestStreak: 10
-          },
-          {
-            id: 'h3',
-            title: 'Atividade Física / Alongamento',
-            icon: '🏋️',
-            target: 1,
-            progressByDate: { [TODAY_STR]: 0 },
-            streak: 2,
-            bestStreak: 7
-          },
-          {
-            id: 'h4',
-            title: 'Organização Rápida da Casa (15 min)',
-            icon: '🧹',
-            target: 1,
-            progressByDate: { [TODAY_STR]: 0 },
-            streak: 5,
-            bestStreak: 12
           }
         ],
         shoppingFilterStore: 'ALL',
@@ -3232,15 +3318,20 @@
         const doneToday = todayPlans.filter(p => p.done).length;
 
         let completedHabitsToday = 0;
+        let scheduledHabitsTodayCount = 0;
         let bestStreak = 0;
         state.habits.forEach(h => {
           const cur = (h.progressByDate && h.progressByDate[TODAY_STR]) || 0;
-          if (cur >= h.target) completedHabitsToday++;
+          const isSched = isHabitScheduledForDate(h, TODAY_STR);
+          if (isSched || cur >= h.target) {
+            scheduledHabitsTodayCount++;
+            if (cur >= h.target) completedHabitsToday++;
+          }
           if (h.streak > bestStreak) bestStreak = h.streak;
         });
 
         document.getElementById('metricPlansToday').textContent = `${pendingToday} pendentes (${doneToday} concluídos)`;
-        document.getElementById('metricHabitsToday').textContent = `${completedHabitsToday}/${state.habits.length} concluídos`;
+        document.getElementById('metricHabitsToday').textContent = `${completedHabitsToday}/${scheduledHabitsTodayCount} hoje`;
         document.getElementById('metricBestStreak').textContent = `🔥 ${bestStreak} dias seguidos`;
         document.getElementById('metricBackupStatus').textContent = `${state.tasks.filter(t => !t.done).length} pendente(s)`;
 
@@ -3339,26 +3430,139 @@
         });
       }
 
+      // ==================== HABIT SCHEDULING & STREAK HELPERS ====================
+      const WEEKDAY_NAMES_SHORT = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+      function getDayOfWeekIndex(dateStr) {
+        const parts = (dateStr || TODAY_STR).split('-').map(Number);
+        const dt = new Date(parts[0], parts[1] - 1, parts[2]);
+        return dt.getDay(); // 0 = Dom .. 6 = Sáb
+      }
+
+      function getCurrentWeekDateStrings(refDateStr) {
+        const parts = (refDateStr || TODAY_STR).split('-').map(Number);
+        const dt = new Date(parts[0], parts[1] - 1, parts[2]);
+        const dayIdx = dt.getDay(); // 0..6
+        const sunday = new Date(dt);
+        sunday.setDate(dt.getDate() - dayIdx);
+        const weekDates = [];
+        for (let i = 0; i < 7; i++) {
+          const cur = new Date(sunday);
+          cur.setDate(sunday.getDate() + i);
+          const y = cur.getFullYear();
+          const m = String(cur.getMonth() + 1).padStart(2, '0');
+          const d = String(cur.getDate()).padStart(2, '0');
+          weekDates.push(`${y}-${m}-${d}`);
+        }
+        return weekDates;
+      }
+
+      function getHabitWeeklyCompletedCount(habit, refDateStr) {
+        const weekDates = getCurrentWeekDateStrings(refDateStr);
+        let count = 0;
+        weekDates.forEach(dStr => {
+          const val = (habit.progressByDate && habit.progressByDate[dStr]) || 0;
+          if (val >= (habit.target || 1)) count++;
+        });
+        return count;
+      }
+
+      function isHabitScheduledForDate(habit, dateStr) {
+        const freq = habit.freqType || 'daily';
+        if (freq === 'daily') return true;
+        if (freq === 'specific_days') {
+          const days = Array.isArray(habit.scheduledDays) && habit.scheduledDays.length > 0
+            ? habit.scheduledDays
+            : [1, 3, 5];
+          return days.includes(getDayOfWeekIndex(dateStr));
+        }
+        if (freq === 'weekly_flex') {
+          const goal = Number(habit.weeklyGoal) || 3;
+          const doneToday = ((habit.progressByDate && habit.progressByDate[dateStr]) || 0) >= (habit.target || 1);
+          if (doneToday) return true;
+          const weeklyDone = getHabitWeeklyCompletedCount(habit, dateStr);
+          return weeklyDone < goal;
+        }
+        return true;
+      }
+
+      function formatHabitFrequencyLabel(habit) {
+        const freq = habit.freqType || 'daily';
+        if (freq === 'daily') {
+          return {
+            typeBadge: '🔁 Diário (Todos os dias)',
+            badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+            unitLabel: 'dias'
+          };
+        }
+        if (freq === 'specific_days') {
+          const days = Array.isArray(habit.scheduledDays) && habit.scheduledDays.length > 0
+            ? habit.scheduledDays
+            : [1, 3, 5];
+          const names = days.map(d => WEEKDAY_NAMES_SHORT[d]).join(', ');
+          return {
+            typeBadge: `📅 ${days.length}x/sem (${names})`,
+            badgeClass: 'bg-indigo-50 text-indigo-800 border-indigo-200',
+            unitLabel: 'check-ins'
+          };
+        }
+        const goal = Number(habit.weeklyGoal) || 3;
+        const weeklyDone = getHabitWeeklyCompletedCount(habit, TODAY_STR);
+        return {
+          typeBadge: `🎯 ${weeklyDone}/${goal}x na semana (Livre)`,
+          badgeClass: 'bg-amber-50 text-amber-800 border-amber-200',
+          unitLabel: 'check-ins'
+        };
+      }
+
       // Render Quick Habit Strip & Detailed Habits
       function renderHabits() {
         const strip = document.getElementById('quickHabitStrip');
         const detailedGrid = document.getElementById('habitsDetailedGrid');
+        if (!strip || !detailedGrid) return;
         strip.innerHTML = '';
         detailedGrid.innerHTML = '';
 
-        let completedCount = 0;
+        // Update filter buttons state
+        const activeFilter = state.habitFilterType || 'ALL';
+        document.querySelectorAll('#habitFilterButtons [data-habit-filter]').forEach(btn => {
+          const f = btn.getAttribute('data-habit-filter');
+          btn.className = f === activeFilter
+            ? 'px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white cursor-pointer'
+            : 'px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer';
+        });
 
-        state.habits.forEach(habit => {
+        let completedScheduledToday = 0;
+        let totalScheduledToday = 0;
+        const weekDates = getCurrentWeekDateStrings(TODAY_STR);
+        const todayDayIdx = getDayOfWeekIndex(TODAY_STR);
+
+        // Sort so habits scheduled for today appear first in the Quick Strip
+        const sortedForStrip = [...state.habits].sort((a, b) => {
+          const aSched = isHabitScheduledForDate(a, TODAY_STR) ? 0 : 1;
+          const bSched = isHabitScheduledForDate(b, TODAY_STR) ? 0 : 1;
+          return aSched - bSched;
+        });
+
+        sortedForStrip.forEach(habit => {
           const currentVal = (habit.progressByDate && habit.progressByDate[TODAY_STR]) || 0;
           const isDone = currentVal >= habit.target;
-          if (isDone) completedCount++;
+          const isScheduledToday = isHabitScheduledForDate(habit, TODAY_STR);
+          const freqInfo = formatHabitFrequencyLabel(habit);
 
-          const pct = Math.min(100, Math.round((currentVal / habit.target) * 100));
+          if (isScheduledToday || isDone) {
+            totalScheduledToday++;
+            if (isDone) completedScheduledToday++;
+          }
 
-          // 1. Quick Strip Card
+          // 1. Quick Strip Card (Always shows all habits, clearly distinguishing Today's Scheduled vs Rest Day)
           const stripCard = document.createElement('div');
           stripCard.className = `p-3 rounded-xl border transition flex items-center justify-between gap-2 ${
-            isDone ? 'bg-emerald-50/70 border-emerald-300' : 'bg-slate-50 border-slate-200'
+            isDone
+              ? 'bg-emerald-50/70 border-emerald-300'
+              : !isScheduledToday
+              ? 'bg-slate-50/60 border-slate-200 opacity-80'
+              : 'bg-slate-50 border-slate-200'
           }`;
           stripCard.innerHTML = `
             <div class="min-w-0">
@@ -3366,49 +3570,133 @@
                 <span>${habit.icon}</span>
                 <p class="text-xs font-bold text-slate-800 truncate">${habit.title}</p>
               </div>
-              <p class="text-[11px] text-slate-500 mt-0.5">
-                Hoje: <strong>${currentVal}/${habit.target}</strong> • 🔥 ${habit.streak}d
+              <p class="text-[11px] text-slate-500 mt-0.5 truncate">
+                ${
+                  isDone
+                    ? `<strong class="text-emerald-700">✓ Concluído hoje (${currentVal}/${habit.target})</strong> • 🔥 ${habit.streak}`
+                    : isScheduledToday
+                    ? `Hoje: <strong>${currentVal}/${habit.target}</strong> • 🔥 ${habit.streak} • ${freqInfo.typeBadge}`
+                    : `🛡️ <strong>Descanso hoje</strong> (Streak 🔥 ${habit.streak} mantido)`
+                }
               </p>
             </div>
             <div class="flex items-center gap-1 shrink-0">
               ${
                 habit.target > 1
-                  ? `<button type="button" data-habit-dec="${habit.id}" class="w-7 h-7 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-xs font-bold text-slate-700">-</button>`
+                  ? `<button type="button" data-habit-dec="${habit.id}" class="w-7 h-7 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-xs font-bold text-slate-700 cursor-pointer">-</button>`
                   : ''
               }
-              <button type="button" data-habit-inc="${habit.id}" class="px-2.5 h-7 rounded-lg text-xs font-semibold transition ${
+              <button type="button" data-habit-inc="${habit.id}" class="px-2.5 h-7 rounded-lg text-xs font-semibold transition cursor-pointer ${
                 isDone
                   ? 'bg-emerald-600 text-white'
+                  : !isScheduledToday
+                  ? 'bg-slate-200 hover:bg-slate-300 text-slate-700'
                   : 'bg-slate-900 hover:bg-slate-800 text-white'
               }">
-                ${habit.target > 1 ? '+1' : isDone ? '✓ Feito' : 'Marcar'}
+                ${habit.target > 1 ? '+1' : isDone ? '✓ Feito' : !isScheduledToday ? '+ Extra' : 'Marcar'}
               </button>
             </div>
           `;
           strip.appendChild(stripCard);
+        });
 
-          // 2. Detailed Habit Card
+        // Filter habits for Detailed Grid
+        const filteredDetailed = state.habits.filter(h => {
+          const freq = h.freqType || 'daily';
+          if (activeFilter === 'DAILY') return freq === 'daily';
+          if (activeFilter === 'SCHEDULED') return freq !== 'daily';
+          if (activeFilter === 'TODAY') return isHabitScheduledForDate(h, TODAY_STR);
+          return true;
+        });
+
+        if (filteredDetailed.length === 0) {
+          detailedGrid.innerHTML = `
+            <div class="md:col-span-2 bg-white rounded-2xl p-8 text-center border border-dashed border-slate-300 text-xs sm:text-sm text-slate-500">
+              Nenhum hábito encontrado para este filtro. Use o formulário acima para criar hábitos diários ou com dias programados!
+            </div>
+          `;
+        }
+
+        filteredDetailed.forEach(habit => {
+          const currentVal = (habit.progressByDate && habit.progressByDate[TODAY_STR]) || 0;
+          const isDone = currentVal >= habit.target;
+          const pct = Math.min(100, Math.round((currentVal / habit.target) * 100));
+          const isScheduledToday = isHabitScheduledForDate(habit, TODAY_STR);
+          const freqInfo = formatHabitFrequencyLabel(habit);
+          const freq = habit.freqType || 'daily';
+
+          // Build 7-day visual week strip (Dom..Sáb)
+          const weekStripHtml = weekDates.map((dStr, dIdx) => {
+            const valOnDay = (habit.progressByDate && habit.progressByDate[dStr]) || 0;
+            const doneOnDay = valOnDay >= habit.target;
+            const isTodayCell = dIdx === todayDayIdx;
+            const scheduledOnDay = freq === 'daily'
+              ? true
+              : freq === 'specific_days'
+              ? (Array.isArray(habit.scheduledDays) ? habit.scheduledDays.includes(dIdx) : [1, 3, 5].includes(dIdx))
+              : true;
+
+            let cellStyle = 'bg-slate-100 text-slate-500 border-slate-200';
+            let statusSymbol = scheduledOnDay ? '•' : '—';
+            if (doneOnDay) {
+              cellStyle = 'bg-emerald-600 text-white border-emerald-600 font-bold';
+              statusSymbol = '✓';
+            } else if (isTodayCell && scheduledOnDay) {
+              cellStyle = 'bg-amber-50 text-amber-800 border-amber-400 font-bold';
+              statusSymbol = 'Hoje';
+            } else if (!scheduledOnDay) {
+              cellStyle = 'bg-slate-50 text-slate-400 border-dashed border-slate-200 opacity-65';
+              statusSymbol = 'Desc';
+            }
+
+            return `
+              <div class="flex-1 py-1.5 px-1 rounded-lg border text-center ${cellStyle}">
+                <p class="text-[10px] uppercase leading-none">${WEEKDAY_NAMES_SHORT[dIdx]}</p>
+                <p class="text-[10px] mt-1 leading-none">${statusSymbol}</p>
+              </div>
+            `;
+          }).join('');
+
           const detailCard = document.createElement('div');
-          detailCard.className = 'bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm flex flex-col justify-between gap-3';
+          detailCard.className = `bg-white rounded-2xl p-4 sm:p-5 border shadow-sm flex flex-col justify-between gap-3 ${
+            isDone ? 'border-emerald-400' : 'border-slate-200'
+          }`;
           detailCard.innerHTML = `
             <div>
               <div class="flex items-start justify-between gap-2">
-                <div class="flex items-center gap-2.5">
-                  <span class="text-2xl">${habit.icon}</span>
+                <div class="flex items-start gap-2.5">
+                  <span class="text-2xl mt-0.5">${habit.icon}</span>
                   <div>
+                    <div class="flex flex-wrap items-center gap-1.5 mb-1">
+                      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${freqInfo.badgeClass}">
+                        ${freqInfo.typeBadge}
+                      </span>
+                      ${
+                        isDone
+                          ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">✓ Concluído Hoje</span>`
+                          : isScheduledToday
+                          ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">⚡ Programado p/ Hoje</span>`
+                          : `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">🛡️ Dia de Descanso (Streak Seguro)</span>`
+                      }
+                    </div>
                     <h4 class="text-sm font-bold text-slate-900">${habit.title}</h4>
-                    <p class="text-xs text-slate-500">${habit.target > 1 ? `Meta progressiva: ${habit.target} unidades/dia` : 'Check diário único'}</p>
+                    <p class="text-xs text-slate-500">${habit.target > 1 ? `Meta no dia: ${habit.target} unidades` : 'Marcação única no dia'}</p>
                   </div>
                 </div>
-                <div class="text-right">
+                <div class="text-right shrink-0">
                   <span class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
-                    🔥 ${habit.streak} dias
+                    🔥 ${habit.streak} ${freqInfo.unitLabel}
                   </span>
-                  <p class="text-[10px] text-slate-400 mt-0.5">Recorde: ${habit.bestStreak}d</p>
+                  <p class="text-[10px] text-slate-400 mt-0.5">Recorde: ${habit.bestStreak}</p>
                 </div>
               </div>
 
-              <div class="mt-4">
+              <!-- 7-Day Schedule & Completion Strip -->
+              <div class="mt-3.5 flex items-center gap-1.5">
+                ${weekStripHtml}
+              </div>
+
+              <div class="mt-3">
                 <div class="flex items-center justify-between text-xs mb-1">
                   <span class="text-slate-600">Progresso de hoje (${currentVal}/${habit.target})</span>
                   <span class="font-bold text-slate-800">${pct}%</span>
@@ -3421,12 +3709,17 @@
 
             <div class="flex items-center justify-between pt-3 border-t border-slate-100">
               <div class="flex items-center gap-1.5">
-                <button type="button" data-habit-dec="${habit.id}" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-700">-1</button>
-                <button type="button" data-habit-inc="${habit.id}" class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white">+1 / Concluir</button>
+                <button type="button" data-habit-dec="${habit.id}" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-700 cursor-pointer">-1</button>
+                <button type="button" data-habit-inc="${habit.id}" class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white cursor-pointer">
+                  ${isDone ? '✓ Concluído' : '+1 / Concluir Hoje'}
+                </button>
               </div>
               ${
                 state.platformMode !== 'mobile'
-                  ? `<button type="button" data-habit-del="${habit.id}" class="text-xs font-medium text-rose-600 hover:text-rose-800">Excluir hábito</button>`
+                  ? `<div class="flex items-center gap-2">
+                       <button type="button" data-habit-edit="${habit.id}" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">Editar</button>
+                       <button type="button" data-habit-del="${habit.id}" class="text-xs font-medium text-rose-600 hover:text-rose-800 cursor-pointer">Excluir</button>
+                     </div>`
                   : ''
               }
             </div>
@@ -3434,13 +3727,16 @@
           detailedGrid.appendChild(detailCard);
         });
 
-        document.getElementById('habitStripSummary').textContent = `${completedCount}/${state.habits.length} concluídos hoje`;
+        document.getElementById('habitStripSummary').textContent = `${completedScheduledToday}/${totalScheduledToday} programados para hoje concluídos`;
 
         document.querySelectorAll('[data-habit-inc]').forEach(btn => {
           btn.addEventListener('click', () => adjustHabitProgress(btn.getAttribute('data-habit-inc'), 1));
         });
         document.querySelectorAll('[data-habit-dec]').forEach(btn => {
           btn.addEventListener('click', () => adjustHabitProgress(btn.getAttribute('data-habit-dec'), -1));
+        });
+        document.querySelectorAll('[data-habit-edit]').forEach(btn => {
+          btn.addEventListener('click', () => startEditHabit(btn.getAttribute('data-habit-edit')));
         });
         document.querySelectorAll('[data-habit-del]').forEach(btn => {
           btn.addEventListener('click', () => deleteHabit(btn.getAttribute('data-habit-del')));
@@ -3463,13 +3759,85 @@
         if (prev < habit.target && next >= habit.target) {
           habit.streak += 1;
           if (habit.streak > habit.bestStreak) habit.bestStreak = habit.streak;
-          showToast(`Hábito "${habit.title}" concluído! Sequência: ${habit.streak} dias 🔥`, '🔥');
+          const isScheduledType = habit.freqType && habit.freqType !== 'daily';
+          showToast(
+            isScheduledType
+              ? `Hábito "${habit.title}" concluído! Sequência: ${habit.streak} check-ins (dias de descanso protegidos!) 🔥`
+              : `Hábito diário "${habit.title}" concluído! Sequência: ${habit.streak} dias 🔥`,
+            '🔥'
+          );
         } else if (prev >= habit.target && next < habit.target) {
           habit.streak = Math.max(0, habit.streak - 1);
         }
 
         saveState();
         renderAll();
+      }
+
+      function updateHabitFreqPanelsUI() {
+        const freqType = document.getElementById('habitFreqTypeInput').value;
+        const specPanel = document.getElementById('habitSpecificDaysPanel');
+        const flexPanel = document.getElementById('habitWeeklyFlexPanel');
+        if (freqType === 'specific_days') {
+          specPanel.classList.remove('hidden');
+          flexPanel.classList.add('hidden');
+        } else if (freqType === 'weekly_flex') {
+          specPanel.classList.add('hidden');
+          flexPanel.classList.remove('hidden');
+        } else {
+          specPanel.classList.add('hidden');
+          flexPanel.classList.add('hidden');
+        }
+      }
+
+      function setSelectedHabitWeekdays(daysArray) {
+        const cleanDays = Array.isArray(daysArray) ? daysArray.map(Number) : [1, 3, 5];
+        document.querySelectorAll('#habitWeekdayButtons [data-day-idx]').forEach(btn => {
+          const idx = parseInt(btn.getAttribute('data-day-idx'), 10);
+          const active = cleanDays.includes(idx);
+          btn.setAttribute('data-selected', active ? 'true' : 'false');
+          btn.className = active
+            ? 'px-3 py-1.5 rounded-xl text-xs font-bold border border-emerald-600 bg-emerald-600 text-white cursor-pointer transition'
+            : 'px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-600 cursor-pointer transition';
+        });
+      }
+
+      function getSelectedHabitWeekdays() {
+        const selected = [];
+        document.querySelectorAll('#habitWeekdayButtons [data-day-idx]').forEach(btn => {
+          if (btn.getAttribute('data-selected') === 'true' || btn.classList.contains('bg-emerald-600')) {
+            selected.push(parseInt(btn.getAttribute('data-day-idx'), 10));
+          }
+        });
+        return selected.length > 0 ? selected.sort((a, b) => a - b) : [1, 3, 5];
+      }
+
+      function startEditHabit(habitId) {
+        const habit = state.habits.find(h => h.id === habitId);
+        if (!habit) return;
+        document.getElementById('editHabitId').value = habit.id;
+        document.getElementById('habitTitleInput').value = habit.title;
+        document.getElementById('habitIconInput').value = habit.icon || '🏋️';
+        document.getElementById('habitTargetInput').value = habit.target || 1;
+        document.getElementById('habitFreqTypeInput').value = habit.freqType || 'daily';
+        document.getElementById('habitWeeklyGoalInput').value = habit.weeklyGoal || 3;
+        setSelectedHabitWeekdays(habit.scheduledDays || [1, 3, 5]);
+        updateHabitFreqPanelsUI();
+        document.getElementById('habitFormTitle').textContent = '✏️ Editando Hábito / Rotina Programada';
+        document.getElementById('btnSubmitHabit').textContent = 'Salvar Alterações';
+        document.getElementById('btnCancelHabitEdit').classList.remove('hidden');
+        document.getElementById('desktopHabitEditorCard').scrollIntoView({ behavior: 'smooth' });
+      }
+
+      function resetHabitForm() {
+        document.getElementById('editHabitId').value = '';
+        document.getElementById('formAddHabit').reset();
+        document.getElementById('habitFreqTypeInput').value = 'daily';
+        setSelectedHabitWeekdays([1, 3, 5]);
+        updateHabitFreqPanelsUI();
+        document.getElementById('habitFormTitle').textContent = '🔥 Configurar Hábito ou Rotina Programada';
+        document.getElementById('btnSubmitHabit').textContent = '+ Salvar Hábito';
+        document.getElementById('btnCancelHabitEdit').classList.add('hidden');
       }
 
       function deleteHabit(habitId) {
@@ -5265,30 +5633,115 @@
           showToast('Lembrete rápido adicionado!', '📱');
         });
 
-        // Desktop Form: Add Habit
+        // Habit Frequency Controls, Day-of-Week Toggles, Presets & Add/Edit Form
+        setSelectedHabitWeekdays([1, 3, 5]);
+        document.getElementById('habitFreqTypeInput').addEventListener('change', updateHabitFreqPanelsUI);
+
+        document.querySelectorAll('#habitWeekdayButtons [data-day-idx]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const isSel = btn.getAttribute('data-selected') === 'true' || btn.classList.contains('bg-emerald-600');
+            btn.setAttribute('data-selected', isSel ? 'false' : 'true');
+            btn.className = !isSel
+              ? 'px-3 py-1.5 rounded-xl text-xs font-bold border border-emerald-600 bg-emerald-600 text-white cursor-pointer transition'
+              : 'px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-600 cursor-pointer transition';
+          });
+        });
+
+        document.querySelectorAll('[data-preset-days]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const days = btn.getAttribute('data-preset-days').split(',').map(Number);
+            setSelectedHabitWeekdays(days);
+          });
+        });
+
+        document.querySelectorAll('#habitFilterButtons [data-habit-filter]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            state.habitFilterType = btn.getAttribute('data-habit-filter');
+            saveState();
+            renderHabits();
+          });
+        });
+
+        document.getElementById('btnQuickHabitCreatina').addEventListener('click', () => {
+          state.habits.unshift({
+            id: 'h_' + Date.now(),
+            title: 'Tomar Creatina (5g)',
+            icon: '💊',
+            target: 1,
+            freqType: 'daily',
+            scheduledDays: [0, 1, 2, 3, 4, 5, 6],
+            weeklyGoal: 7,
+            progressByDate: { [TODAY_STR]: 0 },
+            streak: 1,
+            bestStreak: 1
+          });
+          saveState();
+          renderAll();
+          showToast('Hábito diário "Tomar Creatina (5g)" adicionado!', '💊');
+        });
+
+        document.getElementById('btnQuickHabitAbdominal').addEventListener('click', () => {
+          state.habits.unshift({
+            id: 'h_' + Date.now(),
+            title: 'Treino de Abdominal',
+            icon: '🏋️',
+            target: 1,
+            freqType: 'specific_days',
+            scheduledDays: [1, 3, 5],
+            weeklyGoal: 3,
+            progressByDate: { [TODAY_STR]: 0 },
+            streak: 1,
+            bestStreak: 1
+          });
+          saveState();
+          renderAll();
+          showToast('Hábito programado "Treino de Abdominal (3x/sem: Seg, Qua, Sex)" adicionado!', '🏋️');
+        });
+
+        document.getElementById('btnCancelHabitEdit').addEventListener('click', resetHabitForm);
+
         document.getElementById('formAddHabit').addEventListener('submit', (e) => {
           e.preventDefault();
+          const editId = document.getElementById('editHabitId').value;
           const titleEl = document.getElementById('habitTitleInput');
           const iconEl = document.getElementById('habitIconInput');
           const targetEl = document.getElementById('habitTargetInput');
+          const freqType = document.getElementById('habitFreqTypeInput').value || 'daily';
+          const weeklyGoal = Math.max(1, Math.min(7, parseInt(document.getElementById('habitWeeklyGoalInput').value, 10) || 3));
+          const scheduledDays = freqType === 'specific_days' ? getSelectedHabitWeekdays() : [0, 1, 2, 3, 4, 5, 6];
           const title = titleEl.value.trim();
           if (!title) return;
           const target = Math.max(1, parseInt(targetEl.value, 10) || 1);
 
-          state.habits.push({
-            id: 'h_' + Date.now(),
-            title,
-            icon: iconEl.value,
-            target,
-            progressByDate: { [TODAY_STR]: 0 },
-            streak: 0,
-            bestStreak: 0
-          });
-          titleEl.value = '';
-          targetEl.value = '1';
+          if (editId) {
+            const existing = state.habits.find(h => h.id === editId);
+            if (existing) {
+              existing.title = title;
+              existing.icon = iconEl.value;
+              existing.target = target;
+              existing.freqType = freqType;
+              existing.scheduledDays = scheduledDays;
+              existing.weeklyGoal = freqType === 'specific_days' ? scheduledDays.length : weeklyGoal;
+              showToast(`Hábito "${title}" atualizado com sucesso!`, '✏️');
+            }
+          } else {
+            state.habits.unshift({
+              id: 'h_' + Date.now(),
+              title,
+              icon: iconEl.value,
+              target,
+              freqType,
+              scheduledDays,
+              weeklyGoal: freqType === 'specific_days' ? scheduledDays.length : weeklyGoal,
+              progressByDate: { [TODAY_STR]: 0 },
+              streak: 0,
+              bestStreak: 0
+            });
+            showToast('Novo hábito cadastrado!', '🔥');
+          }
+          resetHabitForm();
           saveState();
           renderAll();
-          showToast('Novo hábito cadastrado!', '🔥');
         });
 
         // Customize Home Modal
