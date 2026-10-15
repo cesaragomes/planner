@@ -2936,7 +2936,9 @@
       function scheduleAutoGoogleDriveSync() {
         if (!currentUser) return;
         if (!isGoogleTokenLikelyValid()) {
-          setCloudSyncHeaderState('expired', 'Reconectar Nuvem');
+          setCloudSyncHeaderState('syncing', 'Renovando...');
+          pendingSyncMode = 'push';
+          triggerRealGoogleOAuthPopup(true);
           return;
         }
         setCloudSyncHeaderState('syncing', 'Salvando...');
@@ -3219,9 +3221,11 @@
       }
 
       // Complete OAuth Login flow after receiving real Google Access Token
-      async function handleRealGoogleAccessToken(accessToken, expiresInSec) {
+      async function handleRealGoogleAccessToken(accessToken, expiresInSec, isSilentRenew) {
         try {
-          showToast('Conectando à sua Conta Google e sincronizando Google Drive...', '⏳');
+          if (!isSilentRenew) {
+            showToast('Conectando à sua Conta Google e sincronizando Google Drive...', '⏳');
+          }
           setCloudSyncHeaderState('syncing', 'Sincronizando...');
           googleApiConfig.accessToken = accessToken;
           googleApiConfig.tokenExpiresAt = Date.now() + ((Number(expiresInSec) || 3500) * 1000);
@@ -3319,32 +3323,48 @@
 
       function updateRealDriveStatusUI() {}
 
-      function triggerRealGoogleOAuthPopup() {
+      let isRenewingToken = false;
 
+      function triggerRealGoogleOAuthPopup(silentRenew) {
+        if (isRenewingToken) return;
         ensureGoogleIdentityScriptLoaded((loaded) => {
           if (loaded && window.google && window.google.accounts && window.google.accounts.oauth2) {
             try {
+              isRenewingToken = true;
+              const userHint = currentUser && currentUser.email ? currentUser.email : '';
               const tokenClient = window.google.accounts.oauth2.initTokenClient({
                 client_id: googleApiConfig.clientId || EMBEDDED_CLIENT_ID,
                 scope: GOOGLE_DRIVE_SCOPES,
+                hint: userHint,
                 callback: (tokenResponse) => {
+                  isRenewingToken = false;
                   if (tokenResponse && tokenResponse.access_token) {
-                    handleRealGoogleAccessToken(tokenResponse.access_token, tokenResponse.expires_in);
-                  } else {
+                    handleRealGoogleAccessToken(tokenResponse.access_token, tokenResponse.expires_in, !!silentRenew);
+                  } else if (!silentRenew) {
                     showToast('Seleção de conta ou permissão cancelada.', '⚠️');
                   }
+                },
+                error_callback: () => {
+                  isRenewingToken = false;
                 }
               });
-              // Abre o pop-up oficial da Google para selecionar a Conta Google (pede permissão apenas no 1º acesso)
-              tokenClient.requestAccessToken({ prompt: 'select_account' });
+              // Se já sabemos quem é o usuário (silentRenew), usamos prompt: '' + hint para renovar sem pedir escolha de conta!
+              if (silentRenew && userHint) {
+                tokenClient.requestAccessToken({ prompt: '', hint: userHint });
+              } else {
+                tokenClient.requestAccessToken({ prompt: 'select_account' });
+              }
             } catch (err) {
-              showToast('Erro ao abrir o pop-up da Google. Verifique as Origens JavaScript Autorizadas no Cloud Console.', '⚠️');
+              isRenewingToken = false;
+              if (!silentRenew) {
+                showToast('Erro ao abrir o pop-up da Google. Verifique as Origens JavaScript Autorizadas no Cloud Console.', '⚠️');
+              }
             }
-          } else {
+          } else if (!silentRenew) {
             const redirectUri = encodeURIComponent(window.location.origin + window.location.pathname);
             const scopeEnc = encodeURIComponent(GOOGLE_DRIVE_SCOPES);
             const cid = encodeURIComponent(googleApiConfig.clientId || EMBEDDED_CLIENT_ID);
-            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${cid}&redirect_uri=${redirectUri}&response_type=token&scope=${scopeEnc}&include_granted_scopes=true&prompt=select_account%20consent`;
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${cid}&redirect_uri=${redirectUri}&response_type=token&scope=${scopeEnc}&include_granted_scopes=true&prompt=select_account`;
             window.open(authUrl, '_blank', 'width=520,height=640');
             showToast('Pop-up de seleção de Conta Google aberto!', '🔑');
           }
@@ -7062,7 +7082,7 @@
           if (!currentUser) return;
           if (!isGoogleTokenLikelyValid()) {
             pendingSyncMode = 'push';
-            triggerRealGoogleOAuthPopup();
+            triggerRealGoogleOAuthPopup(true);
             return;
           }
           try {
@@ -7078,7 +7098,7 @@
             showToast(`Dados enviados para o Google Drive (${state.habits.length} hábitos • ${state.tasks.length} tarefas)!`, '⬆️');
           } catch (e) {
             pendingSyncMode = 'push';
-            triggerRealGoogleOAuthPopup();
+            triggerRealGoogleOAuthPopup(true);
           }
         }
 
@@ -7086,7 +7106,7 @@
           if (!currentUser) return;
           if (!isGoogleTokenLikelyValid()) {
             pendingSyncMode = 'pull';
-            triggerRealGoogleOAuthPopup();
+            triggerRealGoogleOAuthPopup(true);
             return;
           }
           try {
@@ -7104,16 +7124,49 @@
             }
           } catch (e) {
             pendingSyncMode = 'pull';
-            triggerRealGoogleOAuthPopup();
+            triggerRealGoogleOAuthPopup(true);
           }
         }
 
         document.getElementById('btnCloudSyncNow').addEventListener('click', () => {
           if (!isGoogleTokenLikelyValid()) {
             pendingSyncMode = 'auto';
-            triggerRealGoogleOAuthPopup();
+            triggerRealGoogleOAuthPopup(true);
           } else {
             executeCloudPullNow();
+          }
+        });
+
+        // Renovação automática ao interagir com a página se o token de 1h tiver expirado
+        let lastAutoAttemptMs = 0;
+        document.addEventListener('click', (e) => {
+          if (!currentUser || !currentUser.email) return;
+          if (e.target.closest('#btnLogoutAccount') || e.target.closest('#btnRealGoogleOAuthLogin')) return;
+          const expiresSoon = !googleApiConfig.tokenExpiresAt || (Date.now() > googleApiConfig.tokenExpiresAt - 5 * 60 * 1000);
+          if (expiresSoon && (Date.now() - lastAutoAttemptMs > 60 * 1000)) {
+            lastAutoAttemptMs = Date.now();
+            pendingSyncMode = 'auto';
+            triggerRealGoogleOAuthPopup(true);
+          }
+        }, { capture: true });
+
+        // Ao voltar para o aplicativo no celular ou PC (visibilitychange), baixa automaticamente novidades se o token estiver ativo
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible' && currentUser && isGoogleTokenLikelyValid()) {
+            downloadUserDatabaseFromGoogleDrive(googleApiConfig.accessToken, currentUser.email)
+              .then((cloudData) => {
+                if (cloudData && Array.isArray(cloudData.plans)) {
+                  const localMs = Number(state.updatedAtMs || 0);
+                  const cloudMs = Number(cloudData.updatedAtMs || 0);
+                  if (cloudMs > localMs) {
+                    localStorage.setItem(getUserStorageKey(currentUser.email), JSON.stringify(cloudData));
+                    state = loadState();
+                    renderAll();
+                    setCloudSyncHeaderState('ok', 'Sincronizado');
+                  }
+                }
+              })
+              .catch(() => {});
           }
         });
 
@@ -7121,6 +7174,8 @@
         document.getElementById('btnForcePullFromDrive').addEventListener('click', executeCloudPullNow);
 
         if (currentUser && currentUser.email) {
+          // Pré-carrega o script da Google em segundo plano para permitir renovação silenciosa imediata
+          ensureGoogleIdentityScriptLoaded(() => {});
           // Restaura automaticamente a sessão salva ao atualizar a página (F5) ou reabrir o navegador!
           loginWithGoogleAccount(currentUser, true);
           if (isGoogleTokenLikelyValid()) {
