@@ -267,6 +267,10 @@
           <span id="themeToggleIcon">🌙</span>
           <span id="themeToggleLabel" class="hidden sm:inline">Modo Escuro</span>
         </button>
+        <button id="btnCloudSyncNow" type="button" title="Sincronizar agora com o Google Drive" class="hidden px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 text-emerald-200 transition items-center gap-1.5 cursor-pointer">
+          <span id="cloudSyncIcon">☁️</span>
+          <span id="cloudSyncLabel">Sincronizado</span>
+        </button>
         <button id="btnOpenBackupModal" type="button" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5 cursor-pointer">
           <span>💾</span>
           <span class="hidden sm:inline">Backup</span>
@@ -2029,6 +2033,26 @@
         <button id="btnCloseBackupModal" type="button" class="text-slate-400 hover:text-slate-700 text-sm font-bold px-2 py-1">✕</button>
       </div>
 
+      <!-- Direct Google Drive Cloud Sync Controls (PC <-> Celular) -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+        <div class="flex items-center justify-between gap-2">
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-800">☁️ Sincronização Direta Google Drive (PC ↔ Celular)</h4>
+            <p id="modalCloudSyncStatusText" class="text-xs text-slate-500 mt-0.5">Use os botões abaixo caso queira forçar o envio do PC ou baixar a versão mais recente no celular.</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <button id="btnForcePushToDrive" type="button" class="w-full py-2.5 px-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+            <span>⬆️</span>
+            <span>Enviar Deste Aparelho p/ Nuvem</span>
+          </button>
+          <button id="btnForcePullFromDrive" type="button" class="w-full py-2.5 px-3.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+            <span>⬇️</span>
+            <span>Baixar da Nuvem p/ Este Aparelho</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Manual Export / Import Controls -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-200 space-y-2.5 flex flex-col justify-between">
@@ -2864,25 +2888,77 @@
         }
       }
 
+      let pendingSyncMode = null; // 'push' | 'pull' | 'auto'
+
+      function setCloudSyncHeaderState(status, labelText) {
+        const btn = document.getElementById('btnCloudSyncNow');
+        const iconEl = document.getElementById('cloudSyncIcon');
+        const labelEl = document.getElementById('cloudSyncLabel');
+        const modalStatusEl = document.getElementById('modalCloudSyncStatusText');
+        if (!btn || !iconEl || !labelEl) return;
+
+        if (!currentUser) {
+          btn.classList.add('hidden');
+          btn.classList.remove('flex');
+          return;
+        }
+        btn.classList.remove('hidden');
+        btn.classList.add('flex');
+
+        if (status === 'syncing') {
+          iconEl.textContent = '⏳';
+          labelEl.textContent = labelText || 'Sincronizando...';
+          btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/25 border border-sky-400/40 text-sky-100 transition flex items-center gap-1.5 cursor-pointer';
+        } else if (status === 'expired') {
+          iconEl.textContent = '⚠️';
+          labelEl.textContent = labelText || 'Reconectar Nuvem';
+          btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/30 hover:bg-amber-500/40 border border-amber-400/50 text-amber-100 transition flex items-center gap-1.5 cursor-pointer animate-pulse';
+          if (modalStatusEl) {
+            modalStatusEl.textContent = '⚠️ O token temporário de 1h da Google expirou neste navegador. Clique em um dos botões abaixo para renovar a conexão e sincronizar.';
+          }
+        } else {
+          iconEl.textContent = '☁️';
+          labelEl.textContent = labelText || 'Sincronizado';
+          btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 text-emerald-100 transition flex items-center gap-1.5 cursor-pointer';
+          if (modalStatusEl) {
+            modalStatusEl.textContent = `☁️ Última atualização local: ${state.lastUpdated || 'agora'}. Use os botões abaixo para enviar ou baixar da nuvem imediatamente.`;
+          }
+        }
+      }
+
+      function isGoogleTokenLikelyValid() {
+        if (!googleApiConfig || !googleApiConfig.accessToken) return false;
+        if (googleApiConfig.tokenExpiresAt && Date.now() > googleApiConfig.tokenExpiresAt) return false;
+        return true;
+      }
+
       let autoDriveSyncTimer = null;
       function scheduleAutoGoogleDriveSync() {
-        if (!currentUser || !googleApiConfig || !googleApiConfig.accessToken) return;
+        if (!currentUser) return;
+        if (!isGoogleTokenLikelyValid()) {
+          setCloudSyncHeaderState('expired', 'Reconectar Nuvem');
+          return;
+        }
+        setCloudSyncHeaderState('syncing', 'Salvando...');
         if (autoDriveSyncTimer) clearTimeout(autoDriveSyncTimer);
         autoDriveSyncTimer = setTimeout(async () => {
           try {
             const folderId = googleApiConfig.driveFolderId || await getOrCreateDriveFolder(googleApiConfig.accessToken);
             googleApiConfig.driveFolderId = folderId;
+            saveGoogleApiConfig(googleApiConfig);
             const slug = currentUser.email.split('@')[0].replace(/[^a-z0-9]/gi, '_');
             const mainFileName = `casasync_dados_${slug}.json`;
             await uploadJsonToGoogleDrive(googleApiConfig.accessToken, mainFileName, state, folderId);
+            setCloudSyncHeaderState('ok', 'Sincronizado');
           } catch (e) {
-            // Silent fallback
+            setCloudSyncHeaderState('expired', 'Reconectar Nuvem');
           }
-        }, 1800);
+        }, 900);
       }
 
       function saveState() {
         state.lastUpdated = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        state.updatedAtMs = Date.now();
         try {
           const key = currentUser && currentUser.email ? getUserStorageKey(currentUser.email) : STORAGE_KEY;
           localStorage.setItem(key, JSON.stringify(state));
@@ -3023,14 +3099,21 @@
         document.head.appendChild(script);
       }
 
-      // Real Google Drive API v3: Find or create folder 'CasaSync_Backups'
+      // Real Google Drive API v3: Find or create folder 'CasaSync_Backups' (with cache: no-store)
       async function getOrCreateDriveFolder(accessToken) {
         const q = encodeURIComponent("name='CasaSync_Backups' and mimeType='application/vnd.google-apps.folder' and trashed=false");
-        const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)`, {
+        const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime%20desc&fields=files(id,name)&_t=${Date.now()}`, {
+          cache: 'no-store',
           headers: { Authorization: 'Bearer ' + accessToken }
         });
+        if (searchResp.status === 401 || searchResp.status === 403) {
+          googleApiConfig.tokenExpiresAt = 0;
+          saveGoogleApiConfig(googleApiConfig);
+          setCloudSyncHeaderState('expired', 'Reconectar Nuvem');
+          throw new Error('Sessão de sincronização expirada (401).');
+        }
         if (!searchResp.ok) {
-          throw new Error('Falha ao consultar pasta no Google Drive (verifique se a Google Drive API está ativada e o token é válido).');
+          throw new Error('Falha ao consultar pasta no Google Drive.');
         }
         const searchData = await searchResp.json();
         if (searchData.files && searchData.files.length > 0) {
@@ -3057,9 +3140,16 @@
       // Real Google Drive API v3: Upload or update JSON file inside 'CasaSync_Backups'
       async function uploadJsonToGoogleDrive(accessToken, fileName, jsonPayload, folderId) {
         const q = encodeURIComponent(`name='${fileName}' and '${folderId}' in parents and trashed=false`);
-        const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)`, {
+        const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime%20desc&fields=files(id,name)&_t=${Date.now()}`, {
+          cache: 'no-store',
           headers: { Authorization: 'Bearer ' + accessToken }
         });
+        if (searchResp.status === 401 || searchResp.status === 403) {
+          googleApiConfig.tokenExpiresAt = 0;
+          saveGoogleApiConfig(googleApiConfig);
+          setCloudSyncHeaderState('expired', 'Reconectar Nuvem');
+          throw new Error('Token Google expirado (401).');
+        }
         const searchData = searchResp.ok ? await searchResp.json() : { files: [] };
         const existingFileId = searchData.files && searchData.files.length > 0 ? searchData.files[0].id : null;
 
@@ -3094,19 +3184,25 @@
         });
 
         if (!uploadResp.ok) {
+          if (uploadResp.status === 401 || uploadResp.status === 403) {
+            googleApiConfig.tokenExpiresAt = 0;
+            saveGoogleApiConfig(googleApiConfig);
+            setCloudSyncHeaderState('expired', 'Reconectar Nuvem');
+          }
           throw new Error('Erro ao gravar arquivo no Google Drive (' + uploadResp.status + ').');
         }
         return await uploadResp.json();
       }
 
-      // Real Google Drive API v3: Download user's main database file from 'CasaSync_Backups'
+      // Real Google Drive API v3: Download user's latest main database file from 'CasaSync_Backups' (bypassing mobile cache!)
       async function downloadUserDatabaseFromGoogleDrive(accessToken, email) {
         const folderId = await getOrCreateDriveFolder(accessToken);
         const slug = email.split('@')[0].replace(/[^a-z0-9]/gi, '_');
         const mainFileName = `casasync_dados_${slug}.json`;
 
         const q = encodeURIComponent(`name='${mainFileName}' and '${folderId}' in parents and trashed=false`);
-        const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,modifiedTime)`, {
+        const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime%20desc&fields=files(id,name,modifiedTime)&_t=${Date.now()}`, {
+          cache: 'no-store',
           headers: { Authorization: 'Bearer ' + accessToken }
         });
         if (!searchResp.ok) return null;
@@ -3114,7 +3210,8 @@
         if (!searchData.files || searchData.files.length === 0) return null;
 
         const fileId = searchData.files[0].id;
-        const fileResp = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
+        const fileResp = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&_t=${Date.now()}`, {
+          cache: 'no-store',
           headers: { Authorization: 'Bearer ' + accessToken }
         });
         if (!fileResp.ok) return null;
@@ -3122,10 +3219,12 @@
       }
 
       // Complete OAuth Login flow after receiving real Google Access Token
-      async function handleRealGoogleAccessToken(accessToken) {
+      async function handleRealGoogleAccessToken(accessToken, expiresInSec) {
         try {
-          showToast('Conectando à sua Conta Google e verificando Google Drive...', '⏳');
+          showToast('Conectando à sua Conta Google e sincronizando Google Drive...', '⏳');
+          setCloudSyncHeaderState('syncing', 'Sincronizando...');
           googleApiConfig.accessToken = accessToken;
+          googleApiConfig.tokenExpiresAt = Date.now() + ((Number(expiresInSec) || 3500) * 1000);
           saveGoogleApiConfig(googleApiConfig);
 
           // 1. Fetch real Google profile from Drive API v3 (works with drive.file scope!) or OAuth2 userinfo
@@ -3179,20 +3278,39 @@
           googleApiConfig.driveFolderId = folderId;
           saveGoogleApiConfig(googleApiConfig);
 
+          const slug = userEmail.split('@')[0].replace(/[^a-z0-9]/gi, '_');
+          const mainFileName = `casasync_dados_${slug}.json`;
+          const mode = pendingSyncMode;
+          pendingSyncMode = null;
+
+          if (mode === 'push') {
+            await uploadJsonToGoogleDrive(accessToken, mainFileName, state, folderId);
+            setCloudSyncHeaderState('ok', 'Sincronizado');
+            showToast('Dados deste aparelho enviados para o Google Drive com sucesso!', '⬆️');
+            return;
+          }
+
           const cloudData = await downloadUserDatabaseFromGoogleDrive(accessToken, userEmail);
-          if (cloudData && Array.isArray(cloudData.plans)) {
+          const localUpdatedMs = Number(state.updatedAtMs || 0);
+          const cloudUpdatedMs = cloudData ? Number(cloudData.updatedAtMs || 0) : 0;
+
+          if (mode === 'pull' && cloudData && Array.isArray(cloudData.plans)) {
             localStorage.setItem(getUserStorageKey(userEmail), JSON.stringify(cloudData));
             state = loadState();
             renderAll();
-            updateRealDriveStatusUI(true, `Sincronizado da nuvem (/CasaSync_Backups/)`);
-            showToast(`Login Google concluído! Seus dados foram carregados direto do seu Google Drive!`, '☁️');
+            setCloudSyncHeaderState('ok', 'Sincronizado');
+            showToast('Dados mais recentes baixados do Google Drive para este aparelho!', '⬇️');
+          } else if (cloudData && Array.isArray(cloudData.plans) && (localUpdatedMs === 0 || cloudUpdatedMs >= localUpdatedMs)) {
+            localStorage.setItem(getUserStorageKey(userEmail), JSON.stringify(cloudData));
+            state = loadState();
+            renderAll();
+            setCloudSyncHeaderState('ok', 'Sincronizado');
+            showToast(`Sincronizado com o Google Drive (${state.habits.length} hábitos • ${state.tasks.length} tarefas)!`, '☁️');
           } else {
-            const slug = userEmail.split('@')[0].replace(/[^a-z0-9]/gi, '_');
-            const mainFileName = `casasync_dados_${slug}.json`;
+            // Local data is newer than cloud (e.g., edited on PC while token was expired) -> push local data to Drive!
             await uploadJsonToGoogleDrive(accessToken, mainFileName, state, folderId);
-            await uploadJsonToGoogleDrive(accessToken, `backup_casa_${slug}_${TODAY_STR}.json`, state, folderId);
-            updateRealDriveStatusUI(true, `Arquivo criado no Drive: ${mainFileName}`);
-            showToast(`Login Google concluído! Pasta "CasaSync_Backups" e arquivo criados no seu Google Drive!`, '🎉');
+            setCloudSyncHeaderState('ok', 'Sincronizado');
+            showToast(`Suas alterações locais mais recentes foram salvas no Google Drive!`, '☁️');
           }
         } catch (err) {
           showToast(err.message || 'Erro ao acessar a API do Google Drive.', '⚠️');
@@ -3211,7 +3329,7 @@
                 scope: GOOGLE_DRIVE_SCOPES,
                 callback: (tokenResponse) => {
                   if (tokenResponse && tokenResponse.access_token) {
-                    handleRealGoogleAccessToken(tokenResponse.access_token);
+                    handleRealGoogleAccessToken(tokenResponse.access_token, tokenResponse.expires_in);
                   } else {
                     showToast('Seleção de conta ou permissão cancelada.', '⚠️');
                   }
@@ -6940,21 +7058,93 @@
         document.getElementById('btnRealGoogleOAuthLogin').addEventListener('click', triggerRealGoogleOAuthPopup);
 
         renderAll();
+        async function executeCloudPushNow() {
+          if (!currentUser) return;
+          if (!isGoogleTokenLikelyValid()) {
+            pendingSyncMode = 'push';
+            triggerRealGoogleOAuthPopup();
+            return;
+          }
+          try {
+            setCloudSyncHeaderState('syncing', 'Enviando...');
+            const folderId = googleApiConfig.driveFolderId || await getOrCreateDriveFolder(googleApiConfig.accessToken);
+            googleApiConfig.driveFolderId = folderId;
+            saveGoogleApiConfig(googleApiConfig);
+            const slug = currentUser.email.split('@')[0].replace(/[^a-z0-9]/gi, '_');
+            const mainFileName = `casasync_dados_${slug}.json`;
+            state.updatedAtMs = Date.now();
+            await uploadJsonToGoogleDrive(googleApiConfig.accessToken, mainFileName, state, folderId);
+            setCloudSyncHeaderState('ok', 'Sincronizado');
+            showToast(`Dados enviados para o Google Drive (${state.habits.length} hábitos • ${state.tasks.length} tarefas)!`, '⬆️');
+          } catch (e) {
+            pendingSyncMode = 'push';
+            triggerRealGoogleOAuthPopup();
+          }
+        }
+
+        async function executeCloudPullNow() {
+          if (!currentUser) return;
+          if (!isGoogleTokenLikelyValid()) {
+            pendingSyncMode = 'pull';
+            triggerRealGoogleOAuthPopup();
+            return;
+          }
+          try {
+            setCloudSyncHeaderState('syncing', 'Baixando...');
+            const cloudData = await downloadUserDatabaseFromGoogleDrive(googleApiConfig.accessToken, currentUser.email);
+            if (cloudData && Array.isArray(cloudData.plans)) {
+              localStorage.setItem(getUserStorageKey(currentUser.email), JSON.stringify(cloudData));
+              state = loadState();
+              renderAll();
+              setCloudSyncHeaderState('ok', 'Sincronizado');
+              showToast(`Dados atualizados da nuvem (${state.habits.length} hábitos • ${state.tasks.length} tarefas)!`, '⬇️');
+            } else {
+              setCloudSyncHeaderState('ok', 'Sincronizado');
+              showToast('Nenhum arquivo mais recente encontrado na nuvem.', 'ℹ️');
+            }
+          } catch (e) {
+            pendingSyncMode = 'pull';
+            triggerRealGoogleOAuthPopup();
+          }
+        }
+
+        document.getElementById('btnCloudSyncNow').addEventListener('click', () => {
+          if (!isGoogleTokenLikelyValid()) {
+            pendingSyncMode = 'auto';
+            triggerRealGoogleOAuthPopup();
+          } else {
+            executeCloudPullNow();
+          }
+        });
+
+        document.getElementById('btnForcePushToDrive').addEventListener('click', executeCloudPushNow);
+        document.getElementById('btnForcePullFromDrive').addEventListener('click', executeCloudPullNow);
+
         if (currentUser && currentUser.email) {
           // Restaura automaticamente a sessão salva ao atualizar a página (F5) ou reabrir o navegador!
           loginWithGoogleAccount(currentUser, true);
-          if (googleApiConfig.accessToken) {
-            updateRealDriveStatusUI(true, 'Sessão ativa e sincronizada com Google Drive (/CasaSync_Backups/)');
-            // Sincroniza silenciosamente em segundo plano caso haja dados mais novos no Drive
+          if (isGoogleTokenLikelyValid()) {
+            setCloudSyncHeaderState('syncing', 'Verificando nuvem...');
             downloadUserDatabaseFromGoogleDrive(googleApiConfig.accessToken, currentUser.email)
               .then((cloudData) => {
                 if (cloudData && Array.isArray(cloudData.plans)) {
-                  state = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), cloudData);
-                  localStorage.setItem(getUserStorageKey(currentUser.email), JSON.stringify(state));
-                  renderAll();
+                  const localMs = Number(state.updatedAtMs || 0);
+                  const cloudMs = Number(cloudData.updatedAtMs || 0);
+                  if (localMs === 0 || cloudMs >= localMs) {
+                    localStorage.setItem(getUserStorageKey(currentUser.email), JSON.stringify(cloudData));
+                    state = loadState();
+                    renderAll();
+                  } else {
+                    scheduleAutoGoogleDriveSync();
+                  }
                 }
+                setCloudSyncHeaderState('ok', 'Sincronizado');
               })
-              .catch(() => {});
+              .catch(() => {
+                setCloudSyncHeaderState('expired', 'Reconectar Nuvem');
+              });
+          } else {
+            setCloudSyncHeaderState('expired', 'Reconectar Nuvem');
           }
         } else {
           openWelcomeAuthView();
