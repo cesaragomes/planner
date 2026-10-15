@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CasaSync — Gestão Completa da Casa e Rotina (v1.0)</title>
+  <title>Prumo — Gestão da Casa e Rotina</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
@@ -246,11 +246,11 @@
       <div class="flex items-center gap-3">
         <button id="btnGoHomeTop" type="button" class="flex items-center gap-2.5 text-left group focus:outline-none cursor-pointer">
           <div id="headerLogoBox" class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold text-sm shadow-2xs transition">
-            CS
+            PR
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span class="font-bold text-sm sm:text-base tracking-tight">CasaSync</span>
+              <span class="font-bold text-sm sm:text-base tracking-tight">Prumo</span>
               <span id="activeCategoryHeaderPill" class="hidden text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-white/15 text-white">Início</span>
             </div>
           </div>
@@ -384,10 +384,10 @@
         <div class="md:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-center space-y-6">
           <div class="flex items-center gap-3">
             <div class="w-11 h-11 rounded-2xl bg-slate-900 text-emerald-400 flex items-center justify-center font-bold text-base shrink-0">
-              CS
+              PR
             </div>
             <div>
-              <h2 class="text-lg font-bold text-slate-900">Entrar no CasaSync</h2>
+              <h2 class="text-lg font-bold text-slate-900">Entrar no Prumo</h2>
               <p class="text-xs text-slate-500">Use sua conta Google para acessar</p>
             </div>
           </div>
@@ -2040,10 +2040,37 @@
 
   <script>
     (function () {
-      const STORAGE_KEY = 'casasync_state_v1';
-      const ACCOUNTS_REGISTRY_KEY = 'casasync_google_accounts_v1';
-      const ACTIVE_SESSION_KEY = 'casasync_active_google_user_v1';
-      const GOOGLE_API_CONFIG_KEY = 'casasync_google_api_config_v1';
+      const STORAGE_KEY = 'prumo_state_v1';
+      const ACCOUNTS_REGISTRY_KEY = 'prumo_google_accounts_v1';
+      const ACTIVE_SESSION_KEY = 'prumo_active_google_user_v1';
+      const GOOGLE_API_CONFIG_KEY = 'prumo_google_api_config_v1';
+
+      // Migração transparente de chaves antigas no navegador, se existirem
+      (function migrateLegacyLocalKeys() {
+        try {
+          const keyMap = [
+            ['casasync_state_v1', 'prumo_state_v1'],
+            ['casasync_google_accounts_v1', 'prumo_google_accounts_v1'],
+            ['casasync_active_google_user_v1', 'prumo_active_google_user_v1'],
+            ['casasync_google_api_config_v1', 'prumo_google_api_config_v1'],
+            ['casasync_theme_v1', 'prumo_theme_v1']
+          ];
+          keyMap.forEach(([oldK, newK]) => {
+            if (!localStorage.getItem(newK) && localStorage.getItem(oldK)) {
+              localStorage.setItem(newK, localStorage.getItem(oldK));
+            }
+          });
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith('casasync_user_db_')) {
+              const newUserK = 'prumo_user_db_' + k.slice('casasync_user_db_'.length);
+              if (!localStorage.getItem(newUserK)) {
+                localStorage.setItem(newUserK, localStorage.getItem(k));
+              }
+            }
+          }
+        } catch (e) {}
+      })();
       const GOOGLE_DRIVE_SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
       const TODAY_STR = new Date().toISOString().slice(0, 10);
 
@@ -2215,7 +2242,7 @@
 
       function getUserStorageKey(email) {
         if (!email) return STORAGE_KEY;
-        return 'casasync_user_db_' + email.toLowerCase().replace(/[^a-z0-9]/g, '_');
+        return 'prumo_user_db_' + email.toLowerCase().replace(/[^a-z0-9]/g, '_');
       }
 
       const LEGACY_SAMPLE_IDS = new Set([
@@ -2682,9 +2709,9 @@
         document.head.appendChild(script);
       }
 
-      // Real Google Drive API v3: Find or create folder 'CasaSync_Backups' (with cache: no-store)
+      // Real Google Drive API v3: Find or create folder 'Prumo_Backups' (with cache: no-store)
       async function getOrCreateDriveFolder(accessToken) {
-        const q = encodeURIComponent("name='CasaSync_Backups' and mimeType='application/vnd.google-apps.folder' and trashed=false");
+        const q = encodeURIComponent("name='Prumo_Backups' and mimeType='application/vnd.google-apps.folder' and trashed=false");
         const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime%20desc&fields=files(id,name)&_t=${Date.now()}`, {
           cache: 'no-store',
           headers: { Authorization: 'Bearer ' + accessToken }
@@ -2709,18 +2736,18 @@
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            name: 'CasaSync_Backups',
+            name: 'Prumo_Backups',
             mimeType: 'application/vnd.google-apps.folder'
           })
         });
         if (!createResp.ok) {
-          throw new Error('Não foi possível criar a pasta CasaSync_Backups no Google Drive.');
+          throw new Error('Não foi possível criar a pasta Prumo_Backups no Google Drive.');
         }
         const created = await createResp.json();
         return created.id;
       }
 
-      // Real Google Drive API v3: Upload or update JSON file inside 'CasaSync_Backups'
+      // Real Google Drive API v3: Upload or update JSON file inside 'Prumo_Backups'
       async function uploadJsonToGoogleDrive(accessToken, fileName, jsonPayload, folderId) {
         const q = encodeURIComponent(`name='${fileName}' and '${folderId}' in parents and trashed=false`);
         const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime%20desc&fields=files(id,name)&_t=${Date.now()}`, {
@@ -2740,7 +2767,7 @@
           ? { name: fileName, mimeType: 'application/json' }
           : { name: fileName, mimeType: 'application/json', parents: [folderId] };
 
-        const boundary = 'casasync_multipart_boundary_' + Date.now();
+        const boundary = 'prumo_multipart_boundary_' + Date.now();
         const delimiter = `--${boundary}\r\n`;
         const closeDelimiter = `\r\n--${boundary}--`;
         const bodyContent =
@@ -2777,11 +2804,11 @@
         return await uploadResp.json();
       }
 
-      // Real Google Drive API v3: Download user's latest main database file from 'CasaSync_Backups' (bypassing mobile cache!)
+      // Real Google Drive API v3: Download user's latest main database file from 'Prumo_Backups' (bypassing mobile cache!)
       async function downloadUserDatabaseFromGoogleDrive(accessToken, email) {
         const folderId = await getOrCreateDriveFolder(accessToken);
         const slug = email.split('@')[0].replace(/[^a-z0-9]/gi, '_');
-        const mainFileName = `casasync_dados_${slug}.json`;
+        const mainFileName = `prumo_dados_${slug}.json`;
 
         const q = encodeURIComponent(`name='${mainFileName}' and '${folderId}' in parents and trashed=false`);
         const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime%20desc&fields=files(id,name,modifiedTime)&_t=${Date.now()}`, {
@@ -2844,7 +2871,7 @@
               name: userName,
               email: userEmail,
               pin: '',
-              driveFolder: '/CasaSync_Backups/',
+              driveFolder: '/Prumo_Backups/',
               isRealGoogleOAuth: true,
               createdAt: TODAY_STR
             };
@@ -2864,7 +2891,7 @@
           saveGoogleApiConfig(googleApiConfig);
 
           const slug = userEmail.split('@')[0].replace(/[^a-z0-9]/gi, '_');
-          const mainFileName = `casasync_dados_${slug}.json`;
+          const mainFileName = `prumo_dados_${slug}.json`;
           const mode = pendingSyncMode;
           pendingSyncMode = null;
 
@@ -4117,7 +4144,7 @@
 
       function downloadBackupJson() {
         const emailSlug = currentUser && currentUser.email ? currentUser.email.split('@')[0].replace(/[^a-z0-9]/gi, '_') : 'geral';
-        const filename = `backup_casa_${emailSlug}_${TODAY_STR}.json`;
+        const filename = `backup_prumo_${emailSlug}_${TODAY_STR}.json`;
         const dataStr = JSON.stringify(state, null, 2);
         const blob = new Blob([dataStr], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -6024,7 +6051,7 @@
                 closeBkp();
                 showToast('Backup importado e sincronizado com sucesso!', '☁️');
               } else {
-                showToast('Arquivo JSON inválido para o CasaSync.', '⚠️');
+                showToast('Arquivo JSON inválido para o Prumo.', '⚠️');
               }
             } catch (err) {
               showToast('Erro ao ler o arquivo JSON.', '⚠️');
@@ -6845,7 +6872,7 @@
         });
 
         // Theme Mode (Light / Dark) Persistence & Toggle
-        const THEME_STORAGE_KEY = 'casasync_theme_v1';
+        const THEME_STORAGE_KEY = 'prumo_theme_v1';
         function applyThemeMode(theme) {
           const isDark = theme === 'dark';
           document.documentElement.classList.toggle('dark', isDark);
