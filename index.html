@@ -319,99 +319,164 @@
 
 
 
-    <!-- ==================== VIEW 0: TELA DE LOGIN ==================== -->
-    <section id="viewWelcomeAuth" class="py-4 sm:py-8">
-      <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+    <!-- ==================== VIEW 0: PÁGINA DE BOAS-VINDAS & CONTROLE DE ACESSO GOOGLE ==================== -->
+    <section id="viewWelcomeAuth" class="space-y-8 py-2">
 
-        <!-- Apresentação Direta -->
-        <div class="md:col-span-7 rounded-3xl bg-slate-900 text-white p-6 sm:p-8 shadow-lg border border-slate-800 flex flex-col justify-between space-y-6">
-          <div class="space-y-3">
-            <h1 class="text-2xl sm:text-3xl font-bold tracking-tight leading-snug">
-              Tudo da casa e da sua rotina em um só lugar.
-            </h1>
-            <p class="text-sm text-slate-300 leading-relaxed">
-              Planeje seu dia, acompanhe seus hábitos, monte a lista de mercado e controle as contas e tarefas da casa de forma simples.
-            </p>
-          </div>
+      <!-- Hero Welcome Section + Login / Create Account Card -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs pt-2">
-            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-start gap-2.5">
-              <span class="text-base">📅</span>
-              <div>
-                <p class="font-semibold text-white">Planos e Hábitos</p>
-                <p class="text-slate-400 text-[11px] mt-0.5">Agenda por turno e acompanhamento diário.</p>
-              </div>
-            </div>
-            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-start gap-2.5">
-              <span class="text-base">🛒</span>
-              <div>
-                <p class="font-semibold text-white">Compras de Mercado</p>
-                <p class="text-slate-400 text-[11px] mt-0.5">Lista por setor e histórico de preços.</p>
-              </div>
-            </div>
-            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-start gap-2.5">
-              <span class="text-base">🧹</span>
-              <div>
-                <p class="font-semibold text-white">Tarefas da Casa</p>
-                <p class="text-slate-400 text-[11px] mt-0.5">Limpeza recorrente e afazeres por cômodo.</p>
-              </div>
-            </div>
-            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-start gap-2.5">
-              <span class="text-base">💰</span>
-              <div>
-                <p class="font-semibold text-white">Gastos e Contas</p>
-                <p class="text-slate-400 text-[11px] mt-0.5">Despesas do mês, boletos e orçamento.</p>
-              </div>
-            </div>
-            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-start gap-2.5">
-              <span class="text-base">🏠</span>
-              <div>
-                <p class="font-semibold text-white">Aquisições e Manutenção</p>
-                <p class="text-slate-400 text-[11px] mt-0.5">Compras planejadas, garantias e revisões.</p>
-              </div>
-            </div>
-            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-start gap-2.5">
-              <span class="text-base">🍲</span>
-              <div>
-                <p class="font-semibold text-white">Despensa e Cardápio</p>
-                <p class="text-slate-400 text-[11px] mt-0.5">Estoque de alimentos, validades e refeições.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card de Login -->
-        <div class="md:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-center space-y-6">
-          <div class="flex items-center gap-3">
-            <div class="w-11 h-11 rounded-2xl bg-slate-900 text-emerald-400 flex items-center justify-center font-bold text-base shrink-0">
-              CS
-            </div>
-            <div>
-              <h2 class="text-lg font-bold text-slate-900">Entrar no CasaSync</h2>
-              <p class="text-xs text-slate-500">Use sua conta Google para acessar</p>
-            </div>
-          </div>
-
+        <!-- Left Column: About CasaSync & Privacy Architecture (7 cols) -->
+        <div class="md:col-span-7 lg:col-span-7 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white p-6 sm:p-8 shadow-xl border border-slate-800 flex flex-col justify-between space-y-6">
           <div class="space-y-4">
-            <button id="btnRealGoogleOAuthLogin" type="button" class="w-full py-3.5 px-5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm transition shadow-sm flex items-center justify-center gap-3 cursor-pointer">
-              <span class="w-7 h-7 rounded-lg bg-white flex items-center justify-center shrink-0">
-                <svg class="w-4 h-4" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-                  <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24z"/>
-                  <path fill="#FBBC05" d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14z"/>
-                  <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96z"/>
-                </svg>
-              </span>
-              <span>Entrar com conta Google</span>
-            </button>
-
-            <p class="text-xs text-slate-500 text-center leading-relaxed">
-              Seus dados ficam salvos na sua conta e sincronizam automaticamente entre o computador e o celular.
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">
+              <span>🔒 Acesso Restrito & Individualizado via Conta Google</span>
+            </div>
+            <h1 class="text-2xl sm:text-4xl font-bold tracking-tight leading-tight">
+              Bem-vindo ao <span class="text-emerald-400">CasaSync</span>: sua casa e rotina organizadas em um só lugar.
+            </h1>
+            <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+              O CasaSync é uma plataforma modular completa para planejar o seu dia, controlar compras de supermercado com histórico de preços, gerenciar faxinas recorrentes, acompanhar gastos e monitorar aquisições e a despensa da casa.
             </p>
+
+            <!-- Privacy & Multi-User Guarantee Box -->
+            <div class="p-4 rounded-2xl bg-slate-900/70 border border-slate-700/80 space-y-2">
+              <h2 class="text-xs sm:text-sm font-bold text-emerald-300 flex items-center gap-2">
+                <span>🛡️</span>
+                <span>Privacidade Total: Cada Usuário Acessa Somente os Próprios Dados</span>
+              </h2>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Para utilizar o serviço, é necessário <strong>entrar com sua Conta Google</strong>. Cada conta mantém um perfil individual isolado, permitindo que várias pessoas utilizem o sistema mantendo 100% de sigilo e separação das informações.
+              </p>
+            </div>
+          </div>
+
+          <!-- 6 Modules Preview Mini-Grid on Landing Page -->
+          <div class="space-y-2.5 pt-2">
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-400">O que você terá disponível na sua conta:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+              <div class="p-3 rounded-xl bg-slate-800/70 border border-slate-700/70 flex items-start gap-2.5">
+                <span class="text-lg">📅</span>
+                <div>
+                  <p class="font-bold text-white">1. Planos do Dia & Hábitos</p>
+                  <p class="text-slate-400 text-[11px]">Agenda por turnos, adiamento rápido e streaks.</p>
+                </div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-800/70 border border-slate-700/70 flex items-start gap-2.5">
+                <span class="text-lg">🛒</span>
+                <div>
+                  <p class="font-bold text-white">2. Compras & Modo Mercado</p>
+                  <p class="text-slate-400 text-[11px]">Gráfico de variação de preços e baixa automática.</p>
+                </div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-800/70 border border-slate-700/70 flex items-start gap-2.5">
+                <span class="text-lg">🧹</span>
+                <div>
+                  <p class="font-bold text-white">3. Tarefas & Faxina Recorrente</p>
+                  <p class="text-slate-400 text-[11px]">Cronograma por cômodo com reinício semanal.</p>
+                </div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-800/70 border border-slate-700/70 flex items-start gap-2.5">
+                <span class="text-lg">💰</span>
+                <div>
+                  <p class="font-bold text-white">4. Planilha de Gastos & Boletos</p>
+                  <p class="text-slate-400 text-[11px]">Contas fixas, gastos de mercado e metas mensais.</p>
+                </div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-800/70 border border-slate-700/70 flex items-start gap-2.5">
+                <span class="text-lg">🏠</span>
+                <div>
+                  <p class="font-bold text-white">5. Aquisições & Manutenção</p>
+                  <p class="text-slate-400 text-[11px]">Links, fotos, histórico no Dia X e garantias.</p>
+                </div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-800/70 border border-slate-700/70 flex items-start gap-2.5">
+                <span class="text-lg">🍲</span>
+                <div>
+                  <p class="font-bold text-white">6. Despensa & Cardápio Semanal</p>
+                  <p class="text-slate-400 text-[11px]">Alerta de validade, receitas e reposição automática.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
+        <!-- Right Column: Exclusive Google Account OAuth 2.0 Sign-In Card (5 cols) -->
+        <div class="md:col-span-5 lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-lg flex flex-col justify-between space-y-6">
+          <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div>
+                <span class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 mb-1.5">
+                  ☁️ Sincronização Obrigatória em Nuvem
+                </span>
+                <h2 class="text-xl font-bold text-slate-900">Acesse sua Conta</h2>
+                <p class="text-xs text-slate-500 mt-0.5">Login único e exclusivo via Conta Google</p>
+              </div>
+              <div class="w-12 h-12 rounded-2xl bg-slate-900 text-emerald-400 flex items-center justify-center font-bold text-lg shadow-xs">
+                CS
+              </div>
+            </div>
+
+            <!-- Main Google Sign-In Box -->
+            <div class="p-5 rounded-2xl bg-slate-50 border-2 border-slate-200 space-y-4">
+              <div class="space-y-1.5 text-center">
+                <p class="text-xs sm:text-sm font-bold text-slate-800">
+                  Conecte sua Conta Google para entrar ou criar seu perfil
+                </p>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                  Ao clicar abaixo, o pop-up oficial da Google será aberto para você selecionar sua conta e acessar seus módulos com total privacidade.
+                </p>
+              </div>
+
+              <!-- Official "Entrar com conta Google" Button -->
+              <button id="btnRealGoogleOAuthLogin" type="button" class="w-full py-3.5 px-5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm transition shadow-md flex items-center justify-center gap-3 cursor-pointer">
+                <span class="w-7 h-7 rounded-lg bg-white flex items-center justify-center shrink-0">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24z"/>
+                    <path fill="#FBBC05" d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14z"/>
+                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96z"/>
+                  </svg>
+                </span>
+                <span>Entrar com conta Google</span>
+              </button>
+            </div>
+
+            <!-- How Google Sync Works Step-by-Step -->
+            <div class="space-y-3 pt-1">
+              <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Como funciona o seu acesso:</p>
+              <div class="space-y-2.5 text-xs text-slate-600">
+                <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                  <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 text-[11px]">1</span>
+                  <div>
+                    <p class="font-bold text-slate-800">Seleção de Conta no Pop-up Google</p>
+                    <p class="text-[11px] text-slate-500">Entre uma única vez com sua Conta Google; sua sessão permanece ativa permanentemente com sincronização em tempo real via Firebase.</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                  <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 text-[11px]">2</span>
+                  <div>
+                    <p class="font-bold text-slate-800">Perfil Pessoal Isolado</p>
+                    <p class="text-[11px] text-slate-500">Se for seu primeiro acesso, seu espaço exclusivo com os 6 módulos é configurado automaticamente.</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                  <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 text-[11px]">3</span>
+                  <div>
+                    <p class="font-bold text-slate-800">Acesso Contínuo em Qualquer Tela</p>
+                    <p class="text-[11px] text-slate-500">Acesse sua conta em qualquer dispositivo mantendo seus planejamentos, listas e finanças sempre disponíveis.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 text-[11px] text-slate-400 flex items-center justify-between">
+            <span>🔒 Acesso seguro via Conta Google</span>
+            <span>Sincronização automática</span>
+          </div>
+        </div>
       </div>
+
     </section>
 
     <!-- ==================== VIEW 1: MODULAR HOME SCREEN ==================== -->
@@ -1938,25 +2003,22 @@
 
   </main>
 
-  <!-- ==================== MODAL 1: ORGANIZAR E RENOMEAR MÓDULOS ==================== -->
+  <!-- ==================== MODAL 1: PERSONALIZAR TELA INICIAL ==================== -->
   <div id="modalCustomizeHome" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 hidden items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-xl w-full p-5 sm:p-6 shadow-xl border border-slate-200 space-y-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-xl border border-slate-200 space-y-4">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div>
-          <h3 class="text-base font-bold text-slate-900">Organizar Módulos</h3>
-          <p class="text-xs text-slate-500">Altere o nome de cada seção, mude a ordem ou oculte o que não usar</p>
+          <h3 class="text-base font-bold text-slate-900">Personalizar Tela Inicial Modular</h3>
+          <p class="text-xs text-slate-500">Exiba, oculte ou reordene os módulos conforme sua necessidade</p>
         </div>
-        <button id="btnCloseCustomizeModal" type="button" class="text-slate-400 hover:text-slate-700 text-sm font-bold px-2 py-1 cursor-pointer">✕</button>
+        <button id="btnCloseCustomizeModal" type="button" class="text-slate-400 hover:text-slate-700 text-sm font-bold px-2 py-1">✕</button>
       </div>
-      <div id="customizeModulesList" class="space-y-2.5 max-h-96 overflow-y-auto custom-scroll pr-1">
+      <div id="customizeModulesList" class="space-y-2 max-h-80 overflow-y-auto custom-scroll">
         <!-- Rendered dynamically -->
       </div>
-      <div class="flex items-center justify-between pt-2 border-t border-slate-100">
-        <button id="btnResetModuleNames" type="button" class="text-xs font-semibold text-slate-500 hover:text-slate-800 cursor-pointer">
-          Restaurar nomes padrão
-        </button>
-        <button id="btnDoneCustomizeModal" type="button" class="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 cursor-pointer">
-          Salvar e Fechar
+      <div class="flex justify-end pt-2 border-t border-slate-100">
+        <button id="btnDoneCustomizeModal" type="button" class="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800">
+          Concluído
         </button>
       </div>
     </div>
@@ -2320,13 +2382,7 @@
           }
           merged.modules = DEFAULT_STATE.modules.map(defMod => {
             const savedMod = Array.isArray(parsed.modules) ? parsed.modules.find(m => m.id === defMod.id) : null;
-            return savedMod
-              ? Object.assign({}, defMod, {
-                  order: typeof savedMod.order === 'number' ? savedMod.order : defMod.order,
-                  visible: typeof savedMod.visible === 'boolean' ? savedMod.visible : defMod.visible,
-                  title: (savedMod.title && String(savedMod.title).trim()) ? String(savedMod.title).trim() : defMod.title
-                })
-              : defMod;
+            return savedMod ? Object.assign({}, defMod, { order: savedMod.order, visible: savedMod.visible }) : defMod;
           });
           return merged;
         } catch (err) {
@@ -3985,50 +4041,7 @@
         showToast('Plano excluído.', '🗑️');
       }
 
-      function syncModuleTitlesAcrossUI() {
-        if (!Array.isArray(state.modules)) return;
-        const viewIdMap = {
-          mod1: 'viewModule1',
-          mod2: 'viewModule2',
-          mod3: 'viewModule3',
-          mod4: 'viewModule4',
-          mod5: 'viewModule5',
-          mod6: 'viewModule6'
-        };
-
-        state.modules.forEach(mod => {
-          // 1. Update Top Category Bar button text & visibility
-          const navBtn = document.querySelector(`#minimalCategoryNav [data-nav-cat="${mod.id}"]`);
-          if (navBtn) {
-            navBtn.textContent = `${mod.icon} ${mod.title}`;
-            if (mod.visible === false) {
-              navBtn.classList.add('hidden');
-            } else {
-              navBtn.classList.remove('hidden');
-            }
-          }
-          // 2. Update Header Theme Meta label
-          if (CATEGORY_THEME_META[mod.id]) {
-            CATEGORY_THEME_META[mod.id].label = `${mod.icon} ${mod.title}`;
-          }
-          // 3. Update H1 inside the corresponding Module View
-          const vId = viewIdMap[mod.id];
-          if (vId) {
-            const h1El = document.querySelector(`#${vId} h1`);
-            if (h1El) {
-              h1El.textContent = mod.title;
-            }
-          }
-        });
-
-        const currentThemeKey = document.documentElement.getAttribute('data-category-theme') || 'home';
-        const pill = document.getElementById('activeCategoryHeaderPill');
-        if (pill && CATEGORY_THEME_META[currentThemeKey]) {
-          pill.textContent = CATEGORY_THEME_META[currentThemeKey].label;
-        }
-      }
-
-      // Customize Modules Modal (Rename, Reorder & Show/Hide)
+      // Customize Modules Modal
       function renderCustomizeModal() {
         const list = document.getElementById('customizeModulesList');
         list.innerHTML = '';
@@ -4036,17 +4049,19 @@
 
         sorted.forEach((mod, idx) => {
           const row = document.createElement('div');
-          row.className = 'p-3 rounded-xl border border-slate-200 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 bg-slate-50';
-          const safeTitle = (mod.title || '').replace(/"/g, '&quot;');
+          row.className = 'p-3 rounded-xl border border-slate-200 flex items-center justify-between gap-3 bg-slate-50';
           row.innerHTML = `
-            <div class="flex items-center gap-2.5 flex-1 min-w-[200px]">
-              <span class="text-lg shrink-0">${mod.icon}</span>
-              <input type="text" data-mod-title-input="${mod.id}" value="${safeTitle}" placeholder="Nome da seção..." class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="text-lg">${mod.icon}</span>
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-slate-900 truncate">${mod.title}</p>
+                <p class="text-[11px] text-slate-500">${mod.phase}</p>
+              </div>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
-              <button type="button" data-mod-up="${mod.id}" ${idx === 0 ? 'disabled' : ''} class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-bold disabled:opacity-40 cursor-pointer">↑</button>
-              <button type="button" data-mod-down="${mod.id}" ${idx === sorted.length - 1 ? 'disabled' : ''} class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-bold disabled:opacity-40 cursor-pointer">↓</button>
-              <button type="button" data-mod-vis="${mod.id}" class="px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer ${
+              <button type="button" data-mod-up="${mod.id}" ${idx === 0 ? 'disabled' : ''} class="px-2 py-1 rounded bg-white border border-slate-300 text-xs disabled:opacity-40">↑</button>
+              <button type="button" data-mod-down="${mod.id}" ${idx === sorted.length - 1 ? 'disabled' : ''} class="px-2 py-1 rounded bg-white border border-slate-300 text-xs disabled:opacity-40">↓</button>
+              <button type="button" data-mod-vis="${mod.id}" class="px-2.5 py-1 rounded text-xs font-semibold ${
                 mod.visible ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-600'
               }">
                 ${mod.visible ? 'Visível' : 'Oculto'}
@@ -4054,21 +4069,6 @@
             </div>
           `;
           list.appendChild(row);
-        });
-
-        list.querySelectorAll('[data-mod-title-input]').forEach(inp => {
-          inp.addEventListener('input', () => {
-            const modId = inp.getAttribute('data-mod-title-input');
-            const mod = state.modules.find(m => m.id === modId);
-            if (!mod) return;
-            const val = inp.value.trim();
-            if (val) {
-              mod.title = val;
-              saveState();
-              syncModuleTitlesAcrossUI();
-              renderHomeScreen();
-            }
-          });
         });
 
         list.querySelectorAll('[data-mod-up]').forEach(btn => {
@@ -4092,22 +4092,19 @@
         sorted[swapIndex].order = temp;
         saveState();
         renderCustomizeModal();
-        syncModuleTitlesAcrossUI();
         renderHomeScreen();
       }
 
       function toggleModuleVisibility(modId) {
         const mod = state.modules.find(m => m.id === modId);
         if (!mod) return;
-        const visibleCount = state.modules.filter(m => m.visible).length;
-        if (mod.visible && visibleCount <= 1) {
-          showToast('Mantenha pelo menos 1 módulo visível na tela inicial.', 'ℹ️');
+        if (mod.id === 'mod1' && mod.visible) {
+          showToast('O Módulo 1 é o módulo principal da Fase 1 e permanece visível.', 'ℹ️');
           return;
         }
         mod.visible = !mod.visible;
         saveState();
         renderCustomizeModal();
-        syncModuleTitlesAcrossUI();
         renderHomeScreen();
       }
 
@@ -5716,7 +5713,6 @@
       }
 
       function renderAll() {
-        syncModuleTitlesAcrossUI();
         renderPlatformModeUI();
         renderHomeScreen();
         renderHabits();
@@ -5986,24 +5982,7 @@
           modalCust.classList.remove('flex');
         };
         document.getElementById('btnCloseCustomizeModal').addEventListener('click', closeCust);
-        document.getElementById('btnDoneCustomizeModal').addEventListener('click', () => {
-          closeCust();
-          showToast('Configuração dos módulos salva!', '✅');
-        });
-        const btnResetNames = document.getElementById('btnResetModuleNames');
-        if (btnResetNames) {
-          btnResetNames.addEventListener('click', () => {
-            state.modules.forEach(m => {
-              const defMod = DEFAULT_STATE.modules.find(d => d.id === m.id);
-              if (defMod) m.title = defMod.title;
-            });
-            saveState();
-            renderCustomizeModal();
-            syncModuleTitlesAcrossUI();
-            renderHomeScreen();
-            showToast('Nomes padrão restaurados!', '🔄');
-          });
-        }
+        document.getElementById('btnDoneCustomizeModal').addEventListener('click', closeCust);
 
         // Backup & Drive Modal
         const modalBkp = document.getElementById('modalBackupDrive');
