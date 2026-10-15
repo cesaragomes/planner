@@ -26,6 +26,118 @@
       background: #cbd5e1;
       border-radius: 9999px;
     }
+    /* Dark Mode Overrides */
+    html.dark body {
+      background-color: #0b1120;
+      color: #f1f5f9;
+    }
+    html.dark .custom-scroll::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    html.dark .custom-scroll::-webkit-scrollbar-thumb {
+      background: #475569;
+    }
+    html.dark .bg-white {
+      background-color: #111827 !important;
+      color: #f1f5f9;
+    }
+    html.dark .bg-slate-50,
+    html.dark .bg-slate-50\/60,
+    html.dark .bg-slate-50\/50,
+    html.dark .bg-slate-50\/80 {
+      background-color: #1e293b !important;
+    }
+    html.dark .bg-slate-100 {
+      background-color: #1e293b !important;
+      color: #e2e8f0 !important;
+    }
+    html.dark .hover\:bg-slate-200:hover,
+    html.dark .hover\:bg-slate-50:hover,
+    html.dark .hover\:bg-slate-50\/80:hover {
+      background-color: #334155 !important;
+    }
+    html.dark .border-slate-200,
+    html.dark .border-slate-100,
+    html.dark .border-slate-300 {
+      border-color: #334155 !important;
+    }
+    html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+      border-color: #1e293b !important;
+    }
+    html.dark .text-slate-900,
+    html.dark .text-slate-800 {
+      color: #f8fafc !important;
+    }
+    html.dark .text-slate-700,
+    html.dark .text-slate-600 {
+      color: #cbd5e1 !important;
+    }
+    html.dark .text-slate-500,
+    html.dark .text-slate-400 {
+      color: #94a3b8 !important;
+    }
+    html.dark input:not([type="checkbox"]),
+    html.dark select,
+    html.dark textarea {
+      background-color: #0f172a !important;
+      color: #f8fafc !important;
+      border-color: #334155 !important;
+    }
+    html.dark input::placeholder,
+    html.dark textarea::placeholder {
+      color: #64748b !important;
+    }
+    html.dark .bg-amber-50\/60,
+    html.dark .bg-amber-50\/90,
+    html.dark .bg-amber-50\/30,
+    html.dark .bg-amber-50 {
+      background-color: rgba(120, 53, 15, 0.28) !important;
+      border-color: rgba(217, 119, 6, 0.45) !important;
+    }
+    html.dark .text-amber-900,
+    html.dark .text-amber-800,
+    html.dark .text-amber-700 {
+      color: #fcd34d !important;
+    }
+    html.dark .bg-sky-50\/60 {
+      background-color: rgba(12, 74, 110, 0.28) !important;
+    }
+    html.dark .bg-indigo-50\/60,
+    html.dark .bg-indigo-50\/70,
+    html.dark .bg-indigo-50 {
+      background-color: rgba(49, 46, 129, 0.3) !important;
+      border-color: rgba(99, 102, 241, 0.45) !important;
+    }
+    html.dark .text-indigo-900,
+    html.dark .text-indigo-800,
+    html.dark .text-indigo-700,
+    html.dark .text-indigo-600 {
+      color: #a5b4fc !important;
+    }
+    html.dark .bg-emerald-50,
+    html.dark .bg-emerald-50\/70,
+    html.dark .bg-emerald-50\/90,
+    html.dark .bg-emerald-50\/40,
+    html.dark .bg-emerald-50\/50 {
+      background-color: rgba(6, 78, 59, 0.3) !important;
+      border-color: rgba(16, 185, 129, 0.45) !important;
+    }
+    html.dark .text-emerald-900,
+    html.dark .text-emerald-800,
+    html.dark .text-emerald-700 {
+      color: #6ee7b7 !important;
+    }
+    html.dark .bg-rose-50,
+    html.dark .bg-rose-50\/70,
+    html.dark .bg-rose-50\/90,
+    html.dark .bg-rose-50\/20 {
+      background-color: rgba(136, 19, 55, 0.28) !important;
+      border-color: rgba(244, 63, 94, 0.45) !important;
+    }
+    html.dark .text-rose-800,
+    html.dark .text-rose-700 {
+      color: #fda4af !important;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -43,22 +155,12 @@
               <span class="font-bold text-base tracking-tight">CasaSync</span>
               <span class="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Completo • 6 Módulos</span>
             </div>
-            <p class="text-xs text-slate-400">Windows • Linux • Android</p>
+            <p class="text-xs text-slate-400">Gestão Completa da Casa e Rotina</p>
           </div>
         </button>
       </div>
 
-      <!-- Automatic 3-Mode Device Detection Indicator (Desktop / Tablet Landscape / Celular) -->
-      <div id="autoDeviceModeBadge" class="flex items-center gap-2 bg-slate-800/90 px-3.5 py-1.5 rounded-xl border border-slate-700 text-xs">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span id="autoDeviceIcon" class="text-sm">💻</span>
-        <div class="leading-tight">
-          <span class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold block">Layout Automático</span>
-          <span id="autoDeviceLabel" class="font-bold text-emerald-300 text-xs">Desktop (Windows / Linux)</span>
-        </div>
-      </div>
-
-      <!-- Sync, Active Google Account & Backup Status Bar -->
+      <!-- Active Google Account, Theme Switcher & Manual Backup Bar -->
       <div class="flex flex-wrap items-center gap-2">
         <div id="headerUserBadge" class="hidden items-center gap-2 bg-slate-800/90 border border-slate-700 px-2.5 py-1 rounded-xl text-xs text-slate-200">
           <span id="headerUserAvatar" class="w-6 h-6 rounded-full bg-emerald-500 text-slate-950 font-bold flex items-center justify-center text-[11px]">G</span>
@@ -67,15 +169,15 @@
             <p id="headerUserEmail" class="text-[10px] text-emerald-300 truncate max-w-[140px]">conta@gmail.com</p>
           </div>
         </div>
-        <div id="syncBadge" class="hidden sm:flex items-center gap-1.5 text-xs bg-slate-800/90 border border-slate-700 px-3 py-1.5 rounded-lg text-slate-300">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span id="lastSyncText">Salvo localmente</span>
-        </div>
-        <button id="btnOpenBackupModal" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition flex items-center gap-1.5 shadow-sm">
-          <span>☁️</span>
-          <span>Backup / Drive</span>
+        <button id="btnToggleTheme" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+          <span id="themeToggleIcon">🌙</span>
+          <span id="themeToggleLabel">Modo Escuro</span>
         </button>
-        <button id="btnLogoutAccount" type="button" class="hidden px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-600/90 hover:bg-rose-500 text-white transition flex items-center gap-1 shadow-sm">
+        <button id="btnOpenBackupModal" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+          <span>💾</span>
+          <span>Backup Manual</span>
+        </button>
+        <button id="btnLogoutAccount" type="button" class="hidden px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-600/90 hover:bg-rose-500 text-white transition flex items-center gap-1 shadow-sm cursor-pointer">
           <span>🚪</span>
           <span>Sair / Trocar Conta</span>
         </button>
@@ -86,16 +188,7 @@
   <!-- Main Container (Adapts width when simulating Android Mode) -->
   <main id="appContainer" class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 transition-all duration-300">
 
-    <!-- Platform Context Banner -->
-    <div id="platformInfoBanner" class="mb-5 rounded-xl bg-slate-900/5 border border-slate-200 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600">
-      <div class="flex items-center gap-2">
-        <span id="platformBannerIcon" class="text-base">💻</span>
-        <span id="platformBannerText"><strong>Modo Gerenciador (Windows / Linux):</strong> Criação completa de registros, edição de módulos, metas de hábitos e gerenciamento de backups.</span>
-      </div>
-      <div class="flex items-center gap-3">
-        <span id="currentDateDisplay" class="font-medium text-slate-700"></span>
-      </div>
-    </div>
+
 
     <!-- ==================== VIEW 0: PÁGINA DE BOAS-VINDAS & CONTROLE DE ACESSO GOOGLE ==================== -->
     <section id="viewWelcomeAuth" class="space-y-8 py-2">
@@ -110,7 +203,7 @@
               <span>🔒 Acesso Restrito & Individualizado via Conta Google</span>
             </div>
             <h1 class="text-2xl sm:text-4xl font-bold tracking-tight leading-tight">
-              Bem-vindo ao <span class="text-emerald-400">CasaSync</span>: sua casa e rotina organizadas no PC e no Android.
+              Bem-vindo ao <span class="text-emerald-400">CasaSync</span>: sua casa e rotina organizadas em um só lugar.
             </h1>
             <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
               O CasaSync é uma plataforma modular completa para planejar o seu dia, controlar compras de supermercado com histórico de preços, gerenciar faxinas recorrentes, acompanhar gastos e monitorar aquisições e a despensa da casa.
@@ -123,7 +216,7 @@
                 <span>Privacidade Total: Cada Usuário Acessa Somente os Próprios Dados</span>
               </h2>
               <p class="text-xs text-slate-300 leading-relaxed">
-                Para utilizar o serviço, é necessário <strong>criar sua conta vinculada ao Google</strong> ou entrar com uma conta existente. Cada conta cria um cofre individual isolado e sincroniza seus backups diários exclusivamente com o seu próprio <strong>Google Drive</strong>, permitindo que várias pessoas utilizem o sistema mantendo 100% de sigilo e separação das informações.
+                Para utilizar o serviço, é necessário <strong>entrar com sua Conta Google</strong>. Cada conta mantém um perfil individual isolado, permitindo que várias pessoas utilizem o sistema mantendo 100% de sigilo e separação das informações.
               </p>
             </div>
           </div>
@@ -201,7 +294,7 @@
                   Conecte sua Conta Google para entrar ou criar seu perfil
                 </p>
                 <p class="text-xs text-slate-500 leading-relaxed">
-                  Ao clicar abaixo, o pop-up oficial da Google será aberto para você selecionar sua conta e autorizar o backup automático na pasta <code class="bg-slate-200/80 px-1.5 py-0.5 rounded text-slate-800 font-mono">CasaSync_Backups</code> do seu Google Drive.
+                  Ao clicar abaixo, o pop-up oficial da Google será aberto para você selecionar sua conta e acessar seus módulos com total privacidade.
                 </p>
               </div>
 
@@ -233,15 +326,15 @@
                 <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
                   <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 text-[11px]">2</span>
                   <div>
-                    <p class="font-bold text-slate-800">Criação Automática do Cofre no Drive</p>
-                    <p class="text-[11px] text-slate-500">Se for seu primeiro acesso, sua conta e a pasta <code class="font-mono">CasaSync_Backups</code> são criadas automaticamente.</p>
+                    <p class="font-bold text-slate-800">Perfil Pessoal Isolado</p>
+                    <p class="text-[11px] text-slate-500">Se for seu primeiro acesso, seu espaço exclusivo com os 6 módulos é configurado automaticamente.</p>
                   </div>
                 </div>
                 <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
                   <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 text-[11px]">3</span>
                   <div>
-                    <p class="font-bold text-slate-800">Sincronização em Tempo Real (PC & Android)</p>
-                    <p class="text-[11px] text-slate-500">Qualquer alteração nos 6 módulos é salva diretamente no seu Google Drive para acesso em qualquer dispositivo.</p>
+                    <p class="font-bold text-slate-800">Acesso Contínuo em Qualquer Tela</p>
+                    <p class="text-[11px] text-slate-500">Acesse sua conta em qualquer dispositivo mantendo seus planejamentos, listas e finanças sempre disponíveis.</p>
                   </div>
                 </div>
               </div>
@@ -295,8 +388,8 @@
             <p id="metricBestStreak" class="text-lg font-bold text-amber-400 mt-0.5">🔥 0 dias</p>
           </button>
           <button id="pillBackupStatus" type="button" class="text-left bg-slate-800/70 hover:bg-slate-800 p-3 rounded-xl border border-slate-700/70 transition">
-            <p class="text-[11px] uppercase tracking-wider text-slate-400">Backup Diário</p>
-            <p id="metricBackupStatus" class="text-sm font-semibold text-indigo-300 mt-1">Ativo • Ver cópias</p>
+            <p class="text-[11px] uppercase tracking-wider text-slate-400">Tarefas da Casa</p>
+            <p id="metricBackupStatus" class="text-lg font-bold text-indigo-300 mt-0.5">0 pendentes</p>
           </button>
         </div>
       </div>
@@ -329,7 +422,7 @@
           🍲 Despensa & Cardápio
         </button>
         <button id="btnShortcutExport" type="button" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-indigo-500 text-xs font-medium text-slate-700 shadow-sm transition">
-          💾 Exportar Backup (.json)
+          💾 Fazer / Carregar Backup
         </button>
       </div>
 
@@ -439,8 +532,8 @@
           <div class="flex items-center justify-between mb-4">
             <div>
               <h3 id="planFormTitle" class="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <span>💻</span>
-                <span>Cadastrar Novo Plano / Compromisso (Gerenciador PC)</span>
+                <span>📅</span>
+                <span>Cadastrar Novo Plano / Compromisso</span>
               </h3>
               <p class="text-xs text-slate-500">Preencha os detalhes para organizar sua rotina por turno e horário</p>
             </div>
@@ -557,7 +650,7 @@
 
         <!-- Desktop Manager Form: Create/Edit Habit -->
         <div id="desktopHabitEditorCard" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-          <h3 class="text-sm font-bold text-slate-900 mb-1">💻 Configurar Novo Hábito Pessoal (Gerenciador PC)</h3>
+          <h3 class="text-sm font-bold text-slate-900 mb-1">🔥 Configurar Novo Hábito Pessoal</h3>
           <p class="text-xs text-slate-500 mb-4">Crie hábitos de marcação única (Sim/Não) ou contadores progressivos (ex.: copos de água)</p>
 
           <form id="formAddHabit" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
@@ -612,7 +705,7 @@
               <h1 class="text-lg sm:text-xl font-bold text-slate-900">Módulo 2: Lista de Compras de Rotina</h1>
               <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800">Ativo na Fase 2</span>
             </div>
-            <p class="text-xs text-slate-500">Supermercado, feira e farmácia com Modo Mercado rápido para o Android</p>
+            <p class="text-xs text-slate-500">Supermercado, feira e farmácia com Modo Mercado rápido</p>
           </div>
         </div>
 
@@ -705,7 +798,7 @@
       <div id="desktopShoppingEditorCard" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h3 id="shopFormTitle" class="text-sm font-bold text-slate-900">💻 Cadastrar Produto na Lista de Compras (Gerenciador PC)</h3>
+            <h3 id="shopFormTitle" class="text-sm font-bold text-slate-900">🛒 Cadastrar Produto na Lista de Compras</h3>
             <p class="text-xs text-slate-500">Defina local, corredor/setor, quantidade e preço estimado para planejar o mercado</p>
           </div>
           <button id="btnCancelShopEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800">
@@ -955,7 +1048,7 @@
       <div id="desktopTaskEditorCard" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
         <div class="flex items-center justify-between mb-4">
           <div>
-            <h3 id="taskFormTitle" class="text-sm font-bold text-slate-900">💻 Cadastrar Tarefa ou Rotina de Limpeza (Gerenciador PC)</h3>
+            <h3 id="taskFormTitle" class="text-sm font-bold text-slate-900">🧹 Cadastrar Tarefa ou Rotina de Limpeza</h3>
             <p class="text-xs text-slate-500">Configure tarefas únicas ou rotinas domésticas que se repetem automaticamente</p>
           </div>
           <button id="btnCancelTaskEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800">
@@ -1097,7 +1190,7 @@
 
         <!-- Desktop Form: Add Expense or Income -->
         <div id="desktopFinanceEditorCard" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-          <h3 class="text-sm font-bold text-slate-900 mb-1">💻 Lançar Entrada ou Saída na Planilha (Gerenciador PC)</h3>
+          <h3 class="text-sm font-bold text-slate-900 mb-1">💰 Lançar Entrada ou Saída na Planilha</h3>
           <p class="text-xs text-slate-500 mb-4">Compras finalizadas no Módulo 2 e Contas Fixas pagas já entram aqui automaticamente</p>
 
           <form id="formAddExpense" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
@@ -1289,7 +1382,7 @@
         <div id="desktopWishlistEditorCard" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h3 id="wishFormTitle" class="text-sm font-bold text-slate-900">💻 Cadastrar Produto Planejado para a Casa (Gerenciador PC)</h3>
+              <h3 id="wishFormTitle" class="text-sm font-bold text-slate-900">🛍️ Cadastrar Produto Planejado para a Casa</h3>
               <p class="text-xs text-slate-500">Registre o link da loja, capture a miniatura do link ou envie uma imagem do computador/celular e defina seu Preço Alvo</p>
             </div>
             <button id="btnCancelWishEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800">
@@ -1572,7 +1665,7 @@
         <!-- Desktop Manager Form: Add Pantry Item -->
         <div id="desktopPantryEditorCard" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
           <div>
-            <h3 class="text-sm font-bold text-slate-900">💻 Cadastrar Item no Estoque da Casa (Gerenciador PC)</h3>
+            <h3 class="text-sm font-bold text-slate-900">🥫 Cadastrar Item no Estoque da Casa</h3>
             <p class="text-xs text-slate-500">Quando a quantidade chegar ao Estoque Mínimo, o aplicativo envia automaticamente o produto para a Lista de Compras (Módulo 2)</p>
           </div>
 
@@ -1627,7 +1720,7 @@
           <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
             <div>
               <h3 class="text-base font-bold text-slate-900">🍽️ Grade do Cardápio da Semana (Almoço & Jantar)</h3>
-              <p class="text-xs text-slate-500">Planeje os pratos da semana no PC e consulte rapidamente na cozinha pelo celular ou tablet</p>
+              <p class="text-xs text-slate-500">Planeje os pratos de almoço e jantar da semana e integre com os ingredientes da despensa</p>
             </div>
             <button id="btnGenerateMenuShopping" type="button" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-sm">
               🛒 Gerar Compras dos Ingredientes Faltantes
@@ -1694,82 +1787,46 @@
     </div>
   </div>
 
-  <!-- ==================== MODAL 2: SINCRONIZAÇÃO GOOGLE DRIVE & BACKUPS DIÁRIOS ==================== -->
+  <!-- ==================== MODAL 2: FAZER OU CARREGAR BACKUP MANUAL ==================== -->
   <div id="modalBackupDrive" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 hidden items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-2xl w-full p-5 sm:p-6 shadow-xl border border-slate-200 space-y-5 max-h-[90vh] overflow-y-auto custom-scroll">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-5 sm:p-6 shadow-xl border border-slate-200 space-y-5 max-h-[90vh] overflow-y-auto custom-scroll">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div>
           <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-            <span>☁️</span>
-            <span>Sincronização Google Drive & Backups Diários</span>
+            <span>💾</span>
+            <span>Backup Manual dos Dados</span>
           </h3>
-          <p class="text-xs text-slate-500">Compatível entre Windows, Linux e Android via arquivo estruturado JSON</p>
+          <p class="text-xs text-slate-500">Exporte um arquivo de backup manual ou carregue um backup existente</p>
         </div>
         <button id="btnCloseBackupModal" type="button" class="text-slate-400 hover:text-slate-700 text-sm font-bold px-2 py-1">✕</button>
       </div>
 
-      <!-- Active Google Account Isolation Info -->
-      <div class="p-4 rounded-xl bg-slate-900 text-white flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Conta Google Vinculada (Cofre Individual Isolado)</p>
-          <p id="modalDriveUserAccount" class="text-sm font-bold mt-0.5">usuario@gmail.com</p>
-          <p id="modalDriveFolderPath" class="text-xs text-slate-400">Pasta no Google Drive: /CasaSync_Backups/</p>
-        </div>
-        <div class="flex flex-wrap items-center gap-2">
-          <button id="btnPullFromGoogleDriveReal" type="button" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700 font-semibold text-xs transition">
-            ⬇️ Baixar do Meu Google Drive
-          </button>
-          <button id="btnSimulateGoogleDriveSyncNow" type="button" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow">
-            🔄 Sincronizar Agora com Meu Google Drive
-          </button>
-        </div>
-      </div>
-
-      <!-- Real Google Drive API Status Banner inside Modal -->
-      <div id="realDriveApiStatusBanner" class="p-3.5 rounded-xl bg-indigo-950 text-indigo-100 border border-indigo-800 text-xs flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <span class="font-bold text-white">Status da API do Google Drive:</span>
-          <span id="realDriveApiStatusText" class="ml-1 text-indigo-200">Modo Local (Configure o Client ID ou faça login com o botão oficial da Google para enviar direto ao Drive).</span>
-        </div>
-        <span id="realDriveFileIdBadge" class="px-2 py-0.5 rounded bg-indigo-900 text-emerald-300 font-mono text-[11px]">Pasta: CasaSync_Backups</span>
-      </div>
-
-      <!-- Export / Import Controls -->
+      <!-- Manual Export / Import Controls -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-200 space-y-2">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-900">1. Gerar Backup Diário (.JSON)</h4>
-          <p class="text-xs text-indigo-800/80">Salve o estado completo do aplicativo no seu computador (Windows/Linux) ou na sua pasta sincronizada do Google Drive.</p>
-          <button id="btnDownloadBackupJson" type="button" class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition shadow-sm">
-            ⬇️ Baixar Backup de Hoje (.json)
+        <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-200 space-y-2.5 flex flex-col justify-between">
+          <div class="space-y-1">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-900">1. Fazer Backup Manual</h4>
+            <p class="text-xs text-indigo-800/80">Baixe um arquivo estruturado (<code class="font-mono">.json</code>) contendo todos os seus registros dos 6 módulos.</p>
+          </div>
+          <button id="btnDownloadBackupJson" type="button" class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition shadow-sm cursor-pointer">
+            ⬇️ Fazer Backup Manual (.json)
           </button>
         </div>
 
-        <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 space-y-2">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-900">2. Restaurar / Sincronizar de Arquivo</h4>
-          <p class="text-xs text-emerald-800/80">Carregue um arquivo de backup salvo no Google Drive para atualizar os dados neste dispositivo.</p>
+        <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 space-y-2.5 flex flex-col justify-between">
+          <div class="space-y-1">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-900">2. Carregar Backup</h4>
+            <p class="text-xs text-emerald-800/80">Selecione um arquivo de backup (<code class="font-mono">.json</code>) para restaurar os seus registros na conta.</p>
+          </div>
           <label class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-sm flex items-center justify-center cursor-pointer">
-            <span>📂 Selecionar Arquivo (.json)</span>
+            <span>📂 Carregar Backup (.json)</span>
             <input id="inputImportBackupFile" type="file" accept=".json,application/json" class="hidden" />
           </label>
         </div>
       </div>
 
-      <!-- Simulated Google Drive Auto-Backup Snapshots Log -->
-      <div class="space-y-2">
-        <div class="flex items-center justify-between">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Histórico de Snapshots Locais / Google Drive (Últimos 30 Dias)</h4>
-          <button id="btnCreateSnapshotNow" type="button" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">
-            + Criar Ponto de Restauração Agora
-          </button>
-        </div>
-        <div id="backupSnapshotsList" class="border border-slate-200 rounded-xl divide-y divide-slate-100 max-h-48 overflow-y-auto custom-scroll">
-          <!-- Rendered dynamically -->
-        </div>
-      </div>
-
-      <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
-        <span>Pasta padrão planejada no Drive: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">/AppGestaoCasa/Backups/</code></span>
-        <button id="btnDoneBackupModal" type="button" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold hover:bg-slate-800">
+      <div class="flex items-center justify-end pt-2 border-t border-slate-100 text-xs text-slate-500">
+        <button id="btnDoneBackupModal" type="button" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold hover:bg-slate-800 cursor-pointer">
           Fechar
         </button>
       </div>
@@ -1861,7 +1918,7 @@
             activePhase: true,
             icon: '🛒',
             title: '2. Lista de Compras de Rotina',
-            subtitle: 'Supermercado, feira e farmácia com Modo Mercado para uma mão só no Android.',
+            subtitle: 'Supermercado, feira e farmácia com Modo Mercado prático.',
             integrationNote: 'Conectado à Despensa (Módulo 6) e à Planilha de Gastos (Módulo 4).'
           },
           {
@@ -1912,7 +1969,7 @@
         plans: [
           {
             id: 'p1',
-            title: 'Revisar planejamento semanal e contas do mês no PC',
+            title: 'Revisar planejamento semanal e contas do mês',
             date: TODAY_STR,
             shift: 'Manhã',
             time: '08:30',
@@ -2540,16 +2597,13 @@
         if (autoDriveSyncTimer) clearTimeout(autoDriveSyncTimer);
         autoDriveSyncTimer = setTimeout(async () => {
           try {
-            const syncEl = document.getElementById('lastSyncText');
-            if (syncEl) syncEl.textContent = '☁️ Salvando no Google Drive...';
             const folderId = googleApiConfig.driveFolderId || await getOrCreateDriveFolder(googleApiConfig.accessToken);
             googleApiConfig.driveFolderId = folderId;
             const slug = currentUser.email.split('@')[0].replace(/[^a-z0-9]/gi, '_');
             const mainFileName = `casasync_dados_${slug}.json`;
             await uploadJsonToGoogleDrive(googleApiConfig.accessToken, mainFileName, state, folderId);
-            if (syncEl) syncEl.textContent = `☁️ Salvo no Google Drive às ${state.lastUpdated}`;
           } catch (e) {
-            // Silent fallback if offline
+            // Silent fallback
           }
         }, 1800);
       }
@@ -2561,10 +2615,6 @@
           localStorage.setItem(key, JSON.stringify(state));
         } catch (err) {
           // Ignore storage quota errors in sandboxed frames
-        }
-        const syncEl = document.getElementById('lastSyncText');
-        if (syncEl) {
-          syncEl.textContent = `Sincronizado às ${state.lastUpdated}`;
         }
         scheduleAutoGoogleDriveSync();
       }
@@ -2606,7 +2656,6 @@
       function openWelcomeAuthView() {
         hideAllViews();
         document.getElementById('viewWelcomeAuth').classList.remove('hidden');
-        document.getElementById('platformInfoBanner').classList.add('hidden');
         document.getElementById('headerUserBadge').classList.add('hidden');
         document.getElementById('headerUserBadge').classList.remove('flex');
         document.getElementById('btnLogoutAccount').classList.add('hidden');
@@ -2842,16 +2891,7 @@
         }
       }
 
-      function updateRealDriveStatusUI(isConnected, detailText) {
-        const statusText = document.getElementById('realDriveApiStatusText');
-        const badge = document.getElementById('realDriveFileIdBadge');
-        if (statusText && detailText) {
-          statusText.textContent = detailText;
-        }
-        if (badge) {
-          badge.textContent = isConnected ? '🟢 Google Drive API Conectada' : 'Pasta: CasaSync_Backups';
-        }
-      }
+      function updateRealDriveStatusUI() {}
 
       function triggerRealGoogleOAuthPopup() {
 
@@ -2891,7 +2931,6 @@
           localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(accountObj));
         } catch (e) {}
         state = loadState();
-        document.getElementById('platformInfoBanner').classList.remove('hidden');
         const badge = document.getElementById('headerUserBadge');
         badge.classList.remove('hidden');
         badge.classList.add('flex');
@@ -2900,14 +2939,9 @@
         document.getElementById('headerUserEmail').textContent = accountObj.email;
         document.getElementById('btnLogoutAccount').classList.remove('hidden');
 
-        const modalUserEl = document.getElementById('modalDriveUserAccount');
-        const modalFolderEl = document.getElementById('modalDriveFolderPath');
-        if (modalUserEl) modalUserEl.textContent = `${accountObj.name} (${accountObj.email})`;
-        if (modalFolderEl) modalFolderEl.textContent = `Pasta exclusiva no Google Drive: ${accountObj.driveFolder || '/CasaSync_Backups/'}`;
-
         openHomeView();
         if (!isSilentRestore) {
-          showToast(`Conectado como ${accountObj.name} (${accountObj.email})! Sessão mantida neste navegador.`, '🔒');
+          showToast(`Conectado como ${accountObj.name} (${accountObj.email})!`, '🔒');
         }
       }
 
@@ -3150,21 +3184,13 @@
         const isMobile = detectedMode === 'mobile';
         const isTablet = detectedMode === 'tablet';
 
-        const autoIcon = document.getElementById('autoDeviceIcon');
-        const autoLabel = document.getElementById('autoDeviceLabel');
         const appContainer = document.getElementById('appContainer');
-        const bannerIcon = document.getElementById('platformBannerIcon');
-        const bannerText = document.getElementById('platformBannerText');
         const desktopPlanCard = document.getElementById('desktopPlanEditorCard');
         const mobileQuickPlan = document.getElementById('mobileQuickAddPlan');
         const desktopHabitCard = document.getElementById('desktopHabitEditorCard');
 
         if (isMobile) {
-          if (autoIcon) autoIcon.textContent = '📱';
-          if (autoLabel) autoLabel.textContent = 'Celular (Compacto)';
           appContainer.className = 'flex-1 max-w-md w-full mx-auto px-3 py-4 transition-all duration-300';
-          bannerIcon.textContent = '📱';
-          bannerText.innerHTML = '<strong>Detecção Automática — Modo Celular:</strong> Layout vertical compacto para uso rápido com uma mão e barras de adição expressa.';
           desktopPlanCard.classList.add('hidden');
           mobileQuickPlan.classList.remove('hidden');
           desktopHabitCard.classList.add('hidden');
@@ -3176,36 +3202,10 @@
           document.getElementById('mobileFinanceQuickBar').classList.remove('hidden');
           document.getElementById('desktopWishlistEditorCard').classList.add('hidden');
           document.getElementById('desktopPantryEditorCard').classList.add('hidden');
-        } else if (isTablet) {
-          // Modo Tablet: Estrutura visual idêntica ao Desktop (ampla em múltiplas colunas para uso em Landscape)
-          if (autoIcon) autoIcon.textContent = '📟';
-          if (autoLabel) autoLabel.textContent = 'Tablet (Landscape • Layout Desktop)';
-          appContainer.className = 'flex-1 max-w-7xl w-full mx-auto px-4 py-5 transition-all duration-300';
-          bannerIcon.textContent = '📟';
-          bannerText.innerHTML = '<strong>Detecção Automática — Modo Tablet (Landscape):</strong> Estrutura visual em múltiplas colunas similar ao Desktop, com formulários completos, gráficos e edição ativa.';
-          desktopPlanCard.classList.remove('hidden');
-          mobileQuickPlan.classList.add('hidden');
-          desktopHabitCard.classList.remove('hidden');
-          if (state.marketOneHandMode) {
-            document.getElementById('desktopShoppingEditorCard').classList.add('hidden');
-            document.getElementById('mobileShoppingQuickBar').classList.remove('hidden');
-          } else {
-            document.getElementById('desktopShoppingEditorCard').classList.remove('hidden');
-            document.getElementById('mobileShoppingQuickBar').classList.add('hidden');
-          }
-          document.getElementById('desktopTaskEditorCard').classList.remove('hidden');
-          document.getElementById('mobileTaskQuickBar').classList.add('hidden');
-          document.getElementById('desktopFinanceEditorCard').classList.remove('hidden');
-          document.getElementById('mobileFinanceQuickBar').classList.add('hidden');
-          document.getElementById('desktopWishlistEditorCard').classList.remove('hidden');
-          document.getElementById('desktopPantryEditorCard').classList.remove('hidden');
         } else {
-          // Modo Desktop (Windows / Linux)
-          if (autoIcon) autoIcon.textContent = '💻';
-          if (autoLabel) autoLabel.textContent = 'Desktop (Windows / Linux)';
-          appContainer.className = 'flex-1 max-w-7xl w-full mx-auto px-4 py-6 transition-all duration-300';
-          bannerIcon.textContent = '💻';
-          bannerText.innerHTML = '<strong>Detecção Automática — Modo Desktop (Windows / Linux):</strong> Criação completa de registros, edição de módulos, metas de hábitos e gerenciamento de backups.';
+          appContainer.className = isTablet
+            ? 'flex-1 max-w-7xl w-full mx-auto px-4 py-5 transition-all duration-300'
+            : 'flex-1 max-w-7xl w-full mx-auto px-4 py-6 transition-all duration-300';
           desktopPlanCard.classList.remove('hidden');
           mobileQuickPlan.classList.add('hidden');
           desktopHabitCard.classList.remove('hidden');
@@ -3223,8 +3223,6 @@
           document.getElementById('desktopWishlistEditorCard').classList.remove('hidden');
           document.getElementById('desktopPantryEditorCard').classList.remove('hidden');
         }
-
-        document.getElementById('currentDateDisplay').textContent = `Hoje: ${formatPtDate(TODAY_STR)}`;
       }
 
       // Render Home Screen Summary & Modular Cards
@@ -3244,7 +3242,7 @@
         document.getElementById('metricPlansToday').textContent = `${pendingToday} pendentes (${doneToday} concluídos)`;
         document.getElementById('metricHabitsToday').textContent = `${completedHabitsToday}/${state.habits.length} concluídos`;
         document.getElementById('metricBestStreak').textContent = `🔥 ${bestStreak} dias seguidos`;
-        document.getElementById('metricBackupStatus').textContent = `${state.backups.length} cópia(s) salva(s)`;
+        document.getElementById('metricBackupStatus').textContent = `${state.tasks.filter(t => !t.done).length} pendente(s)`;
 
         const summarySubtitle = document.getElementById('smartSummarySubtitle');
         if (pendingToday === 0 && todayPlans.length > 0) {
@@ -3653,7 +3651,7 @@
       function resetPlanForm() {
         document.getElementById('editPlanId').value = '';
         document.getElementById('formAddPlan').reset();
-        document.getElementById('planFormTitle').innerHTML = '<span>💻</span><span>Cadastrar Novo Plano / Compromisso (Gerenciador PC)</span>';
+        document.getElementById('planFormTitle').innerHTML = '<span>📅</span><span>Cadastrar Novo Plano / Compromisso</span>';
         document.getElementById('btnSubmitPlan').textContent = '+ Salvar Plano';
         document.getElementById('btnCancelPlanEdit').classList.add('hidden');
       }
@@ -3745,23 +3743,7 @@
         modal.classList.add('flex');
       }
 
-      // Backup & Google Drive Sync Modal
-      function renderBackupSnapshots() {
-        const list = document.getElementById('backupSnapshotsList');
-        list.innerHTML = '';
-        state.backups.forEach(bkp => {
-          const row = document.createElement('div');
-          row.className = 'px-3.5 py-2.5 flex items-center justify-between text-xs';
-          row.innerHTML = `
-            <div>
-              <p class="font-semibold text-slate-800">${bkp.label}</p>
-              <p class="text-[11px] text-slate-400">Criado em: ${bkp.timestamp}</p>
-            </div>
-            <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">Íntegro</span>
-          `;
-          list.appendChild(row);
-        });
-      }
+      function renderBackupSnapshots() {}
 
       function downloadBackupJson() {
         const emailSlug = currentUser && currentUser.email ? currentUser.email.split('@')[0].replace(/[^a-z0-9]/gi, '_') : 'geral';
@@ -4145,7 +4127,7 @@
       function resetShopForm() {
         document.getElementById('editShopItemId').value = '';
         document.getElementById('formAddShoppingItem').reset();
-        document.getElementById('shopFormTitle').textContent = '💻 Cadastrar Produto na Lista de Compras (Gerenciador PC)';
+        document.getElementById('shopFormTitle').textContent = '🛒 Cadastrar Produto na Lista de Compras';
         document.getElementById('btnSubmitShopItem').textContent = '+ Adicionar à Lista';
         document.getElementById('btnCancelShopEdit').classList.add('hidden');
       }
@@ -4323,7 +4305,7 @@
       function resetTaskForm() {
         document.getElementById('editTaskId').value = '';
         document.getElementById('formAddTask').reset();
-        document.getElementById('taskFormTitle').textContent = '💻 Cadastrar Tarefa ou Rotina de Limpeza (Gerenciador PC)';
+        document.getElementById('taskFormTitle').textContent = '🧹 Cadastrar Tarefa ou Rotina de Limpeza';
         document.getElementById('btnSubmitTask').textContent = '+ Salvar Tarefa';
         document.getElementById('btnCancelTaskEdit').classList.add('hidden');
       }
@@ -5159,11 +5141,7 @@
         document.getElementById('pillPlansToday').addEventListener('click', () => openModule1View('plans'));
         document.getElementById('pillHabitsToday').addEventListener('click', () => openModule1View('habits'));
         document.getElementById('pillBestStreak').addEventListener('click', () => openModule1View('habits'));
-        document.getElementById('pillBackupStatus').addEventListener('click', () => {
-          const modal = document.getElementById('modalBackupDrive');
-          modal.classList.remove('hidden');
-          modal.classList.add('flex');
-        });
+        document.getElementById('pillBackupStatus').addEventListener('click', () => openModule3View());
 
         // Shortcuts bar
         document.getElementById('btnShortcutPlans').addEventListener('click', () => openModule1View('plans'));
@@ -5172,7 +5150,11 @@
           state.selectedDate = TODAY_STR;
           postponeAllPendingForSelectedDate();
         });
-        document.getElementById('btnShortcutExport').addEventListener('click', downloadBackupJson);
+        document.getElementById('btnShortcutExport').addEventListener('click', () => {
+          const modal = document.getElementById('modalBackupDrive');
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+        });
 
         // Automatic Device Mode Detection (Desktop, Tablet Landscape, Celular) on load, resize, and orientation change
         applyAutoDetectedDeviceMode(true);
@@ -5338,18 +5320,6 @@
         document.getElementById('btnDoneBackupModal').addEventListener('click', closeBkp);
 
         document.getElementById('btnDownloadBackupJson').addEventListener('click', downloadBackupJson);
-        document.getElementById('btnCreateSnapshotNow').addEventListener('click', () => {
-          const timeNow = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-          state.backups.unshift({
-            id: 'bkp_' + Date.now(),
-            timestamp: `${TODAY_STR} ${timeNow}`,
-            label: `backup_casa_${TODAY_STR}_${timeNow.replace(':', 'h')}.json (Ponto Manual)`
-          });
-          saveState();
-          renderBackupSnapshots();
-          renderHomeScreen();
-          showToast('Ponto de restauração registrado!', '☁️');
-        });
 
         document.getElementById('inputImportBackupFile').addEventListener('change', (e) => {
           const file = e.target.files && e.target.files[0];
@@ -5768,7 +5738,7 @@
             type,
             category,
             amount,
-            origin: 'Manual • PC'
+            origin: 'Manual'
           });
           document.getElementById('finDescInput').value = '';
           document.getElementById('finAmountInput').value = '';
@@ -5791,7 +5761,7 @@
             type: 'Despesa',
             category,
             amount,
-            origin: 'Rápido • Android'
+            origin: 'Rápido'
           });
           document.getElementById('mobileFinDescInput').value = '';
           document.getElementById('mobileFinAmountInput').value = '';
@@ -6081,74 +6051,33 @@
           showToast(`Receita "${title}" salva com sucesso!`, '📖');
         });
 
+        // Theme Mode (Light / Dark) Persistence & Toggle
+        const THEME_STORAGE_KEY = 'casasync_theme_v1';
+        function applyThemeMode(theme) {
+          const isDark = theme === 'dark';
+          document.documentElement.classList.toggle('dark', isDark);
+          const iconEl = document.getElementById('themeToggleIcon');
+          const labelEl = document.getElementById('themeToggleLabel');
+          if (iconEl) iconEl.textContent = isDark ? '☀️' : '🌙';
+          if (labelEl) labelEl.textContent = isDark ? 'Modo Claro' : 'Modo Escuro';
+          try {
+            localStorage.setItem(THEME_STORAGE_KEY, isDark ? 'dark' : 'light');
+          } catch (e) {}
+          renderProductPriceChart();
+          renderWishlistPriceChart();
+        }
+
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'light';
+        applyThemeMode(savedTheme);
+
+        document.getElementById('btnToggleTheme').addEventListener('click', () => {
+          const isCurrentlyDark = document.documentElement.classList.contains('dark');
+          applyThemeMode(isCurrentlyDark ? 'light' : 'dark');
+        });
+
         // Welcome & Exclusive Google Account OAuth Listeners
         document.getElementById('btnLogoutAccount').addEventListener('click', logoutCurrentAccount);
-        updateRealDriveStatusUI(!!googleApiConfig.accessToken);
         document.getElementById('btnRealGoogleOAuthLogin').addEventListener('click', triggerRealGoogleOAuthPopup);
-
-        document.getElementById('btnPullFromGoogleDriveReal').addEventListener('click', async () => {
-          if (!currentUser) return;
-          if (!googleApiConfig.accessToken) {
-            showToast('Faça login com o botão oficial da Google (OAuth 2.0) primeiro para baixar direto do Google Drive!', '🔑');
-            return;
-          }
-          try {
-            showToast('Buscando arquivo atualizado na pasta CasaSync_Backups do seu Google Drive...', '⏳');
-            const cloudData = await downloadUserDatabaseFromGoogleDrive(googleApiConfig.accessToken, currentUser.email);
-            if (cloudData && Array.isArray(cloudData.plans)) {
-              state = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), cloudData);
-              saveState();
-              renderAll();
-              showToast('Dados baixados e atualizados direto do seu Google Drive!', '☁️');
-            } else {
-              showToast('Nenhum arquivo encontrado ainda na pasta CasaSync_Backups do seu Drive. Clique em Sincronizar Agora para criar!', 'ℹ️');
-            }
-          } catch (err) {
-            showToast(err.message || 'Erro ao baixar do Google Drive.', '⚠️');
-          }
-        });
-
-        document.getElementById('btnSimulateGoogleDriveSyncNow').addEventListener('click', async () => {
-          if (!currentUser) return;
-          const timeNow = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-          const emailSlug = currentUser.email.split('@')[0].replace(/[^a-z0-9]/gi, '_');
-
-          if (googleApiConfig.accessToken) {
-            try {
-              showToast('Enviando arquivos para a pasta CasaSync_Backups no seu Google Drive...', '⏳');
-              const folderId = await getOrCreateDriveFolder(googleApiConfig.accessToken);
-              const mainFileName = `casasync_dados_${emailSlug}.json`;
-              const dailyFileName = `backup_casa_${emailSlug}_${TODAY_STR}.json`;
-              await uploadJsonToGoogleDrive(googleApiConfig.accessToken, mainFileName, state, folderId);
-              await uploadJsonToGoogleDrive(googleApiConfig.accessToken, dailyFileName, state, folderId);
-
-              state.backups.unshift({
-                id: 'bkp_drive_' + Date.now(),
-                timestamp: `${TODAY_STR} ${timeNow}`,
-                label: `☁️ Gravado via API no Google Drive: /CasaSync_Backups/${dailyFileName}`
-              });
-              saveState();
-              renderBackupSnapshots();
-              renderHomeScreen();
-              updateRealDriveStatusUI(true, `Último upload real às ${timeNow} (${mainFileName})`);
-              showToast(`Sucesso! Arquivo salvo na pasta "CasaSync_Backups" do seu Google Drive!`, '☁️');
-              return;
-            } catch (err) {
-              showToast('Falha no upload via API (' + err.message + '). Verifique se o token OAuth ainda está ativo.', '⚠️');
-              return;
-            }
-          }
-
-          state.backups.unshift({
-            id: 'bkp_drive_' + Date.now(),
-            timestamp: `${TODAY_STR} ${timeNow}`,
-            label: `Snapshot local de ${emailSlug} (Configure o Client ID OAuth para gravar direto na nuvem)`
-          });
-          saveState();
-          renderBackupSnapshots();
-          renderHomeScreen();
-          showToast('Snapshot local salvo! Para enviar direto ao site do Google Drive, conecte sua conta via OAuth 2.0.', 'ℹ️');
-        });
 
         renderAll();
         if (currentUser && currentUser.email) {
