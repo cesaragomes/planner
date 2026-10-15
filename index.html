@@ -260,10 +260,11 @@
       <!-- Active Google Account, Theme Switcher & Manual Backup Bar -->
       <div class="flex flex-wrap items-center gap-2">
         <div id="headerUserBadge" class="hidden items-center gap-2 bg-white/10 px-2.5 py-1 rounded-xl text-xs text-white">
-          <span id="headerUserAvatar" class="w-5 h-5 rounded-full bg-white text-slate-900 font-bold flex items-center justify-center text-[10px]">G</span>
+          <img id="headerUserPhoto" src="" alt="Avatar" referrerpolicy="no-referrer" class="hidden w-6 h-6 rounded-full object-cover border border-white/25 shrink-0" />
+          <span id="headerUserAvatar" class="w-6 h-6 rounded-full bg-white text-slate-900 font-bold flex items-center justify-center text-[11px] shrink-0">G</span>
           <div class="leading-tight hidden md:block">
-            <p id="headerUserName" class="font-semibold text-[11px] text-white truncate max-w-[120px]">Usuário</p>
-            <p id="headerUserEmail" class="text-[10px] text-white/75 truncate max-w-[140px]">conta@gmail.com</p>
+            <p id="headerUserName" class="font-semibold text-[11px] text-white truncate max-w-[130px]">Usuário</p>
+            <p id="headerUserEmail" class="text-[10px] text-white/75 truncate max-w-[150px]">conta@gmail.com</p>
           </div>
         </div>
         <button id="btnToggleTheme" type="button" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5 cursor-pointer">
@@ -470,8 +471,8 @@
           </div>
 
           <div class="pt-4 border-t border-slate-100 text-[11px] text-slate-400 flex items-center justify-between">
-            <span>🔒 API configurada internamente no código</span>
-            <span>Firebase Auth & Cloud Firestore (Tempo Real)</span>
+            <span>🔒 Acesso seguro via Conta Google</span>
+            <span>Sincronização automática</span>
           </div>
         </div>
       </div>
@@ -853,14 +854,9 @@
             </div>
 
             <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
-              <div class="flex flex-wrap items-center gap-1.5">
-                <span class="text-[11px] font-semibold uppercase text-slate-400 mr-1">Exemplos Rápidos:</span>
-                <button type="button" id="btnQuickHabitCreatina" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-xs font-medium text-slate-700 transition cursor-pointer">
-                  + 💊 Tomar Creatina (Diário)
-                </button>
-                <button type="button" id="btnQuickHabitAbdominal" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-xs font-medium text-slate-700 transition cursor-pointer">
-                  + 🏋️ Treino de Abdominal (3x na Semana: Seg, Qua, Sex)
-                </button>
+              <div class="hidden">
+                <button type="button" id="btnQuickHabitCreatina"></button>
+                <button type="button" id="btnQuickHabitAbdominal"></button>
               </div>
               <button id="btnSubmitHabit" type="submit" class="py-2 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
                 + Salvar Hábito
@@ -1052,14 +1048,7 @@
             <input id="shopPriceInput" type="number" step="0.01" min="0" placeholder="0.00" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
           </div>
           <div class="sm:col-span-2 lg:col-span-6 flex items-center justify-between pt-2 border-t border-slate-100">
-            <div class="flex flex-wrap items-center gap-1.5">
-              <span class="text-[11px] font-semibold text-slate-400 uppercase mr-1">Reposição em 1 Clique:</span>
-              <button type="button" data-quick-item="Arroz 5kg|Supermercado|Mercearia & Grãos|1|pacote|28.90" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-xs font-medium text-slate-700 transition">+ Arroz 5kg</button>
-              <button type="button" data-quick-item="Leite Integral|Supermercado|Laticínios & Frios|6|un|5.49" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-xs font-medium text-slate-700 transition">+ Leite (6 un)</button>
-              <button type="button" data-quick-item="Café em Pó 500g|Supermercado|Bebidas & Padaria|2|pacote|22.50" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-xs font-medium text-slate-700 transition">+ Café 500g</button>
-              <button type="button" data-quick-item="Detergente Neutro|Supermercado|Limpeza|4|un|2.79" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-xs font-medium text-slate-700 transition">+ Detergente</button>
-              <button type="button" data-quick-item="Banana Prata|Feira / Hortifrúti|Hortifrúti|1.5|kg|8.90" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-xs font-medium text-slate-700 transition">+ Banana</button>
-            </div>
+            <div></div>
             <button id="btnSubmitShopItem" type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm shrink-0">
               + Adicionar à Lista
             </button>
@@ -1333,14 +1322,9 @@
             </div>
           </div>
 
-          <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 text-xs">
-            <span class="text-[11px] font-semibold uppercase text-slate-400">Adição Rápida Customizada:</span>
-            <button type="button" id="btnQuickTaskAspirar" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-sky-50 text-slate-700 font-medium transition cursor-pointer">
-              + 🧹 Aspirar a casa (Seg e Sex)
-            </button>
-            <button type="button" id="btnQuickTaskLavarRoupa" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-sky-50 text-slate-700 font-medium transition cursor-pointer">
-              + 🧺 Lavar roupa (Seg e Qui)
-            </button>
+          <div class="hidden">
+            <button type="button" id="btnQuickTaskAspirar"></button>
+            <button type="button" id="btnQuickTaskLavarRoupa"></button>
           </div>
         </form>
       </div>
@@ -1549,9 +1533,27 @@
         <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
           <div>
             <h3 class="text-base font-bold text-slate-900">🎯 Teto de Gastos Mensal por Categoria</h3>
-            <p class="text-xs text-slate-500">As barras mudam de cor automaticamente (Verde até 70%, Amarelo até 90%, Vermelho acima de 90%)</p>
+            <p class="text-xs text-slate-500">Crie novas categorias, altere o valor limite de cada uma ou remova categorias que não utiliza</p>
           </div>
-          <div id="budgetBarsContainer" class="space-y-4">
+
+          <!-- Form to Add or Update a Budget Category -->
+          <form id="formAddBudgetCategory" class="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2 border-t border-slate-100">
+            <div class="sm:col-span-2">
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Nome da Categoria *</label>
+              <input id="budgetCatNameInput" type="text" required placeholder="Ex.: Supermercado & Feira, Moradia & Contas, Lazer..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Teto Mensal (R$) *</label>
+              <input id="budgetCatLimitInput" type="number" step="0.01" min="1" required placeholder="1000.00" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+            <div class="flex items-end">
+              <button type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
+                + Salvar Categoria
+              </button>
+            </div>
+          </form>
+
+          <div id="budgetBarsContainer" class="space-y-3 pt-2">
             <!-- Rendered dynamically -->
           </div>
         </div>
@@ -1954,8 +1956,8 @@
         <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
             <div>
-              <h3 class="text-base font-bold text-slate-900">🍽️ Grade do Cardápio da Semana (Almoço & Jantar)</h3>
-              <p class="text-xs text-slate-500">Planeje os pratos de almoço e jantar da semana e integre com os ingredientes da despensa</p>
+              <h3 class="text-base font-bold text-slate-900">🍽️ Grade do Cardápio da Semana (Café da Manhã, Almoço, Lanche & Jantar)</h3>
+              <p class="text-xs text-slate-500">Selecione as refeições de Café da Manhã, Almoço, Lanche e Jantar a partir das refeições salvas abaixo</p>
             </div>
             <button id="btnGenerateMenuShopping" type="button" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-sm">
               🛒 Gerar Compras dos Ingredientes Faltantes
@@ -2022,62 +2024,41 @@
     </div>
   </div>
 
-  <!-- ==================== MODAL 2: FAZER OU CARREGAR BACKUP MANUAL ==================== -->
+  <!-- ==================== MODAL 2: BACKUP ==================== -->
   <div id="modalBackupDrive" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 hidden items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-xl w-full p-5 sm:p-6 shadow-xl border border-slate-200 space-y-5 max-h-[90vh] overflow-y-auto custom-scroll">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto custom-scroll">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <div>
-          <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-            <span>💾</span>
-            <span>Backup Manual dos Dados</span>
-          </h3>
-          <p class="text-xs text-slate-500">Exporte um arquivo de backup manual ou carregue um backup existente</p>
-        </div>
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <span>💾</span>
+          <span>Backup</span>
+        </h3>
         <button id="btnCloseBackupModal" type="button" class="text-slate-400 hover:text-slate-700 text-sm font-bold px-2 py-1">✕</button>
       </div>
 
-      <!-- Direct Google Drive Cloud Sync Controls (PC <-> Celular) -->
+      <!-- Cloud Sync Status & Manual Triggers -->
       <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
-        <div class="flex items-center justify-between gap-2">
-          <div>
-            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-800">☁️ Sincronização em Tempo Real — Firebase Cloud (PC ↔ Celular)</h4>
-            <p id="modalCloudSyncStatusText" class="text-xs text-slate-500 mt-0.5">Use os botões abaixo caso queira forçar o envio do PC ou baixar a versão mais recente no celular.</p>
-          </div>
-        </div>
+        <p id="modalCloudSyncStatusText" class="text-xs font-semibold text-slate-700">Conectado. Última gravação: agora</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-          <button id="btnForcePushToDrive" type="button" class="w-full py-2.5 px-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+          <button id="btnForcePushToDrive" type="button" class="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
             <span>⬆️</span>
-            <span>Enviar Deste Aparelho p/ Nuvem</span>
+            <span>Enviar para a Nuvem</span>
           </button>
-          <button id="btnForcePullFromDrive" type="button" class="w-full py-2.5 px-3.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+          <button id="btnForcePullFromDrive" type="button" class="w-full py-2 px-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
             <span>⬇️</span>
-            <span>Baixar da Nuvem p/ Este Aparelho</span>
+            <span>Baixar da Nuvem</span>
           </button>
         </div>
       </div>
 
-      <!-- Manual Export / Import Controls -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-200 space-y-2.5 flex flex-col justify-between">
-          <div class="space-y-1">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-900">1. Fazer Backup Manual</h4>
-            <p class="text-xs text-indigo-800/80">Baixe um arquivo estruturado (<code class="font-mono">.json</code>) contendo todos os seus registros dos 6 módulos.</p>
-          </div>
-          <button id="btnDownloadBackupJson" type="button" class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition shadow-sm cursor-pointer">
-            ⬇️ Fazer Backup Manual (.json)
-          </button>
-        </div>
-
-        <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 space-y-2.5 flex flex-col justify-between">
-          <div class="space-y-1">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-900">2. Carregar Backup</h4>
-            <p class="text-xs text-emerald-800/80">Selecione um arquivo de backup (<code class="font-mono">.json</code>) para restaurar os seus registros na conta.</p>
-          </div>
-          <label class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-sm flex items-center justify-center cursor-pointer">
-            <span>📂 Carregar Backup (.json)</span>
-            <input id="inputImportBackupFile" type="file" accept=".json,application/json" class="hidden" />
-          </label>
-        </div>
+      <!-- Local File Export / Import -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button id="btnDownloadBackupJson" type="button" class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition shadow-sm cursor-pointer">
+          ⬇️ Exportar Arquivo (.json)
+        </button>
+        <label class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-sm flex items-center justify-center cursor-pointer">
+          <span>📂 Importar Arquivo (.json)</span>
+          <input id="inputImportBackupFile" type="file" accept=".json,application/json" class="hidden" />
+        </label>
       </div>
 
       <div class="flex items-center justify-end pt-2 border-t border-slate-100 text-xs text-slate-500">
@@ -2149,16 +2130,17 @@
       }
 
       const DEFAULT_STATE = {
-        platformMode: 'desktop', // 'desktop' (Windows/Linux) or 'mobile' (Android Viewer)
+        platformMode: 'desktop',
         selectedDate: TODAY_STR,
         categoryFilter: 'ALL',
         lastUpdated: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        sampleDataPurgedV3: true,
         modules: [
           {
             id: 'mod1',
             order: 1,
             visible: true,
-            phase: 'Fase 1 • Ativo',
+            phase: 'Ativo',
             activePhase: true,
             icon: '📅',
             title: '1. Planos para o Dia & Hábitos',
@@ -2169,7 +2151,7 @@
             id: 'mod2',
             order: 2,
             visible: true,
-            phase: 'Fase 2 • Ativo',
+            phase: 'Ativo',
             activePhase: true,
             icon: '🛒',
             title: '2. Lista de Compras de Rotina',
@@ -2180,7 +2162,7 @@
             id: 'mod3',
             order: 3,
             visible: true,
-            phase: 'Fase 2 • Ativo',
+            phase: 'Ativo',
             activePhase: true,
             icon: '🧹',
             title: '3. Lista de Tarefas da Casa',
@@ -2191,7 +2173,7 @@
             id: 'mod4',
             order: 4,
             visible: true,
-            phase: 'Fase 3 • Ativo',
+            phase: 'Ativo',
             activePhase: true,
             icon: '💰',
             title: '4. Planilha de Gastos & Contas Fixas',
@@ -2202,7 +2184,7 @@
             id: 'mod5',
             order: 5,
             visible: true,
-            phase: 'Fase 4 • Ativo',
+            phase: 'Ativo',
             activePhase: true,
             icon: '🏠',
             title: '5. Aquisições & Manutenção da Casa',
@@ -2213,7 +2195,7 @@
             id: 'mod6',
             order: 6,
             visible: true,
-            phase: 'Fase 5 • Ativo',
+            phase: 'Ativo',
             activePhase: true,
             icon: '🍲',
             title: '6. Despensa & Cardápio Semanal',
@@ -2221,608 +2203,55 @@
             integrationNote: 'Cruza os ingredientes do cardápio da semana com o estoque da Despensa para gerar só o que falta comprar.'
           }
         ],
-        plans: [
-          {
-            id: 'p1',
-            title: 'Revisar planejamento semanal e contas do mês',
-            date: TODAY_STR,
-            shift: 'Manhã',
-            time: '08:30',
-            category: 'Casa',
-            priority: 'Alta',
-            notes: 'Conferir vencimentos de energia e internet',
-            done: false
-          },
-          {
-            id: 'p2',
-            title: 'Reunião de alinhamento / bloco de foco no trabalho',
-            date: TODAY_STR,
-            shift: 'Manhã',
-            time: '10:00',
-            category: 'Trabalho',
-            priority: 'Alta',
-            notes: 'Separar relatórios principais',
-            done: true
-          },
-          {
-            id: 'p3',
-            title: 'Passar na farmácia e verificar itens de despensa',
-            date: TODAY_STR,
-            shift: 'Tarde',
-            time: '15:30',
-            category: 'Pessoal',
-            priority: 'Média',
-            notes: 'Aproveitar saída à tarde',
-            done: false
-          },
-          {
-            id: 'p4',
-            title: 'Separar ingredientes do jantar e organizar cozinha',
-            date: TODAY_STR,
-            shift: 'Noite',
-            time: '19:30',
-            category: 'Casa',
-            priority: 'Baixa',
-            notes: 'Deixar cafeteira pronta para amanhã',
-            done: false
-          }
-        ],
+        plans: [],
         habitFilterType: 'ALL',
-        habits: [
-          {
-            id: 'h_creatina',
-            title: 'Tomar Creatina (5g)',
-            icon: '💊',
-            target: 1,
-            freqType: 'daily',
-            scheduledDays: [0, 1, 2, 3, 4, 5, 6],
-            weeklyGoal: 7,
-            progressByDate: { [TODAY_STR]: 1 },
-            streak: 12,
-            bestStreak: 21
-          },
-          {
-            id: 'h_abdominal',
-            title: 'Treino de Abdominal',
-            icon: '🏋️',
-            target: 1,
-            freqType: 'specific_days',
-            scheduledDays: [1, 3, 5],
-            weeklyGoal: 3,
-            progressByDate: { [TODAY_STR]: 0 },
-            streak: 6,
-            bestStreak: 9
-          },
-          {
-            id: 'h1',
-            title: 'Beber Água (Copos de 250ml)',
-            icon: '💧',
-            target: 8,
-            freqType: 'daily',
-            scheduledDays: [0, 1, 2, 3, 4, 5, 6],
-            weeklyGoal: 7,
-            progressByDate: { [TODAY_STR]: 5 },
-            streak: 6,
-            bestStreak: 14
-          },
-          {
-            id: 'h2',
-            title: 'Leitura Diária (20 min)',
-            icon: '📚',
-            target: 1,
-            freqType: 'daily',
-            scheduledDays: [0, 1, 2, 3, 4, 5, 6],
-            weeklyGoal: 7,
-            progressByDate: { [TODAY_STR]: 1 },
-            streak: 4,
-            bestStreak: 10
-          }
-        ],
+        habits: [],
         shoppingFilterStore: 'ALL',
         hideCartItems: false,
         marketOneHandMode: false,
-        shoppingItems: [
-          {
-            id: 'sh1',
-            name: 'Azeite de Oliva Extra Virgem 500ml',
-            store: 'Supermercado',
-            aisle: 'Mercearia & Grãos',
-            qty: 1,
-            unit: 'un',
-            price: 39.90,
-            inCart: false
-          },
-          {
-            id: 'sh2',
-            name: 'Peito de Frango Resfriado',
-            store: 'Supermercado',
-            aisle: 'Carnes & Aves',
-            qty: 2,
-            unit: 'kg',
-            price: 21.50,
-            inCart: true
-          },
-          {
-            id: 'sh3',
-            name: 'Tomate Italiano e Folhas Verdes',
-            store: 'Feira / Hortifrúti',
-            aisle: 'Hortifrúti',
-            qty: 1.5,
-            unit: 'kg',
-            price: 9.80,
-            inCart: false
-          },
-          {
-            id: 'sh4',
-            name: 'Sabão Líquido Lava-Roupas 3L',
-            store: 'Supermercado',
-            aisle: 'Limpeza',
-            qty: 1,
-            unit: 'un',
-            price: 34.90,
-            inCart: true
-          },
-          {
-            id: 'sh5',
-            name: 'Vitamina C / Analgésico',
-            store: 'Farmácia',
-            aisle: 'Higiene & Farmácia',
-            qty: 1,
-            unit: 'cx',
-            price: 18.00,
-            inCart: false
-          }
-        ],
+        shoppingItems: [],
         taskFilterType: 'ALL',
         taskFilterRoom: 'ALL',
-        tasks: [
-          {
-            id: 'tk_aspirar',
-            title: 'Aspirar a casa e tapetes',
-            type: 'Recorrente',
-            room: 'Sala',
-            frequency: 'Customizado (Seg, Sex)',
-            customDays: [1, 5],
-            priority: 'Média',
-            lastDone: TODAY_STR,
-            nextDue: getTomorrowStr(TODAY_STR),
-            done: false,
-            subtasks: [
-              { text: 'Aspirar tapete e embaixo do sofá', done: false },
-              { text: 'Aspirar quartos e corredor', done: false }
-            ]
-          },
-          {
-            id: 'tk_roupa',
-            title: 'Lavar e estender roupas da semana',
-            type: 'Recorrente',
-            room: 'Lavanderia / Externa',
-            frequency: 'Customizado (Seg, Qui)',
-            customDays: [1, 4],
-            priority: 'Alta',
-            lastDone: TODAY_STR,
-            nextDue: getTomorrowStr(TODAY_STR),
-            done: false,
-            subtasks: [
-              { text: 'Separar roupas claras e escuras', done: false },
-              { text: 'Recolher roupas secas do varal', done: false }
-            ]
-          },
-          {
-            id: 'tk1',
-            title: 'Limpeza completa da bancada, fogão e exaustor',
-            type: 'Recorrente',
-            room: 'Cozinha',
-            frequency: 'Toda Segunda',
-            priority: 'Alta',
-            lastDone: TODAY_STR,
-            nextDue: getTomorrowStr(TODAY_STR),
-            done: false,
-            subtasks: [
-              { text: 'Desengordurar grades do fogão', done: true },
-              { text: 'Limpar filtro do exaustor', done: false },
-              { text: 'Passar pano com desinfetante na bancada', done: false }
-            ]
-          },
-          {
-            id: 'tk2',
-            title: 'Higienizar box, pia e espelho do banheiro',
-            type: 'Recorrente',
-            room: 'Banheiro',
-            frequency: 'Semanal (7 dias)',
-            priority: 'Alta',
-            lastDone: 'Recente',
-            nextDue: TODAY_STR,
-            done: false,
-            subtasks: [
-              { text: 'Aplicar tira-limo nos vidros do box', done: false },
-              { text: 'Trocar toalhas de rosto e banho', done: false }
-            ]
-          },
-          {
-            id: 'tk3',
-            title: 'Trocar roupa de cama e arejar travesseiros',
-            type: 'Recorrente',
-            room: 'Quartos',
-            frequency: 'Semanal (7 dias)',
-            priority: 'Média',
-            lastDone: TODAY_STR,
-            nextDue: addDaysStr(TODAY_STR, 7),
-            done: true,
-            subtasks: [
-              { text: 'Retirar lençol e fronhas usadas', done: true },
-              { text: 'Colocar jogo limpo do armário', done: true }
-            ]
-          },
-          {
-            id: 'tk4',
-            title: 'Revisar roteador Wi-Fi e organizar cabos da TV',
-            type: 'Pontual',
-            room: 'Sala',
-            frequency: 'Esta Semana',
-            priority: 'Baixa',
-            lastDone: '—',
-            nextDue: getTomorrowStr(TODAY_STR),
-            done: false,
-            subtasks: [
-              { text: 'Prender fios atrás do rack com velcro', done: false }
-            ]
-          }
-        ],
-        selectedChartProduct: 'Azeite de Oliva Extra Virgem 500ml',
-        productPriceHistory: {
-          'Azeite de Oliva Extra Virgem 500ml': [
-            { date: addDaysStr(TODAY_STR, -60), price: 34.90, store: 'Supermercado' },
-            { date: addDaysStr(TODAY_STR, -30), price: 37.50, store: 'Supermercado' },
-            { date: TODAY_STR, price: 39.90, store: 'Supermercado' }
-          ],
-          'Peito de Frango Resfriado': [
-            { date: addDaysStr(TODAY_STR, -45), price: 19.90, store: 'Supermercado' },
-            { date: addDaysStr(TODAY_STR, -15), price: 22.90, store: 'Supermercado' },
-            { date: TODAY_STR, price: 21.50, store: 'Supermercado' }
-          ],
-          'Sabão Líquido Lava-Roupas 3L': [
-            { date: addDaysStr(TODAY_STR, -60), price: 36.90, store: 'Supermercado' },
-            { date: addDaysStr(TODAY_STR, -20), price: 32.90, store: 'Supermercado' },
-            { date: TODAY_STR, price: 34.90, store: 'Supermercado' }
-          ],
-          'Arroz 5kg': [
-            { date: addDaysStr(TODAY_STR, -60), price: 26.50, store: 'Supermercado' },
-            { date: addDaysStr(TODAY_STR, -30), price: 29.90, store: 'Supermercado' },
-            { date: TODAY_STR, price: 28.90, store: 'Supermercado' }
-          ],
-          'Café em Pó 500g': [
-            { date: addDaysStr(TODAY_STR, -50), price: 18.90, store: 'Supermercado' },
-            { date: addDaysStr(TODAY_STR, -25), price: 20.90, store: 'Supermercado' },
-            { date: TODAY_STR, price: 22.50, store: 'Supermercado' }
-          ]
-        },
-        supermarketTrips: [
-          {
-            id: 'tr1',
-            date: addDaysStr(TODAY_STR, -14),
-            store: 'Compra Quinzenal — Supermercado',
-            itemsCount: 12,
-            total: 384.50,
-            payment: 'Cartão de Crédito'
-          },
-          {
-            id: 'tr2',
-            date: addDaysStr(TODAY_STR, -7),
-            store: 'Reposição Hortifrúti & Mercearia',
-            itemsCount: 8,
-            total: 142.80,
-            payment: 'PIX / Débito'
-          }
-        ],
+        tasks: [],
+        selectedChartProduct: '',
+        productPriceHistory: {},
+        supermarketTrips: [],
         financeCategoryFilter: 'ALL',
-        transactions: [
-          {
-            id: 'tx1',
-            date: addDaysStr(TODAY_STR, -20),
-            desc: 'Salário / Renda Principal do Mês',
-            type: 'Receita',
-            category: 'Renda / Salário',
-            amount: 6500.00,
-            origin: 'Manual'
-          },
-          {
-            id: 'tx2',
-            date: addDaysStr(TODAY_STR, -14),
-            desc: '🛒 Compra Quinzenal — Supermercado (12 itens)',
-            type: 'Despesa',
-            category: 'Supermercado & Feira',
-            amount: 384.50,
-            origin: 'Automático • Módulo 2'
-          },
-          {
-            id: 'tx3',
-            date: addDaysStr(TODAY_STR, -10),
-            desc: '📄 Conta Fixa: Internet Fibra 600Mb',
-            type: 'Despesa',
-            category: 'Moradia & Contas',
-            amount: 119.90,
-            origin: 'Automático • Conta Fixa'
-          },
-          {
-            id: 'tx4',
-            date: addDaysStr(TODAY_STR, -7),
-            desc: '🛒 Reposição Hortifrúti & Mercearia (8 itens)',
-            type: 'Despesa',
-            category: 'Supermercado & Feira',
-            amount: 142.80,
-            origin: 'Automático • Módulo 2'
-          }
-        ],
-        fixedBills: [
-          {
-            id: 'fb1',
-            name: 'Energia Elétrica (Cemig)',
-            dueDay: 15,
-            amount: 245.00,
-            paid: false
-          },
-          {
-            id: 'fb2',
-            name: 'Água e Saneamento',
-            dueDay: 18,
-            amount: 92.40,
-            paid: false
-          },
-          {
-            id: 'fb3',
-            name: 'Internet Fibra 600Mb',
-            dueDay: 10,
-            amount: 119.90,
-            paid: true
-          },
-          {
-            id: 'fb4',
-            name: 'Condomínio / Taxa Residencial',
-            dueDay: 20,
-            amount: 420.00,
-            paid: false
-          }
-        ],
-        budgets: [
-          { category: 'Supermercado & Feira', limit: 1400.00 },
-          { category: 'Moradia & Contas', limit: 1800.00 },
-          { category: 'Transporte', limit: 600.00 },
-          { category: 'Saúde & Farmácia', limit: 400.00 },
-          { category: 'Lazer & Outros', limit: 500.00 }
-        ],
-        selectedWishlistChartId: 'w1',
-        wishlistItems: [
-          {
-            id: 'w1',
-            name: 'Geladeira Inverter Frost Free 400L Inox',
-            category: 'Eletrodoméstico',
-            room: 'Cozinha',
-            priority: 'Alta',
-            targetPrice: 3200.00,
-            specs: '110V • Inox • Largura máx 70cm',
-            image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200' viewBox='0 0 320 200'><rect width='320' height='200' rx='16' fill='%230f172a'/><rect x='115' y='20' width='90' height='160' rx='10' fill='%23e2e8f0' stroke='%2394a3b8' stroke-width='3'/><line x1='115' y1='85' x2='205' y2='85' stroke='%2364748b' stroke-width='3'/><rect x='125' y='45' width='6' height='28' rx='3' fill='%23475569'/><rect x='125' y='98' width='6' height='40' rx='3' fill='%23475569'/><text x='160' y='193' text-anchor='middle' fill='%2310b981' font-family='sans-serif' font-size='11' font-weight='bold'>Geladeira Inverter 400L</text></svg>",
-            quotes: [
-              { date: addDaysStr(TODAY_STR, -45), store: 'Magazine Luiza', link: 'https://www.magazineluiza.com.br/', price: 3699.00, note: 'Preço de lançamento' },
-              { date: addDaysStr(TODAY_STR, -20), store: 'Amazon', link: 'https://www.amazon.com.br/', price: 3390.00, note: 'Frete grátis Prime' },
-              { date: TODAY_STR, store: 'Mercado Livre', link: 'https://www.mercadolivre.com.br/', price: 3149.00, note: 'Cupom 10% PIX — Atingiu a Meta!' }
-            ]
-          },
-          {
-            id: 'w2',
-            name: 'AirFryer Oven Digital 12 Litros Inox',
-            category: 'Utensílio Doméstico',
-            room: 'Cozinha',
-            priority: 'Média',
-            targetPrice: 550.00,
-            specs: '110V • 2000W • Com 2 assadeiras',
-            image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200' viewBox='0 0 320 200'><rect width='320' height='200' rx='16' fill='%231e293b'/><rect x='110' y='30' width='100' height='130' rx='24' fill='%23334155' stroke='%23cbd5e1' stroke-width='3'/><circle cx='160' cy='65' r='14' fill='%2310b981'/><rect x='130' y='100' width='60' height='45' rx='8' fill='%230f172a'/><rect x='155' y='108' width='10' height='28' rx='4' fill='%2394a3b8'/><text x='160' y='185' text-anchor='middle' fill='%2338bdf8' font-family='sans-serif' font-size='11' font-weight='bold'>AirFryer Forno Digital 12L</text></svg>",
-            quotes: [
-              { date: addDaysStr(TODAY_STR, -30), store: 'Amazon', link: 'https://www.amazon.com.br/', price: 699.90, note: 'Valor normal' },
-              { date: TODAY_STR, store: 'Casas Bahia', link: 'https://www.casasbahia.com.br/', price: 599.00, note: 'Quase na meta' }
-            ]
-          },
-          {
-            id: 'w3',
-            name: 'Sofá Retrátil e Reclinável 2,30m Linho',
-            category: 'Móvel',
-            room: 'Sala',
-            priority: 'Baixa',
-            targetPrice: 2200.00,
-            specs: 'Molas ensacadas • Cor Cinza Chumbo',
-            image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200' viewBox='0 0 320 200'><rect width='320' height='200' rx='16' fill='%23312e81'/><rect x='55' y='60' width='210' height='65' rx='12' fill='%23818cf8'/><rect x='40' y='85' width='240' height='55' rx='10' fill='%236366f1'/><rect x='35' y='75' width='30' height='65' rx='8' fill='%234f46e5'/><rect x='255' y='75' width='30' height='65' rx='8' fill='%234f46e5'/><text x='160' y='175' text-anchor='middle' fill='%23e0e7ff' font-family='sans-serif' font-size='11' font-weight='bold'>Sofa Retratil 3 Lugares</text></svg>",
-            quotes: [
-              { date: addDaysStr(TODAY_STR, -15), store: 'Mobly', link: 'https://www.mobly.com.br/', price: 2490.00, note: 'Frete R$ 99' },
-              { date: TODAY_STR, store: 'MadeiraMadeira', link: 'https://www.madeiramadeira.com.br/', price: 2180.00, note: 'Promoção Semana da Casa' }
-            ]
-          }
-        ],
-        warranties: [
-          {
-            id: 'wr1',
-            name: 'Máquina Lava e Seca 11kg Inverter',
-            purchaseDate: addDaysStr(TODAY_STR, -120),
-            warrantyMonths: 12,
-            store: 'Fast Shop',
-            pricePaid: 3499.00
-          },
-          {
-            id: 'wr2',
-            name: 'Smart TV 55" 4K QLED Sala',
-            purchaseDate: addDaysStr(TODAY_STR, -200),
-            warrantyMonths: 12,
-            store: 'Amazon',
-            pricePaid: 2699.00
-          }
-        ],
-        maintenanceCycles: [
-          {
-            id: 'mt1',
-            title: 'Trocar vela / refil do purificador de água',
-            room: 'Cozinha',
-            intervalDays: 180,
-            lastDone: addDaysStr(TODAY_STR, -150),
-            nextDue: addDaysStr(TODAY_STR, 30)
-          },
-          {
-            id: 'mt2',
-            title: 'Limpeza de filtros do Ar-Condicionado e higienização',
-            room: 'Quartos',
-            intervalDays: 60,
-            lastDone: addDaysStr(TODAY_STR, -55),
-            nextDue: addDaysStr(TODAY_STR, 5)
-          },
-          {
-            id: 'mt3',
-            title: 'Limpeza e vedação da Caixa d’Água',
-            room: 'Lavanderia / Externa',
-            intervalDays: 180,
-            lastDone: addDaysStr(TODAY_STR, -90),
-            nextDue: addDaysStr(TODAY_STR, 90)
-          }
-        ],
-        pantryItems: [
-          {
-            id: 'pt1',
-            name: 'Arroz 5kg',
-            location: 'Armário / Despensa',
-            qty: 2,
-            minQty: 1,
-            unit: 'pacote',
-            expiry: addDaysStr(TODAY_STR, 90)
-          },
-          {
-            id: 'pt2',
-            name: 'Leite Integral',
-            location: 'Armário / Despensa',
-            qty: 1,
-            minQty: 3,
-            unit: 'un',
-            expiry: addDaysStr(TODAY_STR, 5)
-          },
-          {
-            id: 'pt3',
-            name: 'Café em Pó 500g',
-            location: 'Armário / Despensa',
-            qty: 0,
-            minQty: 1,
-            unit: 'pacote',
-            expiry: addDaysStr(TODAY_STR, 120)
-          },
-          {
-            id: 'pt4',
-            name: 'Peito de Frango Resfriado',
-            location: 'Freezer',
-            qty: 2,
-            minQty: 1,
-            unit: 'kg',
-            expiry: addDaysStr(TODAY_STR, 4)
-          },
-          {
-            id: 'pt5',
-            name: 'Detergente Neutro',
-            location: 'Lavanderia',
-            qty: 3,
-            minQty: 2,
-            unit: 'un',
-            expiry: addDaysStr(TODAY_STR, 365)
-          }
-        ],
+        transactions: [],
+        fixedBills: [],
+        budgets: [],
+        selectedWishlistChartId: '',
+        wishlistItems: [],
+        warranties: [],
+        maintenanceCycles: [],
+        pantryItems: [],
         weeklyMenu: [
-          { day: 'Segunda', lunch: 'Frango Grelhado com Arroz e Salada', dinner: 'Omelete de Forno com Tomate' },
-          { day: 'Terça', lunch: 'Carne Moída com Purê e Feijão', dinner: 'Sopa Leve de Legumes' },
-          { day: 'Quarta', lunch: 'Strogonoff de Frango com Arroz', dinner: 'Sanduíche Natural de Frango' },
-          { day: 'Quinta', lunch: 'Macarrão ao Molho de Tomate', dinner: 'Crepioca com Queijo' },
-          { day: 'Sexta', lunch: 'Filé de Tilápia com Legumes', dinner: 'Noite de Pizza Caseira' },
-          { day: 'Sábado', lunch: 'Feijoada Leve / Almoço Especial', dinner: 'Lanche Rápido' },
-          { day: 'Domingo', lunch: 'Assado de Domingo em Família', dinner: ' Chá / Café com Torradas' }
+          { day: 'Segunda', breakfast: '', lunch: '', snack: '', dinner: '' },
+          { day: 'Terça', breakfast: '', lunch: '', snack: '', dinner: '' },
+          { day: 'Quarta', breakfast: '', lunch: '', snack: '', dinner: '' },
+          { day: 'Quinta', breakfast: '', lunch: '', snack: '', dinner: '' },
+          { day: 'Sexta', breakfast: '', lunch: '', snack: '', dinner: '' },
+          { day: 'Sábado', breakfast: '', lunch: '', snack: '', dinner: '' },
+          { day: 'Domingo', breakfast: '', lunch: '', snack: '', dinner: '' }
         ],
-        recipes: [
-          {
-            id: 'rc1',
-            title: 'Strogonoff de Frango Caseiro',
-            ingredients: ['Peito de Frango Resfriado', 'Arroz 5kg', 'Creme de Leite', 'Champignon']
-          },
-          {
-            id: 'rc2',
-            title: 'Café da Manhã Completo da Semana',
-            ingredients: ['Café em Pó 500g', 'Leite Integral', 'Pão de Forma', 'Queijo Minas']
-          },
-          {
-            id: 'rc3',
-            title: 'Salada Mediterrânea Fresca',
-            ingredients: ['Tomate Italiano e Folhas Verdes', 'Azeite de Oliva Extra Virgem 500ml', 'Queijo Branco']
-          }
-        ],
-        backups: [
-          {
-            id: 'bkp1',
-            timestamp: `${TODAY_STR} 08:00`,
-            label: `backup_casa_${TODAY_STR}.json (Automático Diário)`
-          }
-        ]
+        recipes: [],
+        backups: []
       };
 
       function createEmptyUserState() {
-        const clean = JSON.parse(JSON.stringify(DEFAULT_STATE));
-        clean.plans = [];
-        clean.habits = [
-          {
-            id: 'h_water',
-            title: 'Beber 2L de Água (Copos de 250ml)',
-            icon: '💧',
-            target: 8,
-            progressByDate: { [TODAY_STR]: 0 },
-            streak: 0,
-            bestStreak: 0
-          }
-        ];
-        clean.shoppingItems = [];
-        clean.tasks = [];
-        clean.productPriceHistory = {};
-        clean.supermarketTrips = [];
-        clean.transactions = [];
-        clean.fixedBills = [];
-        clean.wishlistItems = [];
-        clean.warranties = [];
-        clean.maintenanceCycles = [];
-        clean.pantryItems = [];
-        clean.recipes = [];
-        clean.backups = [
-          {
-            id: 'bkp_init_' + Date.now(),
-            timestamp: `${TODAY_STR} ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`,
-            label: `Cofre Google Drive inicializado (${TODAY_STR})`
-          }
-        ];
-        return clean;
+        return JSON.parse(JSON.stringify(DEFAULT_STATE));
       }
 
-      const DEFAULT_ACCOUNTS = [
-        {
-          name: 'César Augusto (Conta Principal)',
-          email: 'cesar.casa@gmail.com',
-          pin: '1234',
-          driveFolder: '/AppGestaoCasa/Backups/',
-          createdAt: TODAY_STR
-        },
-        {
-          name: 'Convidado Familiar (Conta Isolada 2)',
-          email: 'familiar.rotina@gmail.com',
-          pin: '1234',
-          driveFolder: '/CasaSync_Familiar/Backups/',
-          createdAt: TODAY_STR
-        }
-      ];
+      const DEFAULT_ACCOUNTS = [];
 
       function loadAccountsRegistry() {
         try {
           const raw = localStorage.getItem(ACCOUNTS_REGISTRY_KEY);
-          if (!raw) return JSON.parse(JSON.stringify(DEFAULT_ACCOUNTS));
+          if (!raw) return [];
           const parsed = JSON.parse(raw);
-          return Array.isArray(parsed) && parsed.length > 0 ? parsed : JSON.parse(JSON.stringify(DEFAULT_ACCOUNTS));
+          return Array.isArray(parsed) ? parsed : [];
         } catch (e) {
-          return JSON.parse(JSON.stringify(DEFAULT_ACCOUNTS));
+          return [];
         }
       }
 
@@ -2851,33 +2280,103 @@
         return 'casasync_user_db_' + email.toLowerCase().replace(/[^a-z0-9]/g, '_');
       }
 
+      const LEGACY_SAMPLE_IDS = new Set([
+        'p1', 'p2', 'p3', 'p4',
+        'h_creatina', 'h_abdominal', 'h1', 'h2', 'h_water',
+        'sh1', 'sh2', 'sh3', 'sh4', 'sh5',
+        'tk_aspirar', 'tk_roupa', 'tk1', 'tk2', 'tk3', 'tk4',
+        'tr1', 'tr2',
+        'tx1', 'tx2', 'tx3', 'tx4',
+        'fb1', 'fb2', 'fb3', 'fb4',
+        'w1', 'w2', 'w3',
+        'wr1', 'wr2',
+        'mt1', 'mt2', 'mt3',
+        'pt1', 'pt2', 'pt3', 'pt4', 'pt5',
+        'rc1', 'rc2', 'rc3',
+        'bkp1'
+      ]);
+
+      const LEGACY_SAMPLE_MENU_TEXTS = new Set([
+        'Frango Grelhado com Arroz e Salada', 'Omelete de Forno com Tomate',
+        'Carne Moída com Purê e Feijão', 'Sopa Leve de Legumes',
+        'Strogonoff de Frango com Arroz', 'Sanduíche Natural de Frango',
+        'Macarrão ao Molho de Tomate', 'Crepioca com Queijo',
+        'Filé de Tilápia com Legumes', 'Noite de Pizza Caseira',
+        'Feijoada Leve / Almoço Especial', 'Lanche Rápido',
+        'Assado de Domingo em Família', 'Chá / Café com Torradas', ' Chá / Café com Torradas'
+      ]);
+
+      function sanitizeLegacySampleData(obj) {
+        if (!obj || typeof obj !== 'object') return obj;
+        if (!obj.sampleDataPurgedV3) {
+          if (Array.isArray(obj.plans)) obj.plans = obj.plans.filter(x => !LEGACY_SAMPLE_IDS.has(x.id));
+          if (Array.isArray(obj.habits)) obj.habits = obj.habits.filter(x => !LEGACY_SAMPLE_IDS.has(x.id));
+          if (Array.isArray(obj.shoppingItems)) obj.shoppingItems = obj.shoppingItems.filter(x => !LEGACY_SAMPLE_IDS.has(x.id));
+          if (Array.isArray(obj.tasks)) obj.tasks = obj.tasks.filter(x => !LEGACY_SAMPLE_IDS.has(x.id));
+          if (Array.isArray(obj.supermarketTrips)) obj.supermarketTrips = obj.supermarketTrips.filter(x => !LEGACY_SAMPLE_IDS.has(x.id));
+          if (Array.isArray(obj.transactions)) obj.transactions = obj.transactions.filter(x => !LEGACY_SAMPLE_IDS.has(x.id));
+          if (Array.isArray(obj.fixedBills)) obj.fixedBills = obj.fixedBills.filter(x => !LEGACY_SAMPLE_IDS.has(x.id));
+          if (Array.isArray(obj.wishlistItems)) obj.wishlistItems = obj.wishlistItems.filter(x => !LEGACY_SAMPLE_IDS.has(x.id));
+          if (Array.isArray(obj.warranties)) obj.warranties = obj.warranties.filter(x => !LEGACY_SAMPLE_IDS.has(x.id));
+          if (Array.isArray(obj.maintenanceCycles)) obj.maintenanceCycles = obj.maintenanceCycles.filter(x => !LEGACY_SAMPLE_IDS.has(x.id));
+          if (Array.isArray(obj.pantryItems)) obj.pantryItems = obj.pantryItems.filter(x => !LEGACY_SAMPLE_IDS.has(x.id));
+          if (Array.isArray(obj.recipes)) obj.recipes = obj.recipes.filter(x => !LEGACY_SAMPLE_IDS.has(x.id));
+          if (Array.isArray(obj.backups)) obj.backups = obj.backups.filter(x => !LEGACY_SAMPLE_IDS.has(x.id));
+          if (obj.productPriceHistory && typeof obj.productPriceHistory === 'object') {
+            ['Azeite de Oliva Extra Virgem 500ml', 'Peito de Frango Resfriado', 'Sabão Líquido Lava-Roupas 3L', 'Arroz 5kg', 'Café em Pó 500g'].forEach(k => {
+              delete obj.productPriceHistory[k];
+            });
+          }
+          if (Array.isArray(obj.weeklyMenu)) {
+            obj.weeklyMenu.forEach(d => {
+              if (LEGACY_SAMPLE_MENU_TEXTS.has(d.lunch)) d.lunch = '';
+              if (LEGACY_SAMPLE_MENU_TEXTS.has(d.dinner)) d.dinner = '';
+            });
+          }
+          obj.sampleDataPurgedV3 = true;
+        }
+        // Ensure every day in weeklyMenu has breakfast, lunch, snack, dinner keys
+        const defaultDays = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+        if (!Array.isArray(obj.weeklyMenu) || obj.weeklyMenu.length !== 7) {
+          obj.weeklyMenu = defaultDays.map(day => ({ day, breakfast: '', lunch: '', snack: '', dinner: '' }));
+        } else {
+          obj.weeklyMenu = obj.weeklyMenu.map((d, idx) => ({
+            day: d.day || defaultDays[idx] || 'Dia',
+            breakfast: d.breakfast || '',
+            lunch: d.lunch || '',
+            snack: d.snack || '',
+            dinner: d.dinner || ''
+          }));
+        }
+        return obj;
+      }
+
       let state = loadState();
 
       function loadState() {
         try {
           const key = currentUser && currentUser.email ? getUserStorageKey(currentUser.email) : STORAGE_KEY;
           const raw = localStorage.getItem(key);
-          if (!raw && currentUser && currentUser.email === 'familiar.rotina@gmail.com') {
-            return createEmptyUserState();
-          }
-          if (!raw) return JSON.parse(JSON.stringify(DEFAULT_STATE));
+          if (!raw) return createEmptyUserState();
           const parsed = JSON.parse(raw);
-          const merged = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), parsed);
-          if (!Array.isArray(merged.shoppingItems)) merged.shoppingItems = JSON.parse(JSON.stringify(DEFAULT_STATE.shoppingItems));
-          if (!Array.isArray(merged.tasks)) merged.tasks = JSON.parse(JSON.stringify(DEFAULT_STATE.tasks));
+          const merged = Object.assign(createEmptyUserState(), parsed);
+          if (!Array.isArray(merged.plans)) merged.plans = [];
+          if (!Array.isArray(merged.habits)) merged.habits = [];
+          if (!Array.isArray(merged.shoppingItems)) merged.shoppingItems = [];
+          if (!Array.isArray(merged.tasks)) merged.tasks = [];
           if (!merged.productPriceHistory || typeof merged.productPriceHistory !== 'object') {
-            merged.productPriceHistory = JSON.parse(JSON.stringify(DEFAULT_STATE.productPriceHistory));
+            merged.productPriceHistory = {};
           }
-          if (!Array.isArray(merged.supermarketTrips)) merged.supermarketTrips = JSON.parse(JSON.stringify(DEFAULT_STATE.supermarketTrips));
-          if (!Array.isArray(merged.transactions)) merged.transactions = JSON.parse(JSON.stringify(DEFAULT_STATE.transactions));
-          if (!Array.isArray(merged.fixedBills)) merged.fixedBills = JSON.parse(JSON.stringify(DEFAULT_STATE.fixedBills));
-          if (!Array.isArray(merged.budgets)) merged.budgets = JSON.parse(JSON.stringify(DEFAULT_STATE.budgets));
-          if (!Array.isArray(merged.wishlistItems)) merged.wishlistItems = JSON.parse(JSON.stringify(DEFAULT_STATE.wishlistItems));
-          if (!Array.isArray(merged.warranties)) merged.warranties = JSON.parse(JSON.stringify(DEFAULT_STATE.warranties));
-          if (!Array.isArray(merged.maintenanceCycles)) merged.maintenanceCycles = JSON.parse(JSON.stringify(DEFAULT_STATE.maintenanceCycles));
-          if (!Array.isArray(merged.pantryItems)) merged.pantryItems = JSON.parse(JSON.stringify(DEFAULT_STATE.pantryItems));
-          if (!Array.isArray(merged.weeklyMenu)) merged.weeklyMenu = JSON.parse(JSON.stringify(DEFAULT_STATE.weeklyMenu));
-          if (!Array.isArray(merged.recipes)) merged.recipes = JSON.parse(JSON.stringify(DEFAULT_STATE.recipes));
+          if (!Array.isArray(merged.supermarketTrips)) merged.supermarketTrips = [];
+          if (!Array.isArray(merged.transactions)) merged.transactions = [];
+          if (!Array.isArray(merged.fixedBills)) merged.fixedBills = [];
+          if (!Array.isArray(merged.budgets)) merged.budgets = [];
+          if (!Array.isArray(merged.wishlistItems)) merged.wishlistItems = [];
+          if (!Array.isArray(merged.warranties)) merged.warranties = [];
+          if (!Array.isArray(merged.maintenanceCycles)) merged.maintenanceCycles = [];
+          if (!Array.isArray(merged.pantryItems)) merged.pantryItems = [];
+          if (!Array.isArray(merged.recipes)) merged.recipes = [];
+          sanitizeLegacySampleData(merged);
           if (!merged.selectedWishlistChartId && merged.wishlistItems.length > 0) {
             merged.selectedWishlistChartId = merged.wishlistItems[0].id;
           }
@@ -2887,7 +2386,7 @@
           });
           return merged;
         } catch (err) {
-          return JSON.parse(JSON.stringify(DEFAULT_STATE));
+          return createEmptyUserState();
         }
       }
 
@@ -2951,21 +2450,24 @@
 
         if (status === 'syncing') {
           iconEl.textContent = '⏳';
-          labelEl.textContent = labelText || 'Sincronizando...';
+          labelEl.textContent = 'Salvando...';
           btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/25 border border-sky-400/40 text-sky-100 transition flex items-center gap-1.5 cursor-pointer';
+          if (modalStatusEl) {
+            modalStatusEl.textContent = 'Sincronizando...';
+          }
         } else if (status === 'expired') {
-          iconEl.textContent = '⚠️';
-          labelEl.textContent = labelText || 'Ativar Nuvem';
+          iconEl.textContent = '☁️';
+          labelEl.textContent = 'Conectar';
           btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/30 hover:bg-amber-500/40 border border-amber-400/50 text-amber-100 transition flex items-center gap-1.5 cursor-pointer';
           if (modalStatusEl) {
-            modalStatusEl.textContent = '⚠️ Clique em "Enviar" ou "Baixar" abaixo para autenticar no Firebase e ativar a sincronização permanente.';
+            modalStatusEl.textContent = 'Desconectado.';
           }
         } else {
           iconEl.textContent = '☁️';
-          labelEl.textContent = labelText || 'Tempo Real Ativo';
+          labelEl.textContent = 'Conectado';
           btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 text-emerald-100 transition flex items-center gap-1.5 cursor-pointer';
           if (modalStatusEl) {
-            modalStatusEl.textContent = `☁️ Conectado permanentemente ao Firebase (${firebaseConfig.projectId}). Última gravação: ${state.lastUpdated || 'agora'}.`;
+            modalStatusEl.textContent = `Conectado. Última gravação: ${state.lastUpdated || 'agora'}`;
           }
         }
       }
@@ -3013,11 +2515,16 @@
           if (snap && snap.exists) {
             const cloudData = snap.data();
             if (cloudData && Array.isArray(cloudData.plans)) {
+              const needsPurgePush = !cloudData.sampleDataPurgedV3;
+              sanitizeLegacySampleData(cloudData);
               isApplyingRemoteSnapshot = true;
               localStorage.setItem(getUserStorageKey(currentUser.email), JSON.stringify(cloudData));
               state = loadState();
               renderAll();
               isApplyingRemoteSnapshot = false;
+              if (needsPurgePush) {
+                pushStateToFirestoreNow(false);
+              }
               setCloudSyncHeaderState('ok', 'Sincronizado');
               if (showSuccessToast) {
                 showToast(`Dados atualizados do Firebase (${state.habits.length} hábitos • ${state.tasks.length} tarefas)!`, '⬇️');
@@ -3053,16 +2560,21 @@
           }
           const cloudData = docSnap.data();
           if (!cloudData || !Array.isArray(cloudData.plans)) return;
+          const needsPurgePush = !cloudData.sampleDataPurgedV3;
+          sanitizeLegacySampleData(cloudData);
           const cloudMs = Number(cloudData.updatedAtMs || 0);
           const localMs = Number(state.updatedAtMs || 0);
 
-          if (cloudMs > localMs) {
+          if (cloudMs > localMs || needsPurgePush) {
             isApplyingRemoteSnapshot = true;
             localStorage.setItem(getUserStorageKey(currentUser.email), JSON.stringify(cloudData));
             state = loadState();
             renderAll();
             isApplyingRemoteSnapshot = false;
-            setCloudSyncHeaderState('ok', 'Sincronizado');
+            setCloudSyncHeaderState('ok', 'Conectado');
+            if (needsPurgePush) {
+              pushStateToFirestoreNow(false);
+            }
           } else if (localMs > cloudMs && ! docSnap.metadata.hasPendingWrites) {
             // Os dados locais deste aparelho (ex.: PC) são mais novos que os da nuvem -> atualiza a nuvem automaticamente!
             pushStateToFirestoreNow(false);
@@ -3466,6 +2978,7 @@
                 uid: fbUser.uid,
                 name: fbUser.displayName || 'Minha Conta Google',
                 email: (fbUser.email || 'usuario@gmail.com').toLowerCase(),
+                photoURL: fbUser.photoURL || '',
                 driveFolder: 'Firebase Firestore',
                 isFirebaseAuth: true,
                 createdAt: TODAY_STR
@@ -3502,14 +3015,30 @@
         const badge = document.getElementById('headerUserBadge');
         badge.classList.remove('hidden');
         badge.classList.add('flex');
-        document.getElementById('headerUserAvatar').textContent = (accountObj.name || accountObj.email || 'G').charAt(0).toUpperCase();
+
+        const photoEl = document.getElementById('headerUserPhoto');
+        const avatarSpan = document.getElementById('headerUserAvatar');
+        avatarSpan.textContent = (accountObj.name || accountObj.email || 'G').charAt(0).toUpperCase();
+        if (photoEl && accountObj.photoURL) {
+          photoEl.src = accountObj.photoURL;
+          photoEl.classList.remove('hidden');
+          avatarSpan.classList.add('hidden');
+          photoEl.onerror = () => {
+            photoEl.classList.add('hidden');
+            avatarSpan.classList.remove('hidden');
+          };
+        } else if (photoEl) {
+          photoEl.classList.add('hidden');
+          avatarSpan.classList.remove('hidden');
+        }
+
         document.getElementById('headerUserName').textContent = accountObj.name || 'Usuário Google';
         document.getElementById('headerUserEmail').textContent = accountObj.email;
         document.getElementById('btnLogoutAccount').classList.remove('hidden');
 
         openHomeView();
         if (!isSilentRestore) {
-          showToast(`Conectado permanentemente como ${accountObj.name} (${accountObj.email})!`, '🔒');
+          showToast(`Conectado como ${accountObj.name}!`, '🔒');
         }
       }
 
@@ -3761,48 +3290,30 @@
       function renderPlatformModeUI() {
         const detectedMode = detectDeviceLayoutMode();
         state.platformMode = detectedMode;
-        const isMobile = detectedMode === 'mobile';
-        const isTablet = detectedMode === 'tablet';
 
         const appContainer = document.getElementById('appContainer');
         const desktopPlanCard = document.getElementById('desktopPlanEditorCard');
         const mobileQuickPlan = document.getElementById('mobileQuickAddPlan');
         const desktopHabitCard = document.getElementById('desktopHabitEditorCard');
 
-        if (isMobile) {
-          appContainer.className = 'flex-1 max-w-md w-full mx-auto px-3 py-4 transition-all duration-300';
-          desktopPlanCard.classList.add('hidden');
-          mobileQuickPlan.classList.remove('hidden');
-          desktopHabitCard.classList.add('hidden');
+        // Todas as funcionalidades completas ficam liberadas em Celular, Tablet e Desktop!
+        appContainer.className = 'flex-1 max-w-7xl w-full mx-auto px-3 sm:px-4 py-4 sm:py-6 transition-all duration-300';
+        desktopPlanCard.classList.remove('hidden');
+        mobileQuickPlan.classList.add('hidden');
+        desktopHabitCard.classList.remove('hidden');
+        if (state.marketOneHandMode) {
           document.getElementById('desktopShoppingEditorCard').classList.add('hidden');
           document.getElementById('mobileShoppingQuickBar').classList.remove('hidden');
-          document.getElementById('desktopTaskEditorCard').classList.add('hidden');
-          document.getElementById('mobileTaskQuickBar').classList.remove('hidden');
-          document.getElementById('desktopFinanceEditorCard').classList.add('hidden');
-          document.getElementById('mobileFinanceQuickBar').classList.remove('hidden');
-          document.getElementById('desktopWishlistEditorCard').classList.add('hidden');
-          document.getElementById('desktopPantryEditorCard').classList.add('hidden');
         } else {
-          appContainer.className = isTablet
-            ? 'flex-1 max-w-7xl w-full mx-auto px-4 py-5 transition-all duration-300'
-            : 'flex-1 max-w-7xl w-full mx-auto px-4 py-6 transition-all duration-300';
-          desktopPlanCard.classList.remove('hidden');
-          mobileQuickPlan.classList.add('hidden');
-          desktopHabitCard.classList.remove('hidden');
-          if (state.marketOneHandMode) {
-            document.getElementById('desktopShoppingEditorCard').classList.add('hidden');
-            document.getElementById('mobileShoppingQuickBar').classList.remove('hidden');
-          } else {
-            document.getElementById('desktopShoppingEditorCard').classList.remove('hidden');
-            document.getElementById('mobileShoppingQuickBar').classList.add('hidden');
-          }
-          document.getElementById('desktopTaskEditorCard').classList.remove('hidden');
-          document.getElementById('mobileTaskQuickBar').classList.add('hidden');
-          document.getElementById('desktopFinanceEditorCard').classList.remove('hidden');
-          document.getElementById('mobileFinanceQuickBar').classList.add('hidden');
-          document.getElementById('desktopWishlistEditorCard').classList.remove('hidden');
-          document.getElementById('desktopPantryEditorCard').classList.remove('hidden');
+          document.getElementById('desktopShoppingEditorCard').classList.remove('hidden');
+          document.getElementById('mobileShoppingQuickBar').classList.add('hidden');
         }
+        document.getElementById('desktopTaskEditorCard').classList.remove('hidden');
+        document.getElementById('mobileTaskQuickBar').classList.add('hidden');
+        document.getElementById('desktopFinanceEditorCard').classList.remove('hidden');
+        document.getElementById('mobileFinanceQuickBar').classList.add('hidden');
+        document.getElementById('desktopWishlistEditorCard').classList.remove('hidden');
+        document.getElementById('desktopPantryEditorCard').classList.remove('hidden');
       }
 
       // Render Home Screen Summary & Modular Cards
@@ -4214,7 +3725,7 @@
                 </button>
               </div>
               ${
-                state.platformMode !== 'mobile'
+                true
                   ? `<div class="flex items-center gap-2">
                        <button type="button" data-habit-edit="${habit.id}" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">Editar</button>
                        <button type="button" data-habit-del="${habit.id}" class="text-xs font-medium text-rose-600 hover:text-rose-800 cursor-pointer">Excluir</button>
@@ -4439,7 +3950,7 @@
                   ⏭️ Adiar para amanhã
                 </button>
                 ${
-                  state.platformMode !== 'mobile'
+                  true
                     ? `<div class="flex items-center gap-2">
                         <button type="button" data-plan-edit="${plan.id}" class="font-semibold text-indigo-600 hover:text-indigo-800">Editar</button>
                         <button type="button" data-plan-del="${plan.id}" class="font-semibold text-rose-600 hover:text-rose-800">Excluir</button>
@@ -4730,7 +4241,7 @@
                   <button type="button" data-shop-qty-inc="${item.id}" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">+</button>
                   <button type="button" data-shop-chart="${item.name}" class="ml-1 px-2 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[11px] font-semibold">📈 Preços</button>
                   ${
-                    state.platformMode !== 'mobile' && !state.marketOneHandMode
+                    !state.marketOneHandMode
                       ? `<button type="button" data-shop-edit="${item.id}" class="ml-1 text-xs font-semibold text-indigo-600 hover:text-indigo-800">Editar</button>
                          <button type="button" data-shop-del="${item.id}" class="ml-1 text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
                       : ''
@@ -5172,7 +4683,7 @@
             <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
               <span>Última vez: <strong>${task.lastDone || '—'}</strong> • Próxima: <strong>${task.nextDue || '—'}</strong></span>
               ${
-                state.platformMode !== 'mobile'
+                true
                   ? `<div class="flex items-center gap-2">
                        <button type="button" data-task-edit="${task.id}" class="font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">Editar</button>
                        <button type="button" data-task-del="${task.id}" class="font-semibold text-rose-600 hover:text-rose-800 cursor-pointer">Excluir</button>
@@ -5321,7 +4832,7 @@
                   ${isIncome ? '+' : '-'} ${formatCurrencyBRL(tx.amount)}
                 </span>
                 ${
-                  state.platformMode !== 'mobile'
+                  true
                     ? `<button type="button" data-tx-del="${tx.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
                     : ''
                 }
@@ -5341,12 +4852,43 @@
           });
         });
 
-        // 2. Fixed Bills List
+        // Sync custom budget categories into Finance Category Select dropdowns
+        const baseFinCategories = [
+          'Supermercado & Feira',
+          'Moradia & Contas',
+          'Transporte',
+          'Saúde & Farmácia',
+          'Lazer & Outros',
+          'Renda / Salário'
+        ];
+        state.budgets.forEach(b => {
+          if (b.category && !baseFinCategories.includes(b.category)) {
+            baseFinCategories.push(b.category);
+          }
+        });
+        const finCatSelect = document.getElementById('finCategoryInput');
+        const finCatFilterSelect = document.getElementById('selectFinanceCategoryFilter');
+        if (finCatSelect) {
+          const curVal = finCatSelect.value;
+          finCatSelect.innerHTML = baseFinCategories.map(c => `<option value="${c}">${c}</option>`).join('');
+          if (curVal && baseFinCategories.includes(curVal)) finCatSelect.value = curVal;
+        }
+        if (finCatFilterSelect) {
+          const curFilter = state.financeCategoryFilter || 'ALL';
+          finCatFilterSelect.innerHTML = `<option value="ALL">Todas as Categorias</option>` +
+            baseFinCategories.map(c => `<option value="${c}">${c}</option>`).join('');
+          finCatFilterSelect.value = baseFinCategories.includes(curFilter) ? curFilter : 'ALL';
+        }
+
+        // 2. Fixed Bills List (with Delete button)
         const billsList = document.getElementById('fixedBillsList');
         billsList.innerHTML = '';
+        if (state.fixedBills.length === 0) {
+          billsList.innerHTML = `<div class="md:col-span-2 p-6 text-center text-xs text-slate-400 border border-dashed border-slate-200 rounded-xl">Nenhuma conta fixa cadastrada. Use o formulário acima para adicionar seus boletos mensais.</div>`;
+        }
         state.fixedBills.forEach(bill => {
           const card = document.createElement('div');
-          card.className = `p-4 rounded-xl border flex items-center justify-between gap-3 ${
+          card.className = `p-4 rounded-xl border flex flex-wrap items-center justify-between gap-3 ${
             bill.paid ? 'bg-emerald-50/50 border-emerald-200' : 'bg-white border-slate-200'
           }`;
           card.innerHTML = `
@@ -5360,12 +4902,15 @@
               <p class="text-sm font-bold text-slate-800 mt-1">${formatCurrencyBRL(bill.amount)}</p>
             </div>
             <div class="flex items-center gap-2">
-              <button type="button" data-bill-toggle="${bill.id}" class="px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
+              <button type="button" data-bill-toggle="${bill.id}" class="px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
                 bill.paid
                   ? 'bg-slate-200 text-slate-700 hover:bg-slate-300'
                   : 'bg-emerald-600 text-white hover:bg-emerald-500 shadow-xs'
               }">
                 ${bill.paid ? 'Reabrir' : 'Marcar como Pago'}
+              </button>
+              <button type="button" data-bill-del="${bill.id}" class="px-2.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold transition cursor-pointer">
+                Excluir
               </button>
             </div>
           `;
@@ -5395,10 +4940,23 @@
           });
         });
 
-        // 3. Budget Progress Bars
+        billsList.querySelectorAll('[data-bill-del]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-bill-del');
+            state.fixedBills = state.fixedBills.filter(b => b.id !== id);
+            saveState();
+            renderAll();
+            showToast('Conta fixa excluída.', '🗑️');
+          });
+        });
+
+        // 3. Budget Progress Bars (with inline Limit Edit & Category Delete)
         const budgetsEl = document.getElementById('budgetBarsContainer');
         budgetsEl.innerHTML = '';
-        state.budgets.forEach(b => {
+        if (state.budgets.length === 0) {
+          budgetsEl.innerHTML = `<div class="p-6 text-center text-xs text-slate-400 border border-dashed border-slate-200 rounded-xl">Nenhuma categoria de orçamento cadastrada. Crie suas categorias e tetos mensais acima.</div>`;
+        }
+        state.budgets.forEach((b, idx) => {
           const spent = state.transactions
             .filter(t => t.type === 'Despesa' && t.category === b.category)
             .reduce((acc, t) => acc + Number(t.amount || 0), 0);
@@ -5406,17 +4964,55 @@
           const barColor = pct > 90 ? 'bg-rose-600' : pct > 70 ? 'bg-amber-500' : 'bg-emerald-500';
 
           const row = document.createElement('div');
-          row.className = 'p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-2';
+          row.className = 'p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-2.5';
           row.innerHTML = `
-            <div class="flex items-center justify-between text-xs sm:text-sm">
-              <span class="font-bold text-slate-800">${b.category}</span>
-              <span class="font-semibold text-slate-700">${formatCurrencyBRL(spent)} de ${formatCurrencyBRL(b.limit)} (${pct}%)</span>
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+              <div>
+                <span class="font-bold text-slate-800">${b.category}</span>
+                <span class="ml-2 text-xs text-slate-500">Gasto: <strong>${formatCurrencyBRL(spent)}</strong> (${pct}%)</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <label class="text-[11px] font-semibold text-slate-500">Teto R$:</label>
+                <input type="number" step="0.01" min="1" data-budget-limit-input="${idx}" value="${Number(b.limit || 0)}" class="w-28 px-2.5 py-1 rounded-lg border border-slate-300 text-xs font-bold text-slate-800 bg-white" />
+                <button type="button" data-budget-save="${idx}" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition cursor-pointer">
+                  Salvar
+                </button>
+                <button type="button" data-budget-del="${idx}" class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold transition cursor-pointer">
+                  Excluir
+                </button>
+              </div>
             </div>
             <div class="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
               <div class="h-full ${barColor} transition-all duration-300" style="width: ${pct}%"></div>
             </div>
           `;
           budgetsEl.appendChild(row);
+        });
+
+        budgetsEl.querySelectorAll('[data-budget-save]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.getAttribute('data-budget-save'), 10);
+            const inp = budgetsEl.querySelector(`[data-budget-limit-input="${idx}"]`);
+            if (!inp || !state.budgets[idx]) return;
+            const newLimit = parseFloat(inp.value);
+            if (!newLimit || newLimit <= 0) return;
+            state.budgets[idx].limit = newLimit;
+            saveState();
+            renderAll();
+            showToast(`Teto de "${state.budgets[idx].category}" atualizado para ${formatCurrencyBRL(newLimit)}!`, '🎯');
+          });
+        });
+
+        budgetsEl.querySelectorAll('[data-budget-del]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.getAttribute('data-budget-del'), 10);
+            if (!state.budgets[idx]) return;
+            const removedName = state.budgets[idx].category;
+            state.budgets.splice(idx, 1);
+            saveState();
+            renderAll();
+            showToast(`Categoria "${removedName}" removida do orçamento.`, '🗑️');
+          });
         });
       }
 
@@ -5649,7 +5245,7 @@
                 </button>
               </div>
               ${
-                state.platformMode !== 'mobile'
+                true
                   ? `<button type="button" data-wish-del="${item.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
                   : ''
               }
@@ -5742,7 +5338,7 @@
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
               <span class="font-bold text-slate-800">${formatCurrencyBRL(w.pricePaid || 0)}</span>
               ${
-                state.platformMode !== 'mobile'
+                true
                   ? `<button type="button" data-war-del="${w.id}" class="text-rose-600 hover:text-rose-800 font-semibold">Remover</button>`
                   : ''
               }
@@ -5777,15 +5373,30 @@
               <p class="text-xs text-slate-500 mt-1">Última execução: <strong>${formatPtDate(m.lastDone)}</strong> • Próxima: <strong>${formatPtDate(m.nextDue)}</strong></p>
             </div>
             <div class="pt-2.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
-              <button type="button" data-maint-done="${m.id}" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition">
-                ✓ Concluir Revisão Hoje
-              </button>
-              <button type="button" data-maint-to-task="${m.id}" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
-                📌 Enviar p/ Tarefas (Mód. 3)
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button type="button" data-maint-done="${m.id}" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition cursor-pointer">
+                  ✓ Concluir Revisão Hoje
+                </button>
+                <button type="button" data-maint-to-task="${m.id}" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer">
+                  📌 Enviar p/ Tarefas
+                </button>
+              </div>
+              <button type="button" data-maint-del="${m.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800 cursor-pointer">
+                Excluir
               </button>
             </div>
           `;
           maintGrid.appendChild(card);
+        });
+
+        maintGrid.querySelectorAll('[data-maint-del]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-maint-del');
+            state.maintenanceCycles = state.maintenanceCycles.filter(x => x.id !== id);
+            saveState();
+            renderAll();
+            showToast('Ciclo de manutenção excluído.', '🗑️');
+          });
         });
 
         maintGrid.querySelectorAll('[data-maint-done]').forEach(btn => {
@@ -5907,7 +5518,7 @@
                   🛒 +Lista
                 </button>
                 ${
-                  state.platformMode !== 'mobile'
+                  true
                     ? `<button type="button" data-pantry-del="${item.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
                     : ''
                 }
@@ -5969,38 +5580,65 @@
           });
         });
 
-        // 2. Render Weekly Menu Grid
+        // 2. Render Weekly Menu Grid (4 Meals per day via <select> from saved recipes)
         const menuGrid = document.getElementById('weeklyMenuGrid');
         menuGrid.innerHTML = '';
+        const mealSlots = [
+          { key: 'breakfast', label: '☕ Café da Manhã' },
+          { key: 'lunch', label: '☀️ Almoço' },
+          { key: 'snack', label: '🥪 Lanche' },
+          { key: 'dinner', label: '🌙 Jantar' }
+        ];
+        const savedRecipeTitles = state.recipes.map(r => r.title);
+
+        function buildMealSelectOptions(selectedVal) {
+          const cur = (selectedVal || '').trim();
+          const placeholder = savedRecipeTitles.length > 0
+            ? '— Selecionar refeição —'
+            : '— Cadastre refeições abaixo —';
+          let htmlOpts = `<option value="">${placeholder}</option>`;
+          if (cur && !savedRecipeTitles.includes(cur)) {
+            htmlOpts += `<option value="${cur.replace(/"/g, '&quot;')}" selected>${cur}</option>`;
+          }
+          savedRecipeTitles.forEach(title => {
+            const esc = title.replace(/"/g, '&quot;');
+            const sel = title === cur ? 'selected' : '';
+            htmlOpts += `<option value="${esc}" ${sel}>${title}</option>`;
+          });
+          return htmlOpts;
+        }
+
         state.weeklyMenu.forEach((dayObj, idx) => {
           const card = document.createElement('div');
           card.className = 'p-3.5 rounded-xl border border-slate-200 bg-slate-50 flex flex-col justify-between gap-2';
+          const selectsHtml = mealSlots.map(slot => `
+            <div>
+              <label class="block text-[10px] font-bold uppercase text-slate-500">${slot.label}</label>
+              <select data-menu-edit="${idx}|${slot.key}" class="mt-0.5 w-full px-2 py-1.5 rounded-lg border border-slate-200 bg-white text-xs text-slate-800 font-medium cursor-pointer">
+                ${buildMealSelectOptions(dayObj[slot.key])}
+              </select>
+            </div>
+          `).join('');
+
           card.innerHTML = `
             <div>
               <p class="text-xs font-bold uppercase tracking-wider text-emerald-800 border-b border-slate-200 pb-1.5 mb-2">${dayObj.day}</p>
               <div class="space-y-2">
-                <div>
-                  <label class="block text-[10px] font-bold uppercase text-slate-400">☀️ Almoço</label>
-                  <input type="text" data-menu-edit="${idx}|lunch" value="${dayObj.lunch}" class="mt-0.5 w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs text-slate-800 font-medium" />
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold uppercase text-slate-400">🌙 Jantar</label>
-                  <input type="text" data-menu-edit="${idx}|dinner" value="${dayObj.dinner}" class="mt-0.5 w-full px-2 py-1 rounded border border-slate-200 bg-white text-xs text-slate-800 font-medium" />
-                </div>
+                ${selectsHtml}
               </div>
             </div>
           `;
           menuGrid.appendChild(card);
         });
 
-        menuGrid.querySelectorAll('[data-menu-edit]').forEach(inp => {
-          inp.addEventListener('change', () => {
-            const [idxStr, mealKey] = inp.getAttribute('data-menu-edit').split('|');
+        menuGrid.querySelectorAll('[data-menu-edit]').forEach(sel => {
+          sel.addEventListener('change', () => {
+            const [idxStr, mealKey] = sel.getAttribute('data-menu-edit').split('|');
             const idx = parseInt(idxStr, 10);
             if (state.weeklyMenu[idx]) {
-              state.weeklyMenu[idx][mealKey] = inp.value.trim();
+              state.weeklyMenu[idx][mealKey] = sel.value;
               saveState();
-              showToast(`Cardápio de ${state.weeklyMenu[idx].day} salvo!`, '🍽️');
+              showToast(`Cardápio de ${state.weeklyMenu[idx].day} atualizado!`, '🍽️');
             }
           });
         });
@@ -6031,7 +5669,7 @@
                 🛒 Enviar Faltantes p/ Lista de Compras
               </button>
               ${
-                state.platformMode !== 'mobile'
+                true
                   ? `<button type="button" data-recipe-del="${rc.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
                   : ''
               }
@@ -6893,6 +6531,28 @@
           showToast('Gasto rápido registrado!', '📱');
         });
 
+        const formBudgetEl = document.getElementById('formAddBudgetCategory');
+        if (formBudgetEl) {
+          formBudgetEl.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const catName = document.getElementById('budgetCatNameInput').value.trim();
+            const limitVal = parseFloat(document.getElementById('budgetCatLimitInput').value);
+            if (!catName || !limitVal || limitVal <= 0) return;
+            const existing = state.budgets.find(b => b.category.toLowerCase() === catName.toLowerCase());
+            if (existing) {
+              existing.limit = limitVal;
+              showToast(`Teto da categoria "${existing.category}" atualizado para ${formatCurrencyBRL(limitVal)}!`, '🎯');
+            } else {
+              state.budgets.push({ category: catName, limit: limitVal });
+              showToast(`Nova categoria "${catName}" (${formatCurrencyBRL(limitVal)}) adicionada ao orçamento!`, '🎯');
+            }
+            document.getElementById('budgetCatNameInput').value = '';
+            document.getElementById('budgetCatLimitInput').value = '';
+            saveState();
+            renderAll();
+          });
+        }
+
         document.getElementById('formAddFixedBill').addEventListener('submit', (e) => {
           e.preventDefault();
           const name = document.getElementById('billNameInput').value.trim();
@@ -7252,6 +6912,7 @@
                 uid: fbUser.uid,
                 name: fbUser.displayName || (currentUser && currentUser.name) || 'Minha Conta Google',
                 email: (fbUser.email || (currentUser && currentUser.email) || 'usuario@gmail.com').toLowerCase(),
+                photoURL: fbUser.photoURL || (currentUser && currentUser.photoURL) || '',
                 driveFolder: 'Firebase Firestore',
                 isFirebaseAuth: true,
                 createdAt: TODAY_STR
