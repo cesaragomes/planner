@@ -293,22 +293,22 @@
           🏠 Início
         </button>
         <button type="button" data-nav-cat="mod1" class="px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer text-white/85 hover:bg-white/10">
-          📅 1. Planos & Hábitos
+          📅 Planos & Hábitos
         </button>
         <button type="button" data-nav-cat="mod2" class="px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer text-white/85 hover:bg-white/10">
-          🛒 2. Compras
+          🛒 Compras
         </button>
         <button type="button" data-nav-cat="mod3" class="px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer text-white/85 hover:bg-white/10">
-          🧹 3. Tarefas da Casa
+          🧹 Tarefas da Casa
         </button>
         <button type="button" data-nav-cat="mod4" class="px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer text-white/85 hover:bg-white/10">
-          💰 4. Gastos & Contas
+          💰 Gastos & Contas
         </button>
         <button type="button" data-nav-cat="mod5" class="px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer text-white/85 hover:bg-white/10">
-          🏠 5. Aquisições
+          🏠 Aquisições
         </button>
         <button type="button" data-nav-cat="mod6" class="px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer text-white/85 hover:bg-white/10">
-          🍲 6. Despensa & Cardápio
+          🍲 Despensa & Cardápio
         </button>
       </div>
     </div>
@@ -2580,12 +2580,12 @@
 
       const CATEGORY_THEME_META = {
         home: { label: '🏠 Início', accent: '#0f172a' },
-        mod1: { label: '📅 1. Planos & Hábitos', accent: '#059669' },
-        mod2: { label: '🛒 2. Compras & Mercado', accent: '#d97706' },
-        mod3: { label: '🧹 3. Tarefas da Casa', accent: '#0284c7' },
-        mod4: { label: '💰 4. Gastos & Contas', accent: '#4f46e5' },
-        mod5: { label: '🏠 5. Aquisições & Manutenção', accent: '#e11d48' },
-        mod6: { label: '🍲 6. Despensa & Cardápio', accent: '#0d9488' }
+        mod1: { label: '📅 Planos & Hábitos', accent: '#059669' },
+        mod2: { label: '🛒 Compras', accent: '#d97706' },
+        mod3: { label: '🧹 Tarefas da Casa', accent: '#0284c7' },
+        mod4: { label: '💰 Gastos & Contas', accent: '#4f46e5' },
+        mod5: { label: '🏠 Aquisições', accent: '#e11d48' },
+        mod6: { label: '🍲 Despensa & Cardápio', accent: '#0d9488' }
       };
 
       function applyCategoryTheme(catKey) {
@@ -3997,21 +3997,16 @@
         };
 
         state.modules.forEach(mod => {
-          // 1. Update Top Category Bar button text & visibility
+          // Mantém o nome fixo da categoria na barra de abas superior (controlando apenas visibilidade)
           const navBtn = document.querySelector(`#minimalCategoryNav [data-nav-cat="${mod.id}"]`);
           if (navBtn) {
-            navBtn.textContent = `${mod.icon} ${mod.title}`;
             if (mod.visible === false) {
               navBtn.classList.add('hidden');
             } else {
               navBtn.classList.remove('hidden');
             }
           }
-          // 2. Update Header Theme Meta label
-          if (CATEGORY_THEME_META[mod.id]) {
-            CATEGORY_THEME_META[mod.id].label = `${mod.icon} ${mod.title}`;
-          }
-          // 3. Update H1 inside the corresponding Module View
+          // Atualiza apenas o H1 interno do módulo (e o card na tela inicial via renderHomeScreen)
           const vId = viewIdMap[mod.id];
           if (vId) {
             const h1El = document.querySelector(`#${vId} h1`);
@@ -4020,12 +4015,6 @@
             }
           }
         });
-
-        const currentThemeKey = document.documentElement.getAttribute('data-category-theme') || 'home';
-        const pill = document.getElementById('activeCategoryHeaderPill');
-        if (pill && CATEGORY_THEME_META[currentThemeKey]) {
-          pill.textContent = CATEGORY_THEME_META[currentThemeKey].label;
-        }
       }
 
       // Customize Modules Modal (Rename, Reorder & Show/Hide)
