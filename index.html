@@ -2,7 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Prumo" />
+  <link id="pwaManifestLink" rel="manifest" href="manifest.json" />
   <title>Prumo — Gestão da Casa e Rotina</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -275,6 +281,10 @@
           <span id="cloudSyncIcon">☁️</span>
           <span id="cloudSyncLabel">Sincronizado</span>
         </button>
+        <button id="btnInstallPwaHeader" type="button" title="Instalar aplicativo Prumo no dispositivo" class="hidden px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition items-center gap-1.5 cursor-pointer shadow-2xs">
+          <span>📲</span>
+          <span>Instalar App</span>
+        </button>
         <button id="btnOpenBackupModal" type="button" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5 cursor-pointer">
           <span>💾</span>
           <span class="hidden sm:inline">Backup</span>
@@ -452,6 +462,40 @@
             <p class="text-[11px] font-medium text-slate-500">Tarefas da Casa</p>
             <p id="metricBackupStatus" class="text-base font-bold text-sky-600 mt-0.5">0 pendentes</p>
           </button>
+        </div>
+      </div>
+
+      <!-- Quick Today Check-in Card (Habits, Daily Plans & Household Tasks scheduled for Today) -->
+      <div id="homeTodayActionCard" class="rounded-2xl bg-white p-5 border border-slate-200/90 shadow-2xs space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-base">⚡</span>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight">Programado para Hoje</h2>
+              <span id="homeTodayProgressBadge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">0/0 concluídos</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">Marque rapidamente hábitos, compromissos e tarefas da casa do dia sem sair da tela inicial</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 cursor-pointer select-none bg-slate-50 px-2.5 py-1.5 rounded-xl border border-slate-200">
+              <input id="chkShowCompletedTodayHome" type="checkbox" checked class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
+              <span>Exibir já concluídos</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Filter Pills for Today's Items -->
+        <div id="homeTodayFilterPills" class="flex flex-wrap items-center gap-1.5 pt-1">
+          <button type="button" data-home-today-filter="ALL" class="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-900 text-white cursor-pointer transition">Todos de Hoje</button>
+          <button type="button" data-home-today-filter="HABITS" class="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer transition">🔥 Hábitos</button>
+          <button type="button" data-home-today-filter="PLANS" class="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer transition">📅 Planos do Dia</button>
+          <button type="button" data-home-today-filter="TASKS" class="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer transition">🧹 Tarefas da Casa</button>
+        </div>
+
+        <!-- Dynamic List of Today's Scheduled Items -->
+        <div id="homeTodayItemsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5">
+          <!-- Rendered dynamically by renderHomeTodayQuickCheck() -->
         </div>
       </div>
 
@@ -1999,6 +2043,25 @@
         </label>
       </div>
 
+      <!-- PWA Android Installation Helper -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5">
+        <div class="flex items-center justify-between gap-2">
+          <p class="text-xs font-bold text-slate-800">📱 Instalação como Aplicativo no Android (PWA)</p>
+          <span id="pwaInstallStatusBadge" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Pronto p/ PWA</span>
+        </div>
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          Para o Android instalar o <strong>Prumo</strong> como aplicativo completo (e não apenas atalho), coloque os arquivos <code class="bg-white px-1 py-0.5 rounded border border-slate-200">manifest.json</code> e <code class="bg-white px-1 py-0.5 rounded border border-slate-200">sw.js</code> na mesma pasta do seu <code class="bg-white px-1 py-0.5 rounded border border-slate-200">index.html</code> (ex.: no GitHub Pages).
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+          <button id="btnDownloadPwaManifest" type="button" class="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition cursor-pointer">
+            ⬇️ Baixar manifest.json
+          </button>
+          <button id="btnDownloadPwaSw" type="button" class="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition cursor-pointer">
+            ⬇️ Baixar sw.js (Service Worker)
+          </button>
+        </div>
+      </div>
+
       <div class="flex items-center justify-end pt-2 border-t border-slate-100 text-xs text-slate-500">
         <button id="btnDoneBackupModal" type="button" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold hover:bg-slate-800 cursor-pointer">
           Fechar
@@ -3409,6 +3472,226 @@
             }
           });
         });
+
+        renderHomeTodayQuickCheck();
+      }
+
+      function isTaskScheduledForToday(task) {
+        if (!task) return false;
+        const todayWeekday = getDayOfWeekIndex(TODAY_STR);
+        const hasCustomDays = Array.isArray(task.customDays) && task.customDays.length > 0;
+        if (hasCustomDays && task.customDays.includes(todayWeekday)) return true;
+        if (task.nextDue === TODAY_STR) return true;
+        if (task.lastDone === TODAY_STR) return true;
+        if (task.frequency === 'Diária') return true;
+        if (task.type === 'Pontual' && !task.done) return true;
+        if (task.frequency === 'Toda Segunda' && todayWeekday === 1) return true;
+        return false;
+      }
+
+      function toggleTaskDoneById(taskId) {
+        const task = state.tasks.find(t => t.id === taskId);
+        if (!task) return;
+        task.done = !task.done;
+        if (task.done) {
+          task.lastDone = TODAY_STR;
+          if (Array.isArray(task.customDays) && task.customDays.length > 0) {
+            task.nextDue = getNextScheduledDateForCustomDays(task.customDays, TODAY_STR);
+          } else {
+            const daysToAdd = (task.frequency || '').includes('15')
+              ? 15
+              : (task.frequency || '').includes('30')
+              ? 30
+              : (task.frequency || '').includes('Diária')
+              ? 1
+              : 7;
+            task.nextDue = addDaysStr(TODAY_STR, daysToAdd);
+          }
+          showToast(`Tarefa "${task.title}" concluída! Próxima: ${formatPtDate(task.nextDue)}`, '🧹');
+        }
+        saveState();
+        renderAll();
+      }
+
+      function renderHomeTodayQuickCheck() {
+        const container = document.getElementById('homeTodayItemsGrid');
+        const badgeEl = document.getElementById('homeTodayProgressBadge');
+        const chkCompleted = document.getElementById('chkShowCompletedTodayHome');
+        if (!container || !badgeEl) return;
+
+        const activeFilter = state.homeTodayFilter || 'ALL';
+        const showCompleted = state.homeShowCompletedToday !== false;
+        if (chkCompleted) chkCompleted.checked = showCompleted;
+
+        document.querySelectorAll('#homeTodayFilterPills [data-home-today-filter]').forEach(btn => {
+          const f = btn.getAttribute('data-home-today-filter');
+          btn.className = f === activeFilter
+            ? 'px-3 py-1 rounded-xl text-xs font-semibold bg-slate-900 text-white cursor-pointer transition'
+            : 'px-3 py-1 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer transition';
+        });
+
+        // Collect all items scheduled for TODAY_STR across Habits, Daily Plans, and Household Tasks
+        const unifiedItems = [];
+
+        // 1. Habits scheduled for today
+        state.habits.forEach(h => {
+          const curVal = (h.progressByDate && h.progressByDate[TODAY_STR]) || 0;
+          const targetVal = Number(h.target) || 1;
+          const isDone = curVal >= targetVal;
+          const isSched = isHabitScheduledForDate(h, TODAY_STR);
+          if (isSched || isDone) {
+            unifiedItems.push({
+              kind: 'HABITS',
+              id: h.id,
+              done: isDone,
+              title: h.title,
+              icon: h.icon || '🔥',
+              metaLabel: targetVal > 1 ? `Hábito • ${curVal}/${targetVal} hoje • 🔥 ${h.streak}` : `Hábito • 🔥 ${h.streak} seguidos`,
+              accentClass: 'border-emerald-200 bg-emerald-50/40 text-emerald-800',
+              targetVal,
+              curVal
+            });
+          }
+        });
+
+        // 2. Daily Plans for today
+        const shiftOrder = { 'Manhã': 1, 'Tarde': 2, 'Noite': 3 };
+        state.plans
+          .filter(p => p.date === TODAY_STR)
+          .sort((a, b) => (shiftOrder[a.shift] || 9) - (shiftOrder[b.shift] || 9) || (a.time || '99:99').localeCompare(b.time || '99:99'))
+          .forEach(p => {
+            const shiftIcon = p.shift === 'Manhã' ? '☀️' : p.shift === 'Tarde' ? '🌤️' : '🌙';
+            unifiedItems.push({
+              kind: 'PLANS',
+              id: p.id,
+              done: !!p.done,
+              title: p.title,
+              icon: shiftIcon,
+              metaLabel: `Plano (${p.shift}${p.time ? ' • ' + p.time : ''}) • ${p.category}`,
+              accentClass: 'border-amber-200 bg-amber-50/40 text-amber-800'
+            });
+          });
+
+        // 3. Household Tasks scheduled for today
+        state.tasks
+          .filter(t => isTaskScheduledForToday(t))
+          .forEach(t => {
+            const isDoneToday = !!t.done;
+            unifiedItems.push({
+              kind: 'TASKS',
+              id: t.id,
+              done: isDoneToday,
+              title: t.title,
+              icon: '🧹',
+              metaLabel: `Tarefa • ${t.room} (${t.type})`,
+              accentClass: 'border-sky-200 bg-sky-50/40 text-sky-800'
+            });
+          });
+
+        const totalScheduled = unifiedItems.length;
+        const totalDone = unifiedItems.filter(i => i.done).length;
+        badgeEl.textContent = `${totalDone}/${totalScheduled} concluídos hoje`;
+
+        const visibleItems = unifiedItems.filter(item => {
+          const matchesKind = activeFilter === 'ALL' || item.kind === activeFilter;
+          const matchesDone = showCompleted || !item.done;
+          return matchesKind && matchesDone;
+        });
+
+        // Sort pending items first, then completed
+        visibleItems.sort((a, b) => (a.done === b.done ? 0 : a.done ? 1 : -1));
+
+        container.innerHTML = '';
+
+        if (visibleItems.length === 0) {
+          container.innerHTML = `
+            <div class="md:col-span-2 lg:col-span-3 py-6 px-4 text-center rounded-xl border border-dashed border-slate-200 text-xs text-slate-500">
+              ${
+                totalScheduled === 0
+                  ? 'Nenhuma rotina, plano ou tarefa programada para hoje ainda. Adicione nos módulos abaixo!'
+                  : 'Tudo concluído neste filtro para hoje! 🎉'
+              }
+            </div>
+          `;
+          return;
+        }
+
+        visibleItems.forEach(item => {
+          const card = document.createElement('div');
+          card.className = `p-3 rounded-xl border transition flex items-center justify-between gap-2.5 ${
+            item.done
+              ? 'bg-slate-50/80 border-slate-200 opacity-75'
+              : 'bg-white border-slate-200 hover:border-emerald-400 shadow-2xs'
+          }`;
+
+          let actionControlsHtml = '';
+          if (item.kind === 'HABITS') {
+            actionControlsHtml = `
+              <div class="flex items-center gap-1 shrink-0">
+                ${
+                  item.targetVal > 1
+                    ? `<button type="button" data-home-habit-dec="${item.id}" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 cursor-pointer">-</button>`
+                    : ''
+                }
+                <button type="button" data-home-habit-inc="${item.id}" class="px-2.5 h-8 rounded-xl text-xs font-semibold transition cursor-pointer flex items-center gap-1 ${
+                  item.done
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-slate-900 hover:bg-emerald-600 text-white'
+                }">
+                  <span>${item.done ? '✓' : item.targetVal > 1 ? '+1' : '○'}</span>
+                  <span>${item.done ? 'Feito' : item.targetVal > 1 ? `${item.curVal}/${item.targetVal}` : 'Concluir'}</span>
+                </button>
+              </div>
+            `;
+          } else if (item.kind === 'PLANS') {
+            actionControlsHtml = `
+              <button type="button" data-home-plan-toggle="${item.id}" class="px-2.5 h-8 rounded-xl text-xs font-semibold transition cursor-pointer shrink-0 flex items-center gap-1 ${
+                item.done
+                  ? 'bg-emerald-600 text-white'
+                  : 'bg-slate-900 hover:bg-emerald-600 text-white'
+              }">
+                <span>${item.done ? '✓' : '○'}</span>
+                <span>${item.done ? 'Feito' : 'Concluir'}</span>
+              </button>
+            `;
+          } else {
+            actionControlsHtml = `
+              <button type="button" data-home-task-toggle="${item.id}" class="px-2.5 h-8 rounded-xl text-xs font-semibold transition cursor-pointer shrink-0 flex items-center gap-1 ${
+                item.done
+                  ? 'bg-emerald-600 text-white'
+                  : 'bg-slate-900 hover:bg-emerald-600 text-white'
+              }">
+                <span>${item.done ? '✓' : '○'}</span>
+                <span>${item.done ? 'Feita' : 'Concluir'}</span>
+              </button>
+            `;
+          }
+
+          card.innerHTML = `
+            <div class="flex items-center gap-2.5 min-w-0 flex-1">
+              <span class="text-lg shrink-0">${item.icon}</span>
+              <div class="min-w-0 flex-1">
+                <p class="text-xs sm:text-sm font-bold truncate ${item.done ? 'line-through text-slate-400' : 'text-slate-900'}">${item.title}</p>
+                <p class="text-[11px] text-slate-500 truncate mt-0.5">${item.metaLabel}</p>
+              </div>
+            </div>
+            ${actionControlsHtml}
+          `;
+          container.appendChild(card);
+        });
+
+        container.querySelectorAll('[data-home-habit-inc]').forEach(btn => {
+          btn.addEventListener('click', () => adjustHabitProgress(btn.getAttribute('data-home-habit-inc'), 1));
+        });
+        container.querySelectorAll('[data-home-habit-dec]').forEach(btn => {
+          btn.addEventListener('click', () => adjustHabitProgress(btn.getAttribute('data-home-habit-dec'), -1));
+        });
+        container.querySelectorAll('[data-home-plan-toggle]').forEach(btn => {
+          btn.addEventListener('click', () => togglePlanDone(btn.getAttribute('data-home-plan-toggle')));
+        });
+        container.querySelectorAll('[data-home-task-toggle]').forEach(btn => {
+          btn.addEventListener('click', () => toggleTaskDoneById(btn.getAttribute('data-home-task-toggle')));
+        });
       }
 
       // ==================== HABIT SCHEDULING & STREAK HELPERS ====================
@@ -4716,22 +4999,7 @@
 
         listEl.querySelectorAll('[data-task-toggle]').forEach(btn => {
           btn.addEventListener('click', () => {
-            const id = btn.getAttribute('data-task-toggle');
-            const task = state.tasks.find(t => t.id === id);
-            if (!task) return;
-            task.done = !task.done;
-            if (task.done) {
-              task.lastDone = TODAY_STR;
-              if (Array.isArray(task.customDays) && task.customDays.length > 0) {
-                task.nextDue = getNextScheduledDateForCustomDays(task.customDays, TODAY_STR);
-              } else {
-                const daysToAdd = task.frequency.includes('15') ? 15 : task.frequency.includes('30') ? 30 : task.frequency.includes('Diária') ? 1 : 7;
-                task.nextDue = addDaysStr(TODAY_STR, daysToAdd);
-              }
-              showToast(`Tarefa concluída! Próxima programação: ${formatPtDate(task.nextDue)}`, '🧹');
-            }
-            saveState();
-            renderAll();
+            toggleTaskDoneById(btn.getAttribute('data-task-toggle'));
           });
         });
 
@@ -5748,6 +6016,182 @@
       // Attach All Event Listeners
       window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('btnGoHomeTop').addEventListener('click', openHomeView);
+
+        // Home Today Quick-Check Filter Pills & Completed Toggle
+        document.querySelectorAll('#homeTodayFilterPills [data-home-today-filter]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            state.homeTodayFilter = btn.getAttribute('data-home-today-filter');
+            saveState();
+            renderHomeTodayQuickCheck();
+          });
+        });
+        const chkCompletedHome = document.getElementById('chkShowCompletedTodayHome');
+        if (chkCompletedHome) {
+          chkCompletedHome.addEventListener('change', (e) => {
+            state.homeShowCompletedToday = e.target.checked;
+            saveState();
+            renderHomeTodayQuickCheck();
+          });
+        }
+
+        // ==================== PWA / ANDROID WEBAPK SUPPORT ====================
+        function generatePrumoPngIconDataUrl(sizePx) {
+          try {
+            const c = document.createElement('canvas');
+            c.width = sizePx;
+            c.height = sizePx;
+            const ctx = c.getContext('2d');
+            // Rounded dark slate background
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, sizePx, sizePx);
+            // Emerald inner badge
+            const pad = Math.round(sizePx * 0.12);
+            ctx.fillStyle = '#059669';
+            ctx.fillRect(pad, pad, sizePx - pad * 2, sizePx - pad * 2);
+            // PR Monogram
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${Math.round(sizePx * 0.42)}px Inter, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('PR', sizePx / 2, sizePx / 2 + Math.round(sizePx * 0.02));
+            return c.toDataURL('image/png');
+          } catch (e) {
+            return '';
+          }
+        }
+
+        const icon192 = generatePrumoPngIconDataUrl(192);
+        const icon512 = generatePrumoPngIconDataUrl(512);
+        if (icon192) {
+          let appleIcon = document.querySelector('link[rel="apple-touch-icon"]');
+          if (!appleIcon) {
+            appleIcon = document.createElement('link');
+            appleIcon.rel = 'apple-touch-icon';
+            document.head.appendChild(appleIcon);
+          }
+          appleIcon.href = icon192;
+
+          let favIcon = document.querySelector('link[rel="icon"]');
+          if (!favIcon) {
+            favIcon = document.createElement('link');
+            favIcon.rel = 'icon';
+            favIcon.type = 'image/png';
+            document.head.appendChild(favIcon);
+          }
+          favIcon.href = icon192;
+        }
+
+        function getPrumoManifestJsonObject() {
+          return {
+            id: './',
+            name: 'Prumo — Gestão da Casa e Rotina',
+            short_name: 'Prumo',
+            description: 'Planeje seu dia, acompanhe hábitos, monte a lista de mercado e controle gastos e tarefas da casa.',
+            start_url: './index.html',
+            scope: './',
+            display: 'standalone',
+            orientation: 'portrait-primary',
+            background_color: '#0f172a',
+            theme_color: '#0f172a',
+            icons: [
+              {
+                src: icon192 || 'icon-192.png',
+                sizes: '192x192',
+                type: 'image/png',
+                purpose: 'any maskable'
+              },
+              {
+                src: icon512 || 'icon-512.png',
+                sizes: '512x512',
+                type: 'image/png',
+                purpose: 'any maskable'
+              }
+            ]
+          };
+        }
+
+        function getPrumoServiceWorkerCode() {
+          return [
+            "const CACHE_NAME = 'prumo-pwa-v1';",
+            "const ASSETS = ['./', './index.html', './manifest.json'];",
+            "self.addEventListener('install', (event) => {",
+            "  self.skipWaiting();",
+            "  event.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS).catch(() => {})));",
+            "});",
+            "self.addEventListener('activate', (event) => {",
+            "  event.waitUntil(self.clients.claim());",
+            "});",
+            "self.addEventListener('fetch', (event) => {",
+            "  if (event.request.method !== 'GET') return;",
+            "  event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));",
+            "});"
+          ].join('\n');
+        }
+
+        // Register ./sw.js when hosted on HTTPS (e.g. GitHub Pages)
+        if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+          navigator.serviceWorker.register('./sw.js').catch(() => {});
+        }
+
+        let deferredInstallPrompt = null;
+        const btnInstallHeader = document.getElementById('btnInstallPwaHeader');
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          deferredInstallPrompt = e;
+          if (btnInstallHeader) {
+            btnInstallHeader.classList.remove('hidden');
+            btnInstallHeader.classList.add('flex');
+          }
+          const badge = document.getElementById('pwaInstallStatusBadge');
+          if (badge) {
+            badge.textContent = 'Instalável Agora';
+          }
+        });
+
+        if (btnInstallHeader) {
+          btnInstallHeader.addEventListener('click', async () => {
+            if (!deferredInstallPrompt) return;
+            deferredInstallPrompt.prompt();
+            await deferredInstallPrompt.userChoice;
+            deferredInstallPrompt = null;
+            btnInstallHeader.classList.add('hidden');
+            btnInstallHeader.classList.remove('flex');
+          });
+        }
+
+        const btnDlManifest = document.getElementById('btnDownloadPwaManifest');
+        if (btnDlManifest) {
+          btnDlManifest.addEventListener('click', () => {
+            const manifestStr = JSON.stringify(getPrumoManifestJsonObject(), null, 2);
+            const blob = new Blob([manifestStr], { type: 'application/manifest+json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'manifest.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('manifest.json baixado! Coloque na mesma pasta do index.html.', '📱');
+          });
+        }
+
+        const btnDlSw = document.getElementById('btnDownloadPwaSw');
+        if (btnDlSw) {
+          btnDlSw.addEventListener('click', () => {
+            const swCode = getPrumoServiceWorkerCode();
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sw.js';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('sw.js baixado! Coloque na mesma pasta do index.html.', '⚙️');
+          });
+        }
         document.getElementById('btnBackToHome').addEventListener('click', openHomeView);
         document.getElementById('btnQuickOpenDayPlans').addEventListener('click', () => openModule1View('plans'));
 
