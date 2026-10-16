@@ -8,6 +8,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Prumo" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" href="favicon.ico" />
   <link id="pwaManifestLink" rel="manifest" href="manifest.json" />
   <title>Prumo — Gestão da Casa e Rotina</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
@@ -2041,25 +2044,6 @@
           <span>📂 Importar Arquivo (.json)</span>
           <input id="inputImportBackupFile" type="file" accept=".json,application/json" class="hidden" />
         </label>
-      </div>
-
-      <!-- PWA Android Installation Helper -->
-      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5">
-        <div class="flex items-center justify-between gap-2">
-          <p class="text-xs font-bold text-slate-800">📱 Instalação como Aplicativo no Android (PWA)</p>
-          <span id="pwaInstallStatusBadge" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Pronto p/ PWA</span>
-        </div>
-        <p class="text-[11px] text-slate-500 leading-relaxed">
-          Para o Android instalar o <strong>Prumo</strong> como aplicativo completo (e não apenas atalho), coloque os arquivos <code class="bg-white px-1 py-0.5 rounded border border-slate-200">manifest.json</code> e <code class="bg-white px-1 py-0.5 rounded border border-slate-200">sw.js</code> na mesma pasta do seu <code class="bg-white px-1 py-0.5 rounded border border-slate-200">index.html</code> (ex.: no GitHub Pages).
-        </p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-          <button id="btnDownloadPwaManifest" type="button" class="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition cursor-pointer">
-            ⬇️ Baixar manifest.json
-          </button>
-          <button id="btnDownloadPwaSw" type="button" class="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition cursor-pointer">
-            ⬇️ Baixar sw.js (Service Worker)
-          </button>
-        </div>
       </div>
 
       <div class="flex items-center justify-end pt-2 border-t border-slate-100 text-xs text-slate-500">
@@ -6035,100 +6019,6 @@
         }
 
         // ==================== PWA / ANDROID WEBAPK SUPPORT ====================
-        function generatePrumoPngIconDataUrl(sizePx) {
-          try {
-            const c = document.createElement('canvas');
-            c.width = sizePx;
-            c.height = sizePx;
-            const ctx = c.getContext('2d');
-            // Rounded dark slate background
-            ctx.fillStyle = '#0f172a';
-            ctx.fillRect(0, 0, sizePx, sizePx);
-            // Emerald inner badge
-            const pad = Math.round(sizePx * 0.12);
-            ctx.fillStyle = '#059669';
-            ctx.fillRect(pad, pad, sizePx - pad * 2, sizePx - pad * 2);
-            // PR Monogram
-            ctx.fillStyle = '#ffffff';
-            ctx.font = `bold ${Math.round(sizePx * 0.42)}px Inter, sans-serif`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('PR', sizePx / 2, sizePx / 2 + Math.round(sizePx * 0.02));
-            return c.toDataURL('image/png');
-          } catch (e) {
-            return '';
-          }
-        }
-
-        const icon192 = generatePrumoPngIconDataUrl(192);
-        const icon512 = generatePrumoPngIconDataUrl(512);
-        if (icon192) {
-          let appleIcon = document.querySelector('link[rel="apple-touch-icon"]');
-          if (!appleIcon) {
-            appleIcon = document.createElement('link');
-            appleIcon.rel = 'apple-touch-icon';
-            document.head.appendChild(appleIcon);
-          }
-          appleIcon.href = icon192;
-
-          let favIcon = document.querySelector('link[rel="icon"]');
-          if (!favIcon) {
-            favIcon = document.createElement('link');
-            favIcon.rel = 'icon';
-            favIcon.type = 'image/png';
-            document.head.appendChild(favIcon);
-          }
-          favIcon.href = icon192;
-        }
-
-        function getPrumoManifestJsonObject() {
-          return {
-            id: './',
-            name: 'Prumo — Gestão da Casa e Rotina',
-            short_name: 'Prumo',
-            description: 'Planeje seu dia, acompanhe hábitos, monte a lista de mercado e controle gastos e tarefas da casa.',
-            start_url: './index.html',
-            scope: './',
-            display: 'standalone',
-            orientation: 'portrait-primary',
-            background_color: '#0f172a',
-            theme_color: '#0f172a',
-            icons: [
-              {
-                src: icon192 || 'icon-192.png',
-                sizes: '192x192',
-                type: 'image/png',
-                purpose: 'any maskable'
-              },
-              {
-                src: icon512 || 'icon-512.png',
-                sizes: '512x512',
-                type: 'image/png',
-                purpose: 'any maskable'
-              }
-            ]
-          };
-        }
-
-        function getPrumoServiceWorkerCode() {
-          return [
-            "const CACHE_NAME = 'prumo-pwa-v1';",
-            "const ASSETS = ['./', './index.html', './manifest.json'];",
-            "self.addEventListener('install', (event) => {",
-            "  self.skipWaiting();",
-            "  event.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS).catch(() => {})));",
-            "});",
-            "self.addEventListener('activate', (event) => {",
-            "  event.waitUntil(self.clients.claim());",
-            "});",
-            "self.addEventListener('fetch', (event) => {",
-            "  if (event.request.method !== 'GET') return;",
-            "  event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));",
-            "});"
-          ].join('\n');
-        }
-
-        // Register ./sw.js when hosted on HTTPS (e.g. GitHub Pages)
         if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
           navigator.serviceWorker.register('./sw.js').catch(() => {});
         }
@@ -6141,10 +6031,6 @@
           if (btnInstallHeader) {
             btnInstallHeader.classList.remove('hidden');
             btnInstallHeader.classList.add('flex');
-          }
-          const badge = document.getElementById('pwaInstallStatusBadge');
-          if (badge) {
-            badge.textContent = 'Instalável Agora';
           }
         });
 
@@ -6159,39 +6045,6 @@
           });
         }
 
-        const btnDlManifest = document.getElementById('btnDownloadPwaManifest');
-        if (btnDlManifest) {
-          btnDlManifest.addEventListener('click', () => {
-            const manifestStr = JSON.stringify(getPrumoManifestJsonObject(), null, 2);
-            const blob = new Blob([manifestStr], { type: 'application/manifest+json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'manifest.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showToast('manifest.json baixado! Coloque na mesma pasta do index.html.', '📱');
-          });
-        }
-
-        const btnDlSw = document.getElementById('btnDownloadPwaSw');
-        if (btnDlSw) {
-          btnDlSw.addEventListener('click', () => {
-            const swCode = getPrumoServiceWorkerCode();
-            const blob = new Blob([swCode], { type: 'application/javascript' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'sw.js';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showToast('sw.js baixado! Coloque na mesma pasta do index.html.', '⚙️');
-          });
-        }
         document.getElementById('btnBackToHome').addEventListener('click', openHomeView);
         document.getElementById('btnQuickOpenDayPlans').addEventListener('click', () => openModule1View('plans'));
 
