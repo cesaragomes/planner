@@ -1,4 +1,4 @@
-const CACHE_NAME = 'prumo-pwa-v4';
+const CACHE_NAME = 'prumo-pwa-v5';
 const ASSETS = ['./', './index.html', './manifest.json', './favicon.ico'];
 
 self.addEventListener('install', (event) => {
