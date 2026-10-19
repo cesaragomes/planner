@@ -2099,6 +2099,18 @@
             </span>
           </div>
 
+          <div class="space-y-1">
+            <label for="inputFcmCustomDeviceName" class="block text-[11px] font-bold text-indigo-900">
+              Nome deste dispositivo (Ex.: Celular de Fulano, Notebook de Ciclano):
+            </label>
+            <div class="flex items-center gap-2">
+              <input id="inputFcmCustomDeviceName" type="text" maxlength="50" placeholder="Ex.: Celular de Fulano, Notebook de Ciclano..." class="flex-1 px-3 py-2 rounded-xl border border-indigo-200 text-xs font-semibold text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              <button id="btnSaveFcmDeviceNameOnly" type="button" class="px-3 py-2 rounded-xl bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-semibold text-xs transition cursor-pointer shrink-0">
+                ✏️ Salvar Nome
+              </button>
+            </div>
+          </div>
+
           <button id="btnBindFcmDevice" type="button" class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs">
             <span>📲</span>
             <span id="btnBindFcmDeviceLabel">Vincular Este Aparelho às Notificações na Nuvem</span>
@@ -6434,6 +6446,8 @@
           });
         }
 
+        let editingFcmDeviceIdx = null;
+
         function detectCurrentOsLabel() {
           const ua = navigator.userAgent || '';
           if (/iPhone|iPad|iPod/i.test(ua)) return 'iOS (PWA)';
@@ -6442,6 +6456,82 @@
           if (/Linux/i.test(ua)) return 'Linux';
           if (/Mac/i.test(ua)) return 'macOS';
           return 'Navegador Web';
+        }
+
+        function getUserFirstNameForDevice() {
+          if (currentUser && currentUser.name) {
+            const rawName = String(currentUser.name).trim();
+            if (rawName && rawName.toLowerCase() !== 'usuário' && rawName.toLowerCase() !== 'minha conta google') {
+              const first = rawName.split(/\s+/)[0];
+              if (first) return first.charAt(0).toUpperCase() + first.slice(1);
+            }
+          }
+          if (currentUser && currentUser.email) {
+            const prefix = String(currentUser.email).split('@')[0].replace(/[^a-zA-ZÀ-ÿ]/g, '');
+            if (prefix) return prefix.charAt(0).toUpperCase() + prefix.slice(1);
+          }
+          return 'Casa';
+        }
+
+        function isLegacyOsOnlyDeviceName(nameStr) {
+          const clean = String(nameStr || '').trim().toLowerCase();
+          return (
+            !clean ||
+            clean === 'windows' ||
+            clean === 'android' ||
+            clean === 'linux' ||
+            clean === 'macos' ||
+            clean === 'ios (pwa)' ||
+            clean === 'ios' ||
+            clean === 'navegador web' ||
+            clean === 'aparelho'
+          );
+        }
+
+        function buildFriendlyDeviceName(uaStr, rawOsHint) {
+          const firstName = getUserFirstNameForDevice();
+          const hint = String(rawOsHint || '').trim().toLowerCase();
+          const ua = String(uaStr || navigator.userAgent || '');
+
+          if (hint === 'android' || hint === 'ios (pwa)' || hint === 'ios') {
+            if (/iPad|Tablet|PlayBook|Silk/i.test(ua)) {
+              return `Tablet de ${firstName}`;
+            }
+            return `Celular de ${firstName}`;
+          }
+          if (hint === 'windows' || hint === 'linux' || hint === 'macos') {
+            return `Notebook de ${firstName}`;
+          }
+
+          if (/iPad|Tablet|PlayBook|Silk/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua))) {
+            return `Tablet de ${firstName}`;
+          }
+          if (/iPhone|iPod|Android|Mobile/i.test(ua)) {
+            return `Celular de ${firstName}`;
+          }
+          return `Notebook de ${firstName}`;
+        }
+
+        function getIconForFcmDeviceEntry(entry) {
+          const name = String((entry && entry.device) || '').toLowerCase();
+          const ua = String((entry && entry.userAgent) || '');
+          if (name.includes('tablet') || name.includes('ipad') || /iPad|Tablet/i.test(ua)) {
+            return '📲';
+          }
+          if (
+            name.includes('celular') ||
+            name.includes('telefone') ||
+            name.includes('iphone') ||
+            name.includes('android') ||
+            name.includes('galaxy') ||
+            name.includes('motorola') ||
+            name.includes('xiaomi') ||
+            name.includes('redmi') ||
+            /iPhone|iPod|Android|Mobile/i.test(ua)
+          ) {
+            return '📱';
+          }
+          return '💻';
         }
 
         function loadLocalFcmDeviceMeta() {
@@ -6457,6 +6547,92 @@
           try {
             localStorage.setItem(LOCAL_FCM_DEVICE_KEY, JSON.stringify(metaObj));
           } catch (e) {}
+        }
+
+        function upgradeLegacyDeviceNamesIfNeeded() {
+          let changed = false;
+          const localMeta = loadLocalFcmDeviceMeta();
+          if (localMeta && isLegacyOsOnlyDeviceName(localMeta.device)) {
+            localMeta.device = buildFriendlyDeviceName(navigator.userAgent, localMeta.device);
+            saveLocalFcmDeviceMeta(localMeta);
+          }
+          if (Array.isArray(state.fcmTokens)) {
+            state.fcmTokens.forEach((entry) => {
+              if (entry && isLegacyOsOnlyDeviceName(entry.device)) {
+                entry.device = buildFriendlyDeviceName(entry.userAgent || '', entry.device);
+                if (localMeta && localMeta.token === entry.token) {
+                  localMeta.device = entry.device;
+                  saveLocalFcmDeviceMeta(localMeta);
+                }
+                changed = true;
+              }
+            });
+          }
+          if (state.notificationSettings && isLegacyOsOnlyDeviceName(state.notificationSettings.fcmDeviceName)) {
+            state.notificationSettings.fcmDeviceName = (localMeta && localMeta.device) || buildFriendlyDeviceName(navigator.userAgent, '');
+          }
+          if (changed) {
+            saveState();
+          }
+        }
+
+        function getCurrentDevicePreferredName() {
+          const inp = document.getElementById('inputFcmCustomDeviceName');
+          if (inp && inp.value && inp.value.trim()) {
+            return inp.value.trim();
+          }
+          const localMeta = loadLocalFcmDeviceMeta();
+          if (localMeta && localMeta.device && !isLegacyOsOnlyDeviceName(localMeta.device)) {
+            return localMeta.device;
+          }
+          return buildFriendlyDeviceName(navigator.userAgent, '');
+        }
+
+        async function saveCustomDeviceNameForCurrentOrIndex(targetIdx, newNameStr) {
+          const cleanName = String(newNameStr || '').trim();
+          if (!cleanName) {
+            showToast('Digite um nome válido para o aparelho (Ex.: Celular de Fulano).', '⚠️');
+            return false;
+          }
+          const localMeta = loadLocalFcmDeviceMeta();
+          if (!Array.isArray(state.fcmTokens)) state.fcmTokens = [];
+
+          if (typeof targetIdx === 'number' && state.fcmTokens[targetIdx]) {
+            const targetEntry = state.fcmTokens[targetIdx];
+            targetEntry.device = cleanName;
+            targetEntry.updatedAt = new Date().toISOString();
+            if (localMeta && localMeta.token === targetEntry.token) {
+              localMeta.device = cleanName;
+              saveLocalFcmDeviceMeta(localMeta);
+              const inp = document.getElementById('inputFcmCustomDeviceName');
+              if (inp) inp.value = cleanName;
+            }
+          } else {
+            const nextMeta = Object.assign({}, localMeta || {}, {
+              device: cleanName
+            });
+            saveLocalFcmDeviceMeta(nextMeta);
+            if (!state.notificationSettings) {
+              state.notificationSettings = JSON.parse(JSON.stringify(DEFAULT_STATE.notificationSettings));
+            }
+            state.notificationSettings.fcmDeviceName = cleanName;
+            if (nextMeta.token) {
+              const match = state.fcmTokens.find(t => t.token === nextMeta.token);
+              if (match) {
+                match.device = cleanName;
+                match.updatedAt = new Date().toISOString();
+              }
+            }
+          }
+
+          editingFcmDeviceIdx = null;
+          saveState();
+          renderNotificationSettingsUI();
+          if (currentUser && fbAuth && fbAuth.currentUser) {
+            await pushStateToFirestoreNow(false);
+          }
+          showToast(`Nome do aparelho atualizado para "${cleanName}"!`, '✏️');
+          return true;
         }
 
         function renderNotificationSettingsUI() {
@@ -6535,17 +6711,27 @@
             }
           }
 
+          upgradeLegacyDeviceNamesIfNeeded();
+
           const fcmBadge = document.getElementById('fcmLinkStatusBadge');
           const fcmBox = document.getElementById('fcmSavedTokenBox');
           const fcmDevLabel = document.getElementById('fcmSavedDeviceLabel');
           const btnBindLabel = document.getElementById('btnBindFcmDeviceLabel');
+          const inpCustomDevName = document.getElementById('inputFcmCustomDeviceName');
           const localFcmMeta = loadLocalFcmDeviceMeta();
           const tokensList = Array.isArray(state.fcmTokens) ? state.fcmTokens : [];
-          const isThisDeviceInCloudList = Boolean(
-            localFcmMeta &&
-            localFcmMeta.token &&
-            tokensList.some(t => t.token === localFcmMeta.token)
-          );
+          const matchedCloudEntry = (localFcmMeta && localFcmMeta.token)
+            ? tokensList.find(t => t.token === localFcmMeta.token)
+            : null;
+          const isThisDeviceInCloudList = Boolean(matchedCloudEntry);
+
+          const currentFriendlyName = (matchedCloudEntry && matchedCloudEntry.device) ||
+            (localFcmMeta && localFcmMeta.device) ||
+            buildFriendlyDeviceName(navigator.userAgent, '');
+
+          if (inpCustomDevName && document.activeElement !== inpCustomDevName) {
+            inpCustomDevName.value = currentFriendlyName;
+          }
 
           if (isThisDeviceInCloudList) {
             if (fcmBadge) {
@@ -6554,7 +6740,7 @@
             }
             if (fcmBox) fcmBox.classList.remove('hidden');
             if (fcmDevLabel) {
-              fcmDevLabel.textContent = (localFcmMeta.device || detectCurrentOsLabel()) + (localFcmMeta.linkedAt ? ' • ' + localFcmMeta.linkedAt : '');
+              fcmDevLabel.textContent = currentFriendlyName + (localFcmMeta.linkedAt ? ' • ' + localFcmMeta.linkedAt : '');
             }
             if (btnBindLabel) {
               btnBindLabel.textContent = 'Atualizar Vínculo Deste Aparelho na Nuvem';
@@ -6581,20 +6767,92 @@
               listContainer.innerHTML = tokensList.map((entry, idx) => {
                 const isCurrent = Boolean(localFcmMeta && localFcmMeta.token === entry.token);
                 const dateShort = entry.linkedAt || (entry.updatedAt ? entry.updatedAt.slice(0, 10) : '');
-                return `
-                  <div class="p-2 rounded-lg bg-white/90 border border-indigo-200/80 flex items-center justify-between gap-2 text-[11px]">
-                    <div class="flex items-center gap-1.5 min-w-0">
-                      <span>${isCurrent ? '📲' : '💻'}</span>
-                      <span class="font-semibold text-slate-800 truncate">${entry.device || 'Aparelho'}</span>
-                      ${isCurrent ? '<span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[9px]">Este aparelho</span>' : ''}
-                      ${dateShort ? `<span class="text-slate-400 text-[10px]">• ${dateShort}</span>` : ''}
+                const devIcon = getIconForFcmDeviceEntry(entry);
+                const devDisplayName = entry.device || buildFriendlyDeviceName(entry.userAgent || '', '');
+                const safeVal = String(devDisplayName).replace(/"/g, '&quot;');
+
+                if (editingFcmDeviceIdx === idx) {
+                  return `
+                    <div class="p-2.5 rounded-xl bg-white border-2 border-indigo-400 flex flex-wrap items-center justify-between gap-2 text-[11px] shadow-2xs">
+                      <div class="flex items-center gap-1.5 flex-1 min-w-[180px]">
+                        <span>${devIcon}</span>
+                        <input type="text" data-edit-fcm-input="${idx}" value="${safeVal}" maxlength="50" placeholder="Ex.: Celular de Fulano, Notebook de Ciclano..." class="flex-1 px-2.5 py-1 rounded-lg border border-indigo-300 text-xs font-semibold text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                      </div>
+                      <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" data-save-fcm-idx="${idx}" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-[10px] cursor-pointer">
+                          Salvar
+                        </button>
+                        <button type="button" data-cancel-fcm-idx="${idx}" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-[10px] cursor-pointer">
+                          Cancelar
+                        </button>
+                      </div>
                     </div>
-                    <button type="button" data-remove-fcm-idx="${idx}" class="text-rose-600 hover:text-rose-800 font-semibold text-[10px] cursor-pointer shrink-0">
-                      Remover
-                    </button>
+                  `;
+                }
+
+                return `
+                  <div class="p-2.5 rounded-xl bg-white/95 border border-indigo-200/80 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                      <span class="text-sm shrink-0">${devIcon}</span>
+                      <span class="font-bold text-slate-800 truncate">${devDisplayName}</span>
+                      ${isCurrent ? '<span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[9px] shrink-0">Este aparelho</span>' : ''}
+                      ${dateShort ? `<span class="text-slate-400 text-[10px] shrink-0">• ${dateShort}</span>` : ''}
+                    </div>
+                    <div class="flex items-center gap-2.5 shrink-0">
+                      <button type="button" data-rename-fcm-idx="${idx}" class="text-indigo-600 hover:text-indigo-800 font-semibold text-[10px] cursor-pointer">
+                        ✏️ Renomear
+                      </button>
+                      <button type="button" data-remove-fcm-idx="${idx}" class="text-rose-600 hover:text-rose-800 font-semibold text-[10px] cursor-pointer">
+                        Remover
+                      </button>
+                    </div>
                   </div>
                 `;
               }).join('');
+
+              listContainer.querySelectorAll('[data-rename-fcm-idx]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                  editingFcmDeviceIdx = parseInt(btn.getAttribute('data-rename-fcm-idx'), 10);
+                  renderNotificationSettingsUI();
+                  const inp = listContainer.querySelector(`[data-edit-fcm-input="${editingFcmDeviceIdx}"]`);
+                  if (inp) {
+                    inp.focus();
+                    inp.select();
+                  }
+                });
+              });
+
+              listContainer.querySelectorAll('[data-cancel-fcm-idx]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                  editingFcmDeviceIdx = null;
+                  renderNotificationSettingsUI();
+                });
+              });
+
+              listContainer.querySelectorAll('[data-save-fcm-idx]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                  const idx = parseInt(btn.getAttribute('data-save-fcm-idx'), 10);
+                  const inp = listContainer.querySelector(`[data-edit-fcm-input="${idx}"]`);
+                  if (inp) {
+                    saveCustomDeviceNameForCurrentOrIndex(idx, inp.value);
+                  }
+                });
+              });
+
+              listContainer.querySelectorAll('[data-edit-fcm-input]').forEach(inp => {
+                inp.addEventListener('keydown', (ev) => {
+                  const idx = parseInt(inp.getAttribute('data-edit-fcm-input'), 10);
+                  if (ev.key === 'Enter') {
+                    ev.preventDefault();
+                    saveCustomDeviceNameForCurrentOrIndex(idx, inp.value);
+                  } else if (ev.key === 'Escape') {
+                    ev.preventDefault();
+                    editingFcmDeviceIdx = null;
+                    renderNotificationSettingsUI();
+                  }
+                });
+              });
+
               listContainer.querySelectorAll('[data-remove-fcm-idx]').forEach(btn => {
                 btn.addEventListener('click', () => {
                   const idx = parseInt(btn.getAttribute('data-remove-fcm-idx'), 10);
@@ -6604,6 +6862,7 @@
                   if (localFcmMeta && localFcmMeta.token === removed.token) {
                     try { localStorage.removeItem(LOCAL_FCM_DEVICE_KEY); } catch (e) {}
                   }
+                  editingFcmDeviceIdx = null;
                   saveState();
                   renderNotificationSettingsUI();
                   showToast('Aparelho removido da lista de notificações em nuvem.', '🗑️');
@@ -6933,7 +7192,7 @@
               }
               return false;
             }
-            const deviceName = detectCurrentOsLabel();
+            const deviceName = getCurrentDevicePreferredName();
             const nowLabel = new Date().toLocaleString('pt-BR', {
               day: '2-digit',
               month: '2-digit',
@@ -7083,6 +7342,26 @@
             }, 60500);
 
             showToast('Agendado! Daqui a 1 minuto você receberá a notificação automática (pode minimizar o app ou bloquear a tela).', '⏱️');
+          });
+        }
+
+        const btnSaveFcmNameOnly = document.getElementById('btnSaveFcmDeviceNameOnly');
+        if (btnSaveFcmNameOnly) {
+          btnSaveFcmNameOnly.addEventListener('click', async () => {
+            const inp = document.getElementById('inputFcmCustomDeviceName');
+            if (inp) {
+              await saveCustomDeviceNameForCurrentOrIndex(null, inp.value);
+            }
+          });
+        }
+
+        const inpCustomDevNameEl = document.getElementById('inputFcmCustomDeviceName');
+        if (inpCustomDevNameEl) {
+          inpCustomDevNameEl.addEventListener('keydown', async (ev) => {
+            if (ev.key === 'Enter') {
+              ev.preventDefault();
+              await saveCustomDeviceNameForCurrentOrIndex(null, inpCustomDevNameEl.value);
+            }
           });
         }
 
