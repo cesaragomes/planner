@@ -18,6 +18,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -266,7 +267,7 @@
         </button>
       </div>
 
-      <!-- Active Google Account, Theme Switcher & Manual Backup Bar -->
+      <!-- Active Google Account, Cloud Status & Unified Settings Button -->
       <div class="flex flex-wrap items-center gap-2">
         <div id="headerUserBadge" class="hidden items-center gap-2 bg-white/10 px-2.5 py-1 rounded-xl text-xs text-white">
           <img id="headerUserPhoto" src="" alt="Avatar" referrerpolicy="no-referrer" class="hidden w-6 h-6 rounded-full object-cover border border-white/25 shrink-0" />
@@ -276,25 +277,13 @@
             <p id="headerUserEmail" class="text-[10px] text-white/75 truncate max-w-[150px]">conta@gmail.com</p>
           </div>
         </div>
-        <button id="btnToggleTheme" type="button" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5 cursor-pointer">
-          <span id="themeToggleIcon">🌙</span>
-          <span id="themeToggleLabel" class="hidden sm:inline">Modo Escuro</span>
-        </button>
-        <button id="btnCloudSyncNow" type="button" title="Sincronizar agora com o Google Drive" class="hidden px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 text-emerald-200 transition items-center gap-1.5 cursor-pointer">
+        <button id="btnCloudSyncNow" type="button" title="Status de sincronização com a nuvem" class="hidden px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 text-emerald-200 transition items-center gap-1.5 cursor-pointer">
           <span id="cloudSyncIcon">☁️</span>
-          <span id="cloudSyncLabel">Sincronizado</span>
+          <span id="cloudSyncLabel">Conectado</span>
         </button>
-        <button id="btnInstallPwaHeader" type="button" title="Instalar aplicativo Prumo no dispositivo" class="hidden px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition items-center gap-1.5 cursor-pointer shadow-2xs">
-          <span>📲</span>
-          <span>Instalar App</span>
-        </button>
-        <button id="btnOpenBackupModal" type="button" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5 cursor-pointer">
-          <span>💾</span>
-          <span class="hidden sm:inline">Backup</span>
-        </button>
-        <button id="btnLogoutAccount" type="button" class="hidden px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-rose-600 text-white transition flex items-center gap-1 cursor-pointer">
-          <span>🚪</span>
-          <span class="hidden sm:inline">Sair</span>
+        <button id="btnOpenBackupModal" type="button" title="Abrir Configurações do Prumo" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 border border-white/15 text-white transition flex items-center gap-1.5 cursor-pointer shadow-2xs">
+          <span>⚙️</span>
+          <span>Configurações</span>
         </button>
       </div>
     </div>
@@ -2009,44 +1998,302 @@
     </div>
   </div>
 
-  <!-- ==================== MODAL 2: BACKUP ==================== -->
-  <div id="modalBackupDrive" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 hidden items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto custom-scroll">
+  <!-- ==================== MODAL 2: MENU UNIFICADO DE CONFIGURAÇÕES (3 ABAS) ==================== -->
+  <div id="modalBackupDrive" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 hidden items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-5 sm:p-6 shadow-xl border border-slate-200 space-y-4 max-h-[92vh] overflow-y-auto custom-scroll">
+      <!-- Cabeçalho do Modal -->
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-          <span>💾</span>
-          <span>Backup</span>
-        </h3>
-        <button id="btnCloseBackupModal" type="button" class="text-slate-400 hover:text-slate-700 text-sm font-bold px-2 py-1">✕</button>
+        <div>
+          <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+            <span>⚙️</span>
+            <span>Configurações do Prumo</span>
+          </h3>
+          <p class="text-xs text-slate-500">Notificações Push, aparência do aplicativo, backup e sincronização em nuvem</p>
+        </div>
+        <button id="btnCloseBackupModal" type="button" class="text-slate-400 hover:text-slate-700 text-sm font-bold px-2.5 py-1 rounded-lg hover:bg-slate-100 cursor-pointer">✕</button>
       </div>
 
-      <!-- Cloud Sync Status & Manual Triggers -->
-      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
-        <p id="modalCloudSyncStatusText" class="text-xs font-semibold text-slate-700">Conectado. Última gravação: agora</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-          <button id="btnForcePushToDrive" type="button" class="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
-            <span>⬆️</span>
-            <span>Enviar para a Nuvem</span>
+      <!-- Navegação das 3 Abas -->
+      <div class="grid grid-cols-3 gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200">
+        <button id="tabBtnSettingsNotifications" type="button" data-settings-tab="notifications" class="py-2 px-2.5 rounded-lg text-xs font-semibold transition cursor-pointer bg-white text-slate-900 shadow-2xs flex items-center justify-center gap-1.5">
+          <span>🔔</span>
+          <span class="truncate">Notificações</span>
+        </button>
+        <button id="tabBtnSettingsAppearance" type="button" data-settings-tab="appearance" class="py-2 px-2.5 rounded-lg text-xs font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5">
+          <span>🎨</span>
+          <span class="truncate">Aparência &amp; App</span>
+        </button>
+        <button id="tabBtnSettingsCloud" type="button" data-settings-tab="cloud" class="py-2 px-2.5 rounded-lg text-xs font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5">
+          <span>💾</span>
+          <span class="truncate">Nuvem, Backup &amp; Conta</span>
+        </button>
+      </div>
+
+      <!-- ==================== ABA 1: 🔔 NOTIFICAÇÕES ==================== -->
+      <div id="settingsPaneNotifications" class="space-y-4">
+        <!-- Permissão do Sistema e Teste Rápido -->
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                <span>🔔</span>
+                <span>Permissão do Navegador / Sistema Operacional</span>
+              </h4>
+              <p id="notifPlatformCompatibilityText" class="text-[11px] text-slate-500 mt-0.5">
+                Compatível com Windows, Linux, Android (WebAPK) e iOS 16.4+ instalado na Tela de Início.
+              </p>
+            </div>
+            <span id="notifPermissionStatusBadge" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+              Verificando...
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+            <button id="btnRequestNotificationPermission" type="button" class="w-full py-2.5 px-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs">
+              <span>🔓</span>
+              <span>Ativar Permissão do Sistema</span>
+            </button>
+            <button id="btnTestNotificationNow" type="button" class="w-full py-2.5 px-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs">
+              <span>🚀</span>
+              <span>Testar Notificação Agora</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Seletor de Modo de Disparo -->
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-3">
+          <div>
+            <label for="selectNotificationMode" class="block text-xs font-bold text-slate-900 mb-1">
+              ⚙️ Modo de Disparo das Notificações Push
+            </label>
+            <p class="text-[11px] text-slate-500 mb-2">
+              Escolha como o Prumo deve enviar alertas no seu computador ou celular:
+            </p>
+            <select id="selectNotificationMode" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-semibold text-slate-900 bg-white">
+              <option value="hybrid">⚡ Híbrido (Modo 1 Local SW + Modo 2 Push em Nuvem FCM) — Recomendado</option>
+              <option value="local_sw">⏱️ Modo 1: Agendador Local via Service Worker (Offline / App Aberto ou em 2º Plano)</option>
+              <option value="cloud_fcm">☁️ Modo 2: Push em Nuvem via Firebase Cloud Messaging (FCM Web Push)</option>
+              <option value="disabled">🔕 Desativado (Não enviar notificações automáticas)</option>
+            </select>
+          </div>
+
+          <!-- Horários Predefinidos para Resumo de Pendências nos 3 Turnos -->
+          <div class="pt-3 border-t border-slate-100 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <h5 class="text-xs font-bold text-slate-800">⏰ Horários do Resumo de Pendências por Turno</h5>
+              <span class="text-[10px] font-semibold text-slate-400">Planos + Hábitos + Tarefas</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <!-- Manhã -->
+              <div class="p-2.5 rounded-xl bg-amber-50/60 border border-amber-200 flex flex-col justify-between gap-2">
+                <label class="flex items-center gap-2 text-xs font-bold text-slate-800 cursor-pointer">
+                  <input id="chkNotifShiftMorning" type="checkbox" checked class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
+                  <span>☀️ Manhã</span>
+                </label>
+                <input id="inputNotifTimeMorning" type="time" value="08:00" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold bg-white" />
+              </div>
+
+              <!-- Tarde -->
+              <div class="p-2.5 rounded-xl bg-sky-50/60 border border-sky-200 flex flex-col justify-between gap-2">
+                <label class="flex items-center gap-2 text-xs font-bold text-slate-800 cursor-pointer">
+                  <input id="chkNotifShiftAfternoon" type="checkbox" checked class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
+                  <span>🌤️ Tarde</span>
+                </label>
+                <input id="inputNotifTimeAfternoon" type="time" value="14:00" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold bg-white" />
+              </div>
+
+              <!-- Noite -->
+              <div class="p-2.5 rounded-xl bg-indigo-50/60 border border-indigo-200 flex flex-col justify-between gap-2">
+                <label class="flex items-center gap-2 text-xs font-bold text-slate-800 cursor-pointer">
+                  <input id="chkNotifShiftEvening" type="checkbox" checked class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
+                  <span>🌙 Noite</span>
+                </label>
+                <input id="inputNotifTimeEvening" type="time" value="20:00" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold bg-white" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Regras Adicionais: Horário Exato do Compromisso e Boletos Vencendo Hoje -->
+          <div class="pt-3 border-t border-slate-100 space-y-2">
+            <h5 class="text-xs font-bold text-slate-800">🎯 Gatilhos Especiais do Dia</h5>
+            <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+              <input id="chkNotifExactPlanTime" type="checkbox" checked class="mt-0.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
+              <div class="text-xs">
+                <p class="font-semibold text-slate-800">Avisar no horário exato de cada compromisso do dia</p>
+                <p class="text-[11px] text-slate-500">Dispara um lembrete pontual quando um plano do Módulo 1 possui horário definido (ex.: 09:30, 15:00).</p>
+              </div>
+            </label>
+            <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+              <input id="chkNotifDueBillsToday" type="checkbox" checked class="mt-0.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
+              <div class="text-xs">
+                <p class="font-semibold text-slate-800">Alertar sobre contas fixas (boletos) vencendo no dia</p>
+                <p class="text-[11px] text-slate-500">Verifica os boletos em aberto no Módulo 4 cujo dia de vencimento coincide com a data de hoje.</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Configuração de Web Push (Modo 2 — Firebase Cloud Messaging VAPID Key & Token) -->
+        <div id="fcmCloudConfigPanel" class="p-4 rounded-xl bg-indigo-50/60 border border-indigo-200 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-indigo-900 flex items-center gap-1.5">
+                <span>☁️</span>
+                <span>Web Push em Nuvem — Firebase Cloud Messaging (Modo 2)</span>
+              </h4>
+              <p class="text-[11px] text-indigo-700 mt-0.5">
+                Informe a chave pública VAPID Key do projeto <strong>planner-76385</strong> e vincule este aparelho para salvar o token FCM no Firestore.
+              </p>
+            </div>
+            <span id="fcmLinkStatusBadge" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white text-indigo-700 border border-indigo-200">
+              Não vinculado
+            </span>
+          </div>
+
+          <div class="space-y-2">
+            <label for="inputFcmVapidKey" class="block text-[11px] font-bold uppercase text-indigo-800">
+              Chave Pública VAPID Key (Firebase Console &rarr; Cloud Messaging &rarr; Certificados Web)
+            </label>
+            <input id="inputFcmVapidKey" type="text" placeholder="Ex.: BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U" class="w-full px-3 py-2 rounded-xl border border-indigo-200 text-xs bg-white text-slate-900 font-mono" />
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="btnBindFcmDevice" type="button" class="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs">
+              <span>📲</span>
+              <span>Vincular Aparelho e Salvar Token FCM no Firestore</span>
+            </button>
+            <button id="btnCopyFcmToken" type="button" class="hidden py-2.5 px-3 rounded-xl bg-white hover:bg-slate-100 text-indigo-700 border border-indigo-200 font-semibold text-xs transition cursor-pointer">
+              📋 Copiar Token
+            </button>
+          </div>
+
+          <div id="fcmSavedTokenBox" class="hidden p-2.5 rounded-lg bg-white/90 border border-indigo-200 text-[11px] text-slate-600 space-y-1">
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-bold text-slate-800">Aparelho vinculado ao Firestore:</span>
+              <span id="fcmSavedDeviceLabel" class="font-semibold text-emerald-700">Ativo</span>
+            </div>
+            <p id="fcmSavedTokenPreview" class="font-mono text-[10px] text-slate-500 break-all"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== ABA 2: 🎨 APARÊNCIA & APP ==================== -->
+      <div id="settingsPaneAppearance" class="hidden space-y-4">
+        <!-- Alternância Modo Claro / Escuro -->
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h4 class="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
+              <span>🌓</span>
+              <span>Tema Visual (Modo Claro / Escuro)</span>
+            </h4>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Alterne entre o visual claro diurno e o modo escuro com contraste suave.
+            </p>
+          </div>
+          <button id="btnToggleTheme" type="button" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white transition flex items-center gap-2 cursor-pointer shadow-2xs">
+            <span id="themeToggleIcon">🌙</span>
+            <span id="themeToggleLabel">Modo Escuro</span>
           </button>
-          <button id="btnForcePullFromDrive" type="button" class="w-full py-2 px-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
-            <span>⬇️</span>
-            <span>Baixar da Nuvem</span>
+        </div>
+
+        <!-- Organizar / Renomear Módulos -->
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h4 class="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
+              <span>🧩</span>
+              <span>Organizar e Renomear Módulos</span>
+            </h4>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Personalize o título dos 6 módulos, altere a ordem na tela inicial ou oculte os que não usar.
+            </p>
+          </div>
+          <button id="btnOpenCustomizeFromSettings" type="button" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition flex items-center gap-2 cursor-pointer shadow-2xs">
+            <span>⚙️</span>
+            <span>Organizar / Renomear Módulos</span>
+          </button>
+        </div>
+
+        <!-- Instalar Aplicativo (PWA) -->
+        <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex-1 min-w-[200px]">
+            <h4 class="text-xs sm:text-sm font-bold text-emerald-900 flex items-center gap-1.5">
+              <span>📲</span>
+              <span>Instalar Aplicativo Prumo (PWA)</span>
+            </h4>
+            <p id="pwaInstallStatusHint" class="text-xs text-emerald-800/90 mt-0.5">
+              Instale o Prumo no Windows, Linux, Android ou iOS (Compartilhar &rarr; Adicionar à Tela de Início) para acesso em tela cheia e notificações nativas.
+            </p>
+          </div>
+          <button id="btnInstallPwaHeader" type="button" title="Instalar aplicativo Prumo no dispositivo" class="hidden px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition items-center gap-1.5 cursor-pointer shadow-2xs">
+            <span>📲</span>
+            <span>Instalar Aplicativo</span>
           </button>
         </div>
       </div>
 
-      <!-- Local File Export / Import -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <button id="btnDownloadBackupJson" type="button" class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition shadow-sm cursor-pointer">
-          ⬇️ Exportar Arquivo (.json)
-        </button>
-        <label class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-sm flex items-center justify-center cursor-pointer">
-          <span>📂 Importar Arquivo (.json)</span>
-          <input id="inputImportBackupFile" type="file" accept=".json,application/json" class="hidden" />
-        </label>
+      <!-- ==================== ABA 3: 💾 NUVEM, BACKUP & CONTA ==================== -->
+      <div id="settingsPaneCloud" class="hidden space-y-4">
+        <!-- Status da Sincronização com o Firestore -->
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <h4 class="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
+              <span>☁️</span>
+              <span>Sincronização em Tempo Real (Firebase Firestore)</span>
+            </h4>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+              planner-76385
+            </span>
+          </div>
+          <p id="modalCloudSyncStatusText" class="text-xs font-semibold text-slate-700">Conectado. Última gravação: agora</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button id="btnForcePushToDrive" type="button" class="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <span>⬆️</span>
+              <span>Enviar para a Nuvem</span>
+            </button>
+            <button id="btnForcePullFromDrive" type="button" class="w-full py-2.5 px-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <span>⬇️</span>
+              <span>Baixar da Nuvem</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Exportar e Importar Backup Local (.json) -->
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div>
+            <h4 class="text-xs sm:text-sm font-bold text-slate-900">📦 Backup Manual em Arquivo (.json)</h4>
+            <p class="text-xs text-slate-500 mt-0.5">Salve uma cópia completa dos seus 6 módulos no dispositivo ou restaure um arquivo salvo anteriormente.</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button id="btnDownloadBackupJson" type="button" class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition shadow-sm cursor-pointer">
+              ⬇️ Exportar Arquivo (.json)
+            </button>
+            <label class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-sm flex items-center justify-center cursor-pointer">
+              <span>📂 Importar Arquivo (.json)</span>
+              <input id="inputImportBackupFile" type="file" accept=".json,application/json" class="hidden" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Conta Google Conectada e Botão Sair da Conta -->
+        <div class="p-4 rounded-xl bg-rose-50/40 border border-rose-200 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h4 class="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
+              <span>👤</span>
+              <span id="settingsConnectedUserName">Conta Google Conectada</span>
+            </h4>
+            <p id="settingsConnectedUserEmail" class="text-xs text-slate-500 mt-0.5">Sincronização vinculada à sua conta Google</p>
+          </div>
+          <button id="btnLogoutAccount" type="button" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white transition flex items-center gap-1.5 cursor-pointer shadow-2xs">
+            <span>🚪</span>
+            <span>Sair da Conta</span>
+          </button>
+        </div>
       </div>
 
-      <div class="flex items-center justify-end pt-2 border-t border-slate-100 text-xs text-slate-500">
+      <!-- Rodapé do Modal -->
+      <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
+        <span id="settingsModalFooterSummary">Prumo PWA v3 • 6 Módulos Integrados</span>
         <button id="btnDoneBackupModal" type="button" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold hover:bg-slate-800 cursor-pointer">
           Fechar
         </button>
@@ -2247,7 +2494,24 @@
           { day: 'Domingo', breakfast: '', lunch: '', snack: '', dinner: '' }
         ],
         recipes: [],
-        backups: []
+        backups: [],
+        fcmTokens: [],
+        notificationSettings: {
+          mode: 'hybrid',
+          morningEnabled: true,
+          morningTime: '08:00',
+          afternoonEnabled: true,
+          afternoonTime: '14:00',
+          eveningEnabled: true,
+          eveningTime: '20:00',
+          exactPlanTimeEnabled: true,
+          dueBillsEnabled: true,
+          vapidKey: '',
+          fcmToken: '',
+          fcmDeviceName: '',
+          fcmLinkedAt: '',
+          dispatchedLog: {}
+        }
       };
 
       function createEmptyUserState() {
@@ -2388,6 +2652,15 @@
           if (!Array.isArray(merged.maintenanceCycles)) merged.maintenanceCycles = [];
           if (!Array.isArray(merged.pantryItems)) merged.pantryItems = [];
           if (!Array.isArray(merged.recipes)) merged.recipes = [];
+          if (!Array.isArray(merged.fcmTokens)) merged.fcmTokens = [];
+          merged.notificationSettings = Object.assign(
+            {},
+            DEFAULT_STATE.notificationSettings,
+            parsed.notificationSettings || {}
+          );
+          if (!merged.notificationSettings.dispatchedLog || typeof merged.notificationSettings.dispatchedLog !== 'object') {
+            merged.notificationSettings.dispatchedLog = {};
+          }
           sanitizeLegacySampleData(merged);
           if (!merged.selectedWishlistChartId && merged.wishlistItems.length > 0) {
             merged.selectedWishlistChartId = merged.wishlistItems[0].id;
@@ -3053,6 +3326,10 @@
         document.getElementById('headerUserName').textContent = accountObj.name || 'Usuário Google';
         document.getElementById('headerUserEmail').textContent = accountObj.email;
         document.getElementById('btnLogoutAccount').classList.remove('hidden');
+        const setAccName = document.getElementById('settingsConnectedUserName');
+        const setAccEmail = document.getElementById('settingsConnectedUserEmail');
+        if (setAccName) setAccName.textContent = accountObj.name || 'Usuário Google';
+        if (setAccEmail) setAccEmail.textContent = accountObj.email || '';
 
         openHomeView();
         if (!isSilentRestore) {
@@ -3072,6 +3349,11 @@
         try {
           localStorage.removeItem(ACTIVE_SESSION_KEY);
         } catch (e) {}
+        const modalBkpEl = document.getElementById('modalBackupDrive');
+        if (modalBkpEl) {
+          modalBkpEl.classList.add('hidden');
+          modalBkpEl.classList.remove('flex');
+        }
         openWelcomeAuthView();
         showToast('Sessão encerrada com segurança.', '🚪');
       }
@@ -5983,6 +6265,8 @@
         });
       }
 
+      let updateNotificationSettingsUIRef = null;
+
       function renderAll() {
         syncModuleTitlesAcrossUI();
         renderPlatformModeUI();
@@ -5995,6 +6279,9 @@
         renderModule5();
         renderModule6();
         renderBackupSnapshots();
+        if (typeof updateNotificationSettingsUIRef === 'function') {
+          updateNotificationSettingsUIRef();
+        }
       }
 
       // Attach All Event Listeners
@@ -6018,32 +6305,610 @@
           });
         }
 
-        // ==================== PWA / ANDROID WEBAPK SUPPORT ====================
+        // ==================== PWA SERVICE WORKER (v3) & 2-MODE PUSH NOTIFICATIONS ====================
+        let swRegistrationRef = null;
         if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-          navigator.serviceWorker.register('./sw.js').catch(() => {});
+          navigator.serviceWorker.register('./sw.js').then((reg) => {
+            swRegistrationRef = reg;
+          }).catch(() => {});
+
+          navigator.serviceWorker.addEventListener('message', (event) => {
+            const msg = event.data;
+            if (msg && msg.type === 'PRUMO_NOTIFICATION_CLICK') {
+              const d = msg.data || {};
+              if (d.targetModule === 'mod4_bills') {
+                openModule4View('bills');
+              } else if (d.targetModule === 'mod1_plans') {
+                openModule1View('plans');
+              } else if (currentUser) {
+                openHomeView();
+              }
+            }
+          });
         }
 
         let deferredInstallPrompt = null;
         const btnInstallHeader = document.getElementById('btnInstallPwaHeader');
+        const pwaInstallStatusHint = document.getElementById('pwaInstallStatusHint');
+
+        function updatePwaInstallButtonUI() {
+          const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+          if (isStandalone && pwaInstallStatusHint) {
+            pwaInstallStatusHint.textContent = '✅ Aplicativo Prumo já está instalado e rodando em modo nativo (Standalone PWA).';
+          }
+          if (btnInstallHeader) {
+            if (deferredInstallPrompt) {
+              btnInstallHeader.classList.remove('hidden');
+              btnInstallHeader.classList.add('flex');
+            } else {
+              btnInstallHeader.classList.add('hidden');
+              btnInstallHeader.classList.remove('flex');
+            }
+          }
+        }
+
         window.addEventListener('beforeinstallprompt', (e) => {
           e.preventDefault();
           deferredInstallPrompt = e;
-          if (btnInstallHeader) {
-            btnInstallHeader.classList.remove('hidden');
-            btnInstallHeader.classList.add('flex');
-          }
+          updatePwaInstallButtonUI();
         });
 
         if (btnInstallHeader) {
           btnInstallHeader.addEventListener('click', async () => {
-            if (!deferredInstallPrompt) return;
+            if (!deferredInstallPrompt) {
+              showToast('Para instalar manualmente: use o menu do navegador "Instalar aplicativo" ou "Adicionar à Tela de Início".', '📲');
+              return;
+            }
             deferredInstallPrompt.prompt();
             await deferredInstallPrompt.userChoice;
             deferredInstallPrompt = null;
-            btnInstallHeader.classList.add('hidden');
-            btnInstallHeader.classList.remove('flex');
+            updatePwaInstallButtonUI();
           });
         }
+
+        function switchSettingsModalTab(tabKey) {
+          const panes = {
+            notifications: document.getElementById('settingsPaneNotifications'),
+            appearance: document.getElementById('settingsPaneAppearance'),
+            cloud: document.getElementById('settingsPaneCloud')
+          };
+          const buttons = {
+            notifications: document.getElementById('tabBtnSettingsNotifications'),
+            appearance: document.getElementById('tabBtnSettingsAppearance'),
+            cloud: document.getElementById('tabBtnSettingsCloud')
+          };
+          Object.keys(panes).forEach((k) => {
+            if (!panes[k] || !buttons[k]) return;
+            if (k === tabKey) {
+              panes[k].classList.remove('hidden');
+              buttons[k].className = 'py-2 px-2.5 rounded-lg text-xs font-semibold transition cursor-pointer bg-white text-slate-900 shadow-2xs flex items-center justify-center gap-1.5';
+            } else {
+              panes[k].classList.add('hidden');
+              buttons[k].className = 'py-2 px-2.5 rounded-lg text-xs font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5';
+            }
+          });
+        }
+
+        document.querySelectorAll('[data-settings-tab]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            switchSettingsModalTab(btn.getAttribute('data-settings-tab'));
+          });
+        });
+
+        const btnOpenCustFromSettings = document.getElementById('btnOpenCustomizeFromSettings');
+        if (btnOpenCustFromSettings) {
+          btnOpenCustFromSettings.addEventListener('click', () => {
+            const modalBkpEl = document.getElementById('modalBackupDrive');
+            if (modalBkpEl) {
+              modalBkpEl.classList.add('hidden');
+              modalBkpEl.classList.remove('flex');
+            }
+            renderCustomizeModal();
+            const modalCustEl = document.getElementById('modalCustomizeHome');
+            if (modalCustEl) {
+              modalCustEl.classList.remove('hidden');
+              modalCustEl.classList.add('flex');
+            }
+          });
+        }
+
+        function detectCurrentOsLabel() {
+          const ua = navigator.userAgent || '';
+          if (/iPhone|iPad|iPod/i.test(ua)) return 'iOS (PWA)';
+          if (/Android/i.test(ua)) return 'Android';
+          if (/Windows/i.test(ua)) return 'Windows';
+          if (/Linux/i.test(ua)) return 'Linux';
+          if (/Mac/i.test(ua)) return 'macOS';
+          return 'Navegador Web';
+        }
+
+        function renderNotificationSettingsUI() {
+          const ns = state.notificationSettings || DEFAULT_STATE.notificationSettings;
+          const badgeEl = document.getElementById('notifPermissionStatusBadge');
+          const hasNotifSupport = ('Notification' in window);
+          const perm = hasNotifSupport ? Notification.permission : 'unsupported';
+
+          if (badgeEl) {
+            if (perm === 'granted') {
+              badgeEl.textContent = '✅ Permissão Ativa (' + detectCurrentOsLabel() + ')';
+              badgeEl.className = 'text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200';
+            } else if (perm === 'denied') {
+              badgeEl.textContent = '🚫 Bloqueada no Navegador';
+              badgeEl.className = 'text-[11px] font-bold px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 border border-rose-200';
+            } else if (perm === 'default') {
+              badgeEl.textContent = '⏳ Permissão Pendente';
+              badgeEl.className = 'text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-200';
+            } else {
+              badgeEl.textContent = '⚠️ Instale o App (PWA)';
+              badgeEl.className = 'text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 border border-slate-300';
+            }
+          }
+
+          const selMode = document.getElementById('selectNotificationMode');
+          if (selMode) selMode.value = ns.mode || 'hybrid';
+
+          const chkMorning = document.getElementById('chkNotifShiftMorning');
+          const inpMorning = document.getElementById('inputNotifTimeMorning');
+          if (chkMorning) chkMorning.checked = ns.morningEnabled !== false;
+          if (inpMorning) inpMorning.value = ns.morningTime || '08:00';
+
+          const chkAfternoon = document.getElementById('chkNotifShiftAfternoon');
+          const inpAfternoon = document.getElementById('inputNotifTimeAfternoon');
+          if (chkAfternoon) chkAfternoon.checked = ns.afternoonEnabled !== false;
+          if (inpAfternoon) inpAfternoon.value = ns.afternoonTime || '14:00';
+
+          const chkEvening = document.getElementById('chkNotifShiftEvening');
+          const inpEvening = document.getElementById('inputNotifTimeEvening');
+          if (chkEvening) chkEvening.checked = ns.eveningEnabled !== false;
+          if (inpEvening) inpEvening.value = ns.eveningTime || '20:00';
+
+          const chkExact = document.getElementById('chkNotifExactPlanTime');
+          if (chkExact) chkExact.checked = ns.exactPlanTimeEnabled !== false;
+
+          const chkBills = document.getElementById('chkNotifDueBillsToday');
+          if (chkBills) chkBills.checked = ns.dueBillsEnabled !== false;
+
+          const inpVapid = document.getElementById('inputFcmVapidKey');
+          if (inpVapid && document.activeElement !== inpVapid) {
+            inpVapid.value = ns.vapidKey || '';
+          }
+
+          const fcmPanel = document.getElementById('fcmCloudConfigPanel');
+          if (fcmPanel) {
+            if (ns.mode === 'local_sw' || ns.mode === 'disabled') {
+              fcmPanel.classList.add('opacity-75');
+            } else {
+              fcmPanel.classList.remove('opacity-75');
+            }
+          }
+
+          const fcmBadge = document.getElementById('fcmLinkStatusBadge');
+          const fcmBox = document.getElementById('fcmSavedTokenBox');
+          const fcmDevLabel = document.getElementById('fcmSavedDeviceLabel');
+          const fcmTokPrev = document.getElementById('fcmSavedTokenPreview');
+          const btnCopyTok = document.getElementById('btnCopyFcmToken');
+
+          if (ns.fcmToken) {
+            if (fcmBadge) {
+              fcmBadge.textContent = '✅ Vinculado ao Firestore';
+              fcmBadge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200';
+            }
+            if (fcmBox) fcmBox.classList.remove('hidden');
+            if (btnCopyTok) btnCopyTok.classList.remove('hidden');
+            if (fcmDevLabel) {
+              fcmDevLabel.textContent = (ns.fcmDeviceName || detectCurrentOsLabel()) + (ns.fcmLinkedAt ? ' • ' + ns.fcmLinkedAt : '');
+            }
+            if (fcmTokPrev) {
+              fcmTokPrev.textContent = 'Token FCM: ' + ns.fcmToken;
+            }
+          } else {
+            if (fcmBadge) {
+              fcmBadge.textContent = 'Não vinculado';
+              fcmBadge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white text-indigo-700 border border-indigo-200';
+            }
+            if (fcmBox) fcmBox.classList.add('hidden');
+            if (btnCopyTok) btnCopyTok.classList.add('hidden');
+          }
+
+          updatePwaInstallButtonUI();
+        }
+        updateNotificationSettingsUIRef = renderNotificationSettingsUI;
+
+        function saveNotificationSettingsFromInputs(showFeedback) {
+          if (!state.notificationSettings) {
+            state.notificationSettings = JSON.parse(JSON.stringify(DEFAULT_STATE.notificationSettings));
+          }
+          const ns = state.notificationSettings;
+          const selMode = document.getElementById('selectNotificationMode');
+          const chkMorning = document.getElementById('chkNotifShiftMorning');
+          const inpMorning = document.getElementById('inputNotifTimeMorning');
+          const chkAfternoon = document.getElementById('chkNotifShiftAfternoon');
+          const inpAfternoon = document.getElementById('inputNotifTimeAfternoon');
+          const chkEvening = document.getElementById('chkNotifShiftEvening');
+          const inpEvening = document.getElementById('inputNotifTimeEvening');
+          const chkExact = document.getElementById('chkNotifExactPlanTime');
+          const chkBills = document.getElementById('chkNotifDueBillsToday');
+          const inpVapid = document.getElementById('inputFcmVapidKey');
+
+          if (selMode) ns.mode = selMode.value;
+          if (chkMorning) ns.morningEnabled = chkMorning.checked;
+          if (inpMorning && inpMorning.value) ns.morningTime = inpMorning.value;
+          if (chkAfternoon) ns.afternoonEnabled = chkAfternoon.checked;
+          if (inpAfternoon && inpAfternoon.value) ns.afternoonTime = inpAfternoon.value;
+          if (chkEvening) ns.eveningEnabled = chkEvening.checked;
+          if (inpEvening && inpEvening.value) ns.eveningTime = inpEvening.value;
+          if (chkExact) ns.exactPlanTimeEnabled = chkExact.checked;
+          if (chkBills) ns.dueBillsEnabled = chkBills.checked;
+          if (inpVapid) ns.vapidKey = inpVapid.value.trim();
+
+          saveState();
+          renderNotificationSettingsUI();
+          if (showFeedback) {
+            showToast('Preferências de notificações salvas e sincronizadas!', '🔔');
+          }
+        }
+
+        [
+          'selectNotificationMode',
+          'chkNotifShiftMorning',
+          'inputNotifTimeMorning',
+          'chkNotifShiftAfternoon',
+          'inputNotifTimeAfternoon',
+          'chkNotifShiftEvening',
+          'inputNotifTimeEvening',
+          'chkNotifExactPlanTime',
+          'chkNotifDueBillsToday',
+          'inputFcmVapidKey'
+        ].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.addEventListener('change', () => saveNotificationSettingsFromInputs(true));
+          }
+        });
+
+        async function dispatchPrumoNotification(title, body, tag, extraData) {
+          const payload = {
+            title: title || 'Prumo — Gestão da Casa e Rotina',
+            body: body || 'Você tem atividades programadas para hoje.',
+            icon: './favicon.ico',
+            badge: './favicon.ico',
+            tag: tag || ('prumo-notif-' + Date.now()),
+            url: './index.html',
+            data: extraData || {}
+          };
+
+          if ('Notification' in window && Notification.permission === 'granted') {
+            try {
+              if ('serviceWorker' in navigator) {
+                const reg = swRegistrationRef || (await navigator.serviceWorker.getRegistration());
+                if (reg && reg.active) {
+                  reg.active.postMessage({
+                    type: 'SHOW_LOCAL_NOTIFICATION',
+                    payload
+                  });
+                  return true;
+                } else if (reg && reg.showNotification) {
+                  await reg.showNotification(payload.title, {
+                    body: payload.body,
+                    icon: payload.icon,
+                    badge: payload.badge,
+                    tag: payload.tag,
+                    data: payload.data
+                  });
+                  return true;
+                }
+              }
+              // Fallback direto para Desktop caso SW não esteja ativo no ambiente
+              new Notification(payload.title, {
+                body: payload.body,
+                icon: payload.icon,
+                tag: payload.tag
+              });
+              return true;
+            } catch (e) {}
+          }
+          return false;
+        }
+
+        function buildDailyPendingSummaryText(shiftLabel) {
+          const nowStr = new Date().toISOString().slice(0, 10);
+          const pendingPlans = state.plans.filter(p => p.date === nowStr && !p.done);
+          const shiftPlans = shiftLabel
+            ? pendingPlans.filter(p => p.shift === shiftLabel)
+            : pendingPlans;
+
+          let pendingHabits = 0;
+          state.habits.forEach(h => {
+            const cur = (h.progressByDate && h.progressByDate[nowStr]) || 0;
+            if (isHabitScheduledForDate(h, nowStr) && cur < (h.target || 1)) {
+              pendingHabits++;
+            }
+          });
+
+          const pendingTasks = state.tasks.filter(t => isTaskScheduledForToday(t) && !t.done).length;
+          const todayDayNum = new Date().getDate();
+          const dueBills = state.fixedBills.filter(b => !b.paid && Number(b.dueDay) === todayDayNum).length;
+
+          const parts = [];
+          if (shiftLabel && shiftPlans.length > 0) {
+            parts.push(`${shiftPlans.length} plano(s) no turno da ${shiftLabel}`);
+          } else if (pendingPlans.length > 0) {
+            parts.push(`${pendingPlans.length} compromisso(s) no dia`);
+          }
+          if (pendingHabits > 0) parts.push(`${pendingHabits} hábito(s) para concluir`);
+          if (pendingTasks > 0) parts.push(`${pendingTasks} tarefa(s) da casa`);
+          if (dueBills > 0) parts.push(`${dueBills} boleto(s) vencendo hoje`);
+
+          if (parts.length === 0) {
+            return 'Tudo em dia por aqui! Nenhuma pendência aberta neste turno. 🎉';
+          }
+          return 'Pendentes agora: ' + parts.join(' • ') + '.';
+        }
+
+        const btnReqPerm = document.getElementById('btnRequestNotificationPermission');
+        if (btnReqPerm) {
+          btnReqPerm.addEventListener('click', async () => {
+            if (!('Notification' in window)) {
+              showToast('Este navegador exige instalar o app na Tela de Início para ativar notificações.', '⚠️');
+              return;
+            }
+            try {
+              const res = await Notification.requestPermission();
+              renderNotificationSettingsUI();
+              if (res === 'granted') {
+                showToast('Permissão de notificações ativada com sucesso!', '✅');
+                await dispatchPrumoNotification(
+                  '🔔 Prumo — Notificações Ativadas!',
+                  'Seus alertas de compromissos, turnos e boletos estão prontos neste aparelho.',
+                  'prumo-perm-granted'
+                );
+              } else {
+                showToast('Permissão negada ou pendente nas configurações do navegador.', '⚠️');
+              }
+            } catch (err) {
+              showToast('Não foi possível solicitar permissão neste ambiente.', '⚠️');
+            }
+          });
+        }
+
+        const btnTestNotif = document.getElementById('btnTestNotificationNow');
+        if (btnTestNotif) {
+          btnTestNotif.addEventListener('click', async () => {
+            if ('Notification' in window && Notification.permission === 'default') {
+              try {
+                await Notification.requestPermission();
+                renderNotificationSettingsUI();
+              } catch (e) {}
+            }
+            const summaryBody = buildDailyPendingSummaryText('');
+            const sent = await dispatchPrumoNotification(
+              '🚀 Teste de Notificação — Prumo',
+              summaryBody,
+              'prumo-test-' + Date.now()
+            );
+            if (sent) {
+              showToast('Notificação de teste disparada! Confira na central do seu sistema.', '🔔');
+            } else {
+              showToast('Resumo atual: ' + summaryBody + ' (Ative a permissão do navegador para alertas nativos)', '🔔');
+            }
+          });
+        }
+
+        // Modo 2: Vincular Aparelho no Firebase Cloud Messaging (FCM) e salvar token no Firestore
+        const btnBindFcm = document.getElementById('btnBindFcmDevice');
+        if (btnBindFcm) {
+          btnBindFcm.addEventListener('click', async () => {
+            saveNotificationSettingsFromInputs(false);
+            const ns = state.notificationSettings || {};
+            const vapidKey = (ns.vapidKey || '').trim();
+            if (!vapidKey) {
+              showToast('Informe a chave pública VAPID Key do Firebase Cloud Messaging antes de vincular!', '⚠️');
+              const inp = document.getElementById('inputFcmVapidKey');
+              if (inp) inp.focus();
+              return;
+            }
+            if (!('Notification' in window)) {
+              showToast('Este navegador não suporta Web Push (no iOS, instale o app na Tela de Início primeiro).', '⚠️');
+              return;
+            }
+            const perm = await Notification.requestPermission();
+            renderNotificationSettingsUI();
+            if (perm !== 'granted') {
+              showToast('Permissão de notificação necessária para gerar o token FCM.', '⚠️');
+              return;
+            }
+            try {
+              initFirebaseServices();
+              if (!firebase.messaging || !firebase.messaging.isSupported || !firebase.messaging.isSupported()) {
+                showToast('Firebase Cloud Messaging não suportado neste contexto/navegador.', '⚠️');
+                return;
+              }
+              showToast('Gerando token FCM e vinculando aparelho no Firestore...', '⏳');
+              const messaging = firebase.messaging();
+              const reg = swRegistrationRef || (await navigator.serviceWorker.register('./sw.js'));
+              const token = await messaging.getToken({
+                vapidKey,
+                serviceWorkerRegistration: reg
+              });
+              if (!token) {
+                showToast('Não foi possível obter o token FCM. Verifique a VAPID Key informada.', '⚠️');
+                return;
+              }
+              const deviceName = detectCurrentOsLabel();
+              const nowLabel = new Date().toLocaleString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+              state.notificationSettings.fcmToken = token;
+              state.notificationSettings.fcmDeviceName = deviceName;
+              state.notificationSettings.fcmLinkedAt = nowLabel;
+
+              if (!Array.isArray(state.fcmTokens)) state.fcmTokens = [];
+              const existingIdx = state.fcmTokens.findIndex(t => t.token === token);
+              const tokenEntry = {
+                token,
+                device: deviceName,
+                userAgent: (navigator.userAgent || '').slice(0, 120),
+                updatedAt: new Date().toISOString()
+              };
+              if (existingIdx >= 0) {
+                state.fcmTokens[existingIdx] = tokenEntry;
+              } else {
+                state.fcmTokens.unshift(tokenEntry);
+              }
+
+              saveState();
+              renderNotificationSettingsUI();
+              if (currentUser && fbAuth && fbAuth.currentUser) {
+                await pushStateToFirestoreNow(false);
+              }
+              showToast('Aparelho vinculado! Token FCM salvo junto aos seus dados no Firestore.', '☁️');
+            } catch (err) {
+              showToast('Erro ao gerar token FCM: verifique a VAPID Key do projeto planner-76385.', '⚠️');
+            }
+          });
+        }
+
+        const btnCopyFcm = document.getElementById('btnCopyFcmToken');
+        if (btnCopyFcm) {
+          btnCopyFcm.addEventListener('click', () => {
+            const tok = state.notificationSettings && state.notificationSettings.fcmToken;
+            if (!tok) return;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(tok).then(() => {
+                showToast('Token FCM copiado para a área de transferência!', '📋');
+              }).catch(() => {});
+            } else {
+              const ta = document.createElement('textarea');
+              ta.value = tok;
+              document.body.appendChild(ta);
+              ta.select();
+              try { document.execCommand('copy'); } catch (e) {}
+              document.body.removeChild(ta);
+              showToast('Token FCM copiado!', '📋');
+            }
+          });
+        }
+
+        // Listener em Foreground para mensagens FCM (Modo 2 / Híbrido)
+        try {
+          if (initFirebaseServices() && firebase.messaging && firebase.messaging.isSupported && firebase.messaging.isSupported()) {
+            const fgMessaging = firebase.messaging();
+            fgMessaging.onMessage((payload) => {
+              const ns = state.notificationSettings || {};
+              if (ns.mode === 'disabled' || ns.mode === 'local_sw') return;
+              const notif = (payload && payload.notification) || {};
+              const data = (payload && payload.data) || {};
+              dispatchPrumoNotification(
+                notif.title || data.title || 'Prumo — Alerta em Nuvem',
+                notif.body || data.body || 'Nova atualização da sua rotina.',
+                'prumo-fcm-fg-' + Date.now(),
+                data
+              );
+            });
+          }
+        } catch (e) {}
+
+        // Motor Agendador Local (Modo 1 & Híbrido): verifica turnos (Manhã/Tarde/Noite), compromissos com hora exata e boletos do dia
+        function runScheduledNotificationsTick() {
+          if (!currentUser) return;
+          const ns = state.notificationSettings || DEFAULT_STATE.notificationSettings;
+          if (!ns || ns.mode === 'disabled' || ns.mode === 'cloud_fcm') return;
+          if (!('Notification' in window) || Notification.permission !== 'granted') return;
+
+          const now = new Date();
+          const yyyy = now.getFullYear();
+          const mm = String(now.getMonth() + 1).padStart(2, '0');
+          const dd = String(now.getDate()).padStart(2, '0');
+          const todayKey = `${yyyy}-${mm}-${dd}`;
+          const hhmm = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
+          if (!ns.dispatchedLog || typeof ns.dispatchedLog !== 'object') {
+            ns.dispatchedLog = {};
+          }
+
+          let logUpdated = false;
+
+          // 1. Resumo dos 3 Turnos Predefinidos (Manhã, Tarde, Noite)
+          const shiftConfigs = [
+            { enabled: ns.morningEnabled !== false, time: ns.morningTime || '08:00', shift: 'Manhã', icon: '☀️' },
+            { enabled: ns.afternoonEnabled !== false, time: ns.afternoonTime || '14:00', shift: 'Tarde', icon: '🌤️' },
+            { enabled: ns.eveningEnabled !== false, time: ns.eveningTime || '20:00', shift: 'Noite', icon: '🌙' }
+          ];
+
+          shiftConfigs.forEach((sc) => {
+            if (sc.enabled && sc.time === hhmm) {
+              const logKey = `${todayKey}_shift_${sc.shift}_${sc.time}`;
+              if (!ns.dispatchedLog[logKey]) {
+                ns.dispatchedLog[logKey] = true;
+                logUpdated = true;
+                const summary = buildDailyPendingSummaryText(sc.shift);
+                dispatchPrumoNotification(
+                  `${sc.icon} Resumo da ${sc.shift} (${sc.time}) — Prumo`,
+                  summary,
+                  logKey,
+                  { targetModule: 'mod1_plans' }
+                );
+              }
+            }
+          });
+
+          // 2. Horário Exato de Cada Compromisso do Dia
+          if (ns.exactPlanTimeEnabled !== false) {
+            state.plans
+              .filter(p => p.date === todayKey && !p.done && p.time === hhmm)
+              .forEach((plan) => {
+                const logKey = `${todayKey}_plan_${plan.id}_${plan.time}`;
+                if (!ns.dispatchedLog[logKey]) {
+                  ns.dispatchedLog[logKey] = true;
+                  logUpdated = true;
+                  dispatchPrumoNotification(
+                    `⏰ Compromisso Agora (${plan.time}): ${plan.title}`,
+                    `Turno: ${plan.shift} • Categoria: ${plan.category}${plan.notes ? ' — ' + plan.notes : ''}`,
+                    logKey,
+                    { targetModule: 'mod1_plans' }
+                  );
+                }
+              });
+          }
+
+          // 3. Alerta de Contas Fixas (Boletos) Vencendo no Dia
+          if (ns.dueBillsEnabled !== false) {
+            const billTriggerTime = ns.morningTime || '08:00';
+            if (hhmm >= billTriggerTime) {
+              const todayDayNum = now.getDate();
+              const dueTodayBills = state.fixedBills.filter(b => !b.paid && Number(b.dueDay) === todayDayNum);
+              if (dueTodayBills.length > 0) {
+                const logKey = `${todayKey}_due_bills_${dueTodayBills.length}`;
+                if (!ns.dispatchedLog[logKey]) {
+                  ns.dispatchedLog[logKey] = true;
+                  logUpdated = true;
+                  const names = dueTodayBills.map(b => `${b.name} (${formatCurrencyBRL(b.amount)})`).join(', ');
+                  dispatchPrumoNotification(
+                    `📄 ${dueTodayBills.length} Conta(s) Fixa(s) Vencendo Hoje!`,
+                    `Boletos em aberto hoje: ${names}.`,
+                    logKey,
+                    { targetModule: 'mod4_bills' }
+                  );
+                }
+              }
+            }
+          }
+
+          if (logUpdated) {
+            saveState();
+          }
+        }
+
+        setInterval(runScheduledNotificationsTick, 20000);
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) {
+            renderNotificationSettingsUI();
+            runScheduledNotificationsTick();
+          }
+        });
 
         document.getElementById('btnBackToHome').addEventListener('click', openHomeView);
         document.getElementById('btnQuickOpenDayPlans').addEventListener('click', () => openModule1View('plans'));
@@ -6318,10 +7183,11 @@
           });
         }
 
-        // Backup & Drive Modal
+        // Unified Settings Modal (Notificações, Aparência & App, Nuvem, Backup & Conta)
         const modalBkp = document.getElementById('modalBackupDrive');
         document.getElementById('btnOpenBackupModal').addEventListener('click', () => {
           renderBackupSnapshots();
+          renderNotificationSettingsUI();
           modalBkp.classList.remove('hidden');
           modalBkp.classList.add('flex');
         });
