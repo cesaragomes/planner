@@ -277,7 +277,7 @@
             <p id="headerUserEmail" class="text-[10px] text-white/75 truncate max-w-[150px]">conta@gmail.com</p>
           </div>
         </div>
-        <button id="btnCloudSyncNow" type="button" title="Status de sincronização com a nuvem" class="hidden px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 text-emerald-200 transition items-center gap-1.5 cursor-pointer">
+        <button id="btnCloudSyncNow" type="button" title="Abrir configurações de sincronização na nuvem" class="hidden px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 text-emerald-200 transition items-center gap-1.5 cursor-pointer">
           <span id="cloudSyncIcon">☁️</span>
           <span id="cloudSyncLabel">Conectado</span>
         </button>
@@ -430,9 +430,6 @@
             <button id="btnQuickOpenDayPlans" type="button" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition cursor-pointer">
               Agenda de Hoje →
             </button>
-            <button id="btnCustomizeModules" type="button" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs transition cursor-pointer">
-              ⚙️ Organizar Módulos
-            </button>
           </div>
         </div>
 
@@ -491,37 +488,7 @@
         </div>
       </div>
 
-      <!-- Pinned Shortcuts Bar (Hidden in minimalist layout to avoid duplicating the 6 category cards) -->
-      <div id="shortcutsContainer" class="hidden flex-wrap items-center gap-2">
-        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 mr-1">Atalhos Rápidos:</span>
-        <button id="btnShortcutPlans" type="button" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 text-xs font-medium text-slate-700 shadow-sm transition">
-          📅 Agenda de Hoje
-        </button>
-        <button id="btnShortcutHabits" type="button" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 text-xs font-medium text-slate-700 shadow-sm transition">
-          💧 Check-in de Hábitos
-        </button>
-        <button id="btnShortcutPostpone" type="button" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-amber-500 text-xs font-medium text-slate-700 shadow-sm transition">
-          ⏭️ Adiar Pendências para Amanhã
-        </button>
-        <button id="btnShortcutShopping" type="button" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 text-xs font-medium text-slate-700 shadow-sm transition">
-          🛒 Modo Mercado
-        </button>
-        <button id="btnShortcutTasks" type="button" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 text-xs font-medium text-slate-700 shadow-sm transition">
-          🧹 Tarefas da Casa
-        </button>
-        <button id="btnShortcutFinance" type="button" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 text-xs font-medium text-slate-700 shadow-sm transition">
-          💰 Planilha de Gastos
-        </button>
-        <button id="btnShortcutWishlist" type="button" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 text-xs font-medium text-slate-700 shadow-sm transition">
-          🏠 Aquisições & Preços
-        </button>
-        <button id="btnShortcutPantry" type="button" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 text-xs font-medium text-slate-700 shadow-sm transition">
-          🍲 Despensa & Cardápio
-        </button>
-        <button id="btnShortcutExport" type="button" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-indigo-500 text-xs font-medium text-slate-700 shadow-sm transition">
-          💾 Fazer / Carregar Backup
-        </button>
-      </div>
+
 
       <!-- Modular Grid (The 6 Modules) -->
       <div>
@@ -1177,13 +1144,10 @@
 
         <div class="flex flex-wrap items-center gap-2">
           <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
-            <button id="tabBtnTasksAll" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-900 shadow-xs">Todas</button>
-            <button id="tabBtnTasksRecurring" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900">🔄 Limpeza Recorrente</button>
-            <button id="tabBtnTasksOneOff" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900">📌 Pontuais</button>
+            <button id="tabBtnTasksAll" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-900 shadow-xs cursor-pointer">Todas</button>
+            <button id="tabBtnTasksRecurring" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer">🔄 Limpeza Recorrente</button>
+            <button id="tabBtnTasksOneOff" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer">📌 Pontuais</button>
           </div>
-          <button id="btnResetWeeklyChores" type="button" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition shadow-sm">
-            🔄 Reiniciar Rodízio Semanal
-          </button>
         </div>
       </div>
 
@@ -1974,31 +1938,7 @@
 
   </main>
 
-  <!-- ==================== MODAL 1: ORGANIZAR E RENOMEAR MÓDULOS ==================== -->
-  <div id="modalCustomizeHome" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 hidden items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-xl w-full p-5 sm:p-6 shadow-xl border border-slate-200 space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <div>
-          <h3 class="text-base font-bold text-slate-900">Organizar Módulos</h3>
-          <p class="text-xs text-slate-500">Altere o nome de cada seção, mude a ordem ou oculte o que não usar</p>
-        </div>
-        <button id="btnCloseCustomizeModal" type="button" class="text-slate-400 hover:text-slate-700 text-sm font-bold px-2 py-1 cursor-pointer">✕</button>
-      </div>
-      <div id="customizeModulesList" class="space-y-2.5 max-h-96 overflow-y-auto custom-scroll pr-1">
-        <!-- Rendered dynamically -->
-      </div>
-      <div class="flex items-center justify-between pt-2 border-t border-slate-100">
-        <button id="btnResetModuleNames" type="button" class="text-xs font-semibold text-slate-500 hover:text-slate-800 cursor-pointer">
-          Restaurar nomes padrão
-        </button>
-        <button id="btnDoneCustomizeModal" type="button" class="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 cursor-pointer">
-          Salvar e Fechar
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== MODAL 2: MENU UNIFICADO DE CONFIGURAÇÕES (3 ABAS) ==================== -->
+  <!-- ==================== MODAL CENTRALIZADO DE CONFIGURAÇÕES (3 ABAS) ==================== -->
   <div id="modalBackupDrive" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 hidden items-center justify-center p-3 sm:p-4">
     <div class="bg-white rounded-2xl max-w-2xl w-full p-5 sm:p-6 shadow-xl border border-slate-200 space-y-4 max-h-[92vh] overflow-y-auto custom-scroll">
       <!-- Cabeçalho do Modal -->
@@ -2008,7 +1948,7 @@
             <span>⚙️</span>
             <span>Configurações do Prumo</span>
           </h3>
-          <p class="text-xs text-slate-500">Notificações Push, aparência do aplicativo, backup e sincronização em nuvem</p>
+          <p class="text-xs text-slate-500">Notificações Push, aparência e módulos, manutenção da rotina e nuvem</p>
         </div>
         <button id="btnCloseBackupModal" type="button" class="text-slate-400 hover:text-slate-700 text-sm font-bold px-2.5 py-1 rounded-lg hover:bg-slate-100 cursor-pointer">✕</button>
       </div>
@@ -2157,8 +2097,13 @@
           </button>
 
           <div id="fcmSavedTokenBox" class="hidden p-2.5 rounded-lg bg-white/90 border border-indigo-200 text-[11px] text-slate-600 flex items-center justify-between gap-2">
-            <span class="font-bold text-slate-800">Aparelho sincronizado na nuvem:</span>
+            <span class="font-bold text-slate-800">Este aparelho:</span>
             <span id="fcmSavedDeviceLabel" class="font-semibold text-emerald-700">Ativo</span>
+          </div>
+
+          <div id="fcmDevicesListWrapper" class="hidden pt-2 border-t border-indigo-200/60 space-y-1.5">
+            <p class="text-[11px] font-bold text-indigo-900">Aparelhos vinculados na sua conta:</p>
+            <div id="fcmDevicesListContainer" class="space-y-1.5"></div>
           </div>
         </div>
       </div>
@@ -2182,21 +2127,47 @@
           </button>
         </div>
 
-        <!-- Organizar / Renomear Módulos -->
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h4 class="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
-              <span>🧩</span>
-              <span>Organizar e Renomear Módulos</span>
-            </h4>
-            <p class="text-xs text-slate-500 mt-0.5">
-              Personalize o título dos 6 módulos, altere a ordem na tela inicial ou oculte os que não usar.
-            </p>
+        <!-- Preferências de Exibição de Tarefas e Concluídos -->
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2.5">
+          <h4 class="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
+            <span>👁️</span>
+            <span>Preferências de Exibição da Rotina</span>
+          </h4>
+          <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+            <input id="chkSettingsShowCompletedToday" type="checkbox" checked class="mt-0.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
+            <div class="text-xs">
+              <p class="font-semibold text-slate-800">Exibir itens já concluídos de hoje no painel rápido da Tela Inicial</p>
+              <p class="text-[11px] text-slate-500">Mostra apenas o que foi concluído na data de hoje (tarefas de dias anteriores nunca poluem o painel do dia).</p>
+            </div>
+          </label>
+          <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+            <input id="chkHidePastCompletedOneOffTasks" type="checkbox" checked class="mt-0.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
+            <div class="text-xs">
+              <p class="font-semibold text-slate-800">Ocultar automaticamente tarefas pontuais já concluídas em dias passados (Módulo 3)</p>
+              <p class="text-[11px] text-slate-500">Mantém a lista do Módulo 3 limpa no dia seguinte após concluir uma tarefa única.</p>
+            </div>
+          </label>
+        </div>
+
+        <!-- Organizar e Renomear Módulos (Embutido diretamente na Aba 2, sem segundo modal redundante) -->
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                <span>🧩</span>
+                <span>Organizar e Renomear Módulos</span>
+              </h4>
+              <p class="text-xs text-slate-500 mt-0.5">
+                Altere o nome de cada seção, mude a ordem na tela inicial ou oculte os módulos que não usar.
+              </p>
+            </div>
+            <button id="btnResetModuleNames" type="button" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-700 cursor-pointer transition">
+              🔄 Restaurar nomes padrão
+            </button>
           </div>
-          <button id="btnOpenCustomizeFromSettings" type="button" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition flex items-center gap-2 cursor-pointer shadow-2xs">
-            <span>⚙️</span>
-            <span>Organizar / Renomear Módulos</span>
-          </button>
+          <div id="customizeModulesList" class="space-y-2 max-h-72 overflow-y-auto custom-scroll pr-1">
+            <!-- Rendered dynamically -->
+          </div>
         </div>
 
         <!-- Instalar Aplicativo (PWA) -->
@@ -2239,6 +2210,29 @@
             <button id="btnForcePullFromDrive" type="button" class="w-full py-2.5 px-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
               <span>⬇️</span>
               <span>Baixar da Nuvem</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Manutenção da Rotina (Reiniciar Rodízio Semanal e Limpar Concluídos Antigos) -->
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-3">
+          <div>
+            <h4 class="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
+              <span>🛠️</span>
+              <span>Manutenção da Rotina &amp; Limpeza de Histórico</span>
+            </h4>
+            <p class="text-xs text-slate-500 mt-0.5">
+              As tarefas recorrentes já destravam sozinhas na virada do dia. Use os botões abaixo apenas quando quiser forçar um reinício manual ou limpar concluídos antigos.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button id="btnResetWeeklyChores" type="button" class="w-full py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
+              <span>🔄</span>
+              <span>Reiniciar Rodízio Semanal</span>
+            </button>
+            <button id="btnCleanupOldCompleted" type="button" class="w-full py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
+              <span>🧹</span>
+              <span>Limpar Concluídos Antigos</span>
             </button>
           </div>
         </div>
@@ -2350,8 +2344,17 @@
           }
         } catch (e) {}
       })();
-      const GOOGLE_DRIVE_SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
-      const TODAY_STR = new Date().toISOString().slice(0, 10);
+      const LOCAL_FCM_DEVICE_KEY = 'prumo_local_fcm_device_v1';
+
+      function getLocalTodayStr() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, '0');
+        const d = String(now.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+      }
+
+      let TODAY_STR = getLocalTodayStr();
 
       function getTomorrowStr(dateStr) {
         const parts = dateStr.split('-').map(Number);
@@ -2480,6 +2483,9 @@
         ],
         recipes: [],
         backups: [],
+        homeTodayFilter: 'ALL',
+        homeShowCompletedToday: true,
+        hidePastCompletedOneOffTasks: true,
         fcmTokens: [],
         notificationSettings: {
           mode: 'hybrid',
@@ -2611,6 +2617,143 @@
         return obj;
       }
 
+      function recalculateHabitStreak(habit) {
+        if (!habit) return;
+        if (!habit.progressByDate || typeof habit.progressByDate !== 'object') {
+          habit.progressByDate = {};
+        }
+        const target = Number(habit.target) || 1;
+        const freq = habit.freqType || 'daily';
+        let streak = 0;
+
+        if (freq === 'daily') {
+          const doneToday = (Number(habit.progressByDate[TODAY_STR]) || 0) >= target;
+          let cursor = doneToday ? TODAY_STR : addDaysStr(TODAY_STR, -1);
+          for (let i = 0; i < 365; i++) {
+            const val = Number(habit.progressByDate[cursor]) || 0;
+            if (val >= target) {
+              streak++;
+              cursor = addDaysStr(cursor, -1);
+            } else {
+              break;
+            }
+          }
+        } else if (freq === 'specific_days') {
+          const schedDays = Array.isArray(habit.scheduledDays) && habit.scheduledDays.length > 0
+            ? habit.scheduledDays.map(Number)
+            : [1, 3, 5];
+          for (let i = 0; i < 365; i++) {
+            const dStr = addDaysStr(TODAY_STR, -i);
+            const val = Number(habit.progressByDate[dStr]) || 0;
+            const dIdx = getDayOfWeekIndex(dStr);
+            const isSched = schedDays.includes(dIdx);
+            if (val >= target) {
+              streak++;
+            } else if (isSched) {
+              if (i === 0) {
+                // Hoje ainda está em aberto: não quebra o streak acumulado dos dias anteriores
+                continue;
+              }
+              break;
+            }
+          }
+        } else if (freq === 'weekly_flex') {
+          const goal = Math.max(1, Number(habit.weeklyGoal) || 3);
+          for (let w = 0; w < 52; w++) {
+            const refDate = addDaysStr(TODAY_STR, -(w * 7));
+            const weekDates = getCurrentWeekDateStrings(refDate);
+            let doneInWeek = 0;
+            weekDates.forEach(dStr => {
+              if ((Number(habit.progressByDate[dStr]) || 0) >= target) {
+                doneInWeek++;
+              }
+            });
+            if (w === 0) {
+              streak += doneInWeek;
+            } else if (doneInWeek >= goal) {
+              streak += doneInWeek;
+            } else {
+              break;
+            }
+          }
+        }
+
+        habit.streak = streak;
+        habit.bestStreak = Math.max(Number(habit.bestStreak) || 0, streak);
+      }
+
+      function refreshDailyRoutinesOnObject(targetState) {
+        if (!targetState || typeof targetState !== 'object') return false;
+        TODAY_STR = getLocalTodayStr();
+        let mutated = false;
+        const todayWeekday = (function () {
+          const parts = TODAY_STR.split('-').map(Number);
+          return new Date(parts[0], parts[1] - 1, parts[2]).getDay();
+        })();
+
+        if (Array.isArray(targetState.tasks)) {
+          targetState.tasks.forEach(task => {
+            if (!task) return;
+            const isRecurring = task.type === 'Recorrente' || (Array.isArray(task.customDays) && task.customDays.length > 0);
+            if (isRecurring && task.done && task.lastDone && task.lastDone !== '—' && task.lastDone < TODAY_STR) {
+              task.done = false;
+              if (Array.isArray(task.subtasks)) {
+                task.subtasks.forEach(s => { s.done = false; });
+              }
+              mutated = true;
+            }
+            if (isRecurring && !task.done) {
+              if (Array.isArray(task.customDays) && task.customDays.length > 0) {
+                if (task.customDays.includes(todayWeekday) && task.lastDone !== TODAY_STR) {
+                  if (task.nextDue !== TODAY_STR) {
+                    task.nextDue = TODAY_STR;
+                    mutated = true;
+                  }
+                } else if (!task.nextDue || task.nextDue < TODAY_STR) {
+                  let nextCandidate = addDaysStr(TODAY_STR, 7);
+                  for (let delta = 1; delta <= 7; delta++) {
+                    const cand = addDaysStr(TODAY_STR, delta);
+                    const p = cand.split('-').map(Number);
+                    const wIdx = new Date(p[0], p[1] - 1, p[2]).getDay();
+                    if (task.customDays.includes(wIdx)) {
+                      nextCandidate = cand;
+                      break;
+                    }
+                  }
+                  task.nextDue = nextCandidate;
+                  mutated = true;
+                }
+              }
+            }
+          });
+        }
+
+        if (Array.isArray(targetState.habits)) {
+          targetState.habits.forEach(h => {
+            if (!h) return;
+            const prevStreak = h.streak;
+            // Se getDayOfWeekIndex já estiver acessível, recalcula o streak real
+            if (typeof getDayOfWeekIndex === 'function') {
+              recalculateHabitStreak(h);
+              if (h.streak !== prevStreak) mutated = true;
+            }
+          });
+        }
+
+        // Limpa logs de notificações de dias anteriores para não inflar o documento na nuvem
+        if (targetState.notificationSettings && targetState.notificationSettings.dispatchedLog) {
+          const logObj = targetState.notificationSettings.dispatchedLog;
+          Object.keys(logObj).forEach(k => {
+            if (!k.startsWith(TODAY_STR)) {
+              delete logObj[k];
+              mutated = true;
+            }
+          });
+        }
+
+        return mutated;
+      }
+
       let state = loadState();
 
       function loadState() {
@@ -2637,6 +2780,8 @@
           if (!Array.isArray(merged.pantryItems)) merged.pantryItems = [];
           if (!Array.isArray(merged.recipes)) merged.recipes = [];
           if (!Array.isArray(merged.fcmTokens)) merged.fcmTokens = [];
+          if (typeof merged.homeShowCompletedToday !== 'boolean') merged.homeShowCompletedToday = true;
+          if (typeof merged.hidePastCompletedOneOffTasks !== 'boolean') merged.hidePastCompletedOneOffTasks = true;
           merged.notificationSettings = Object.assign(
             {},
             DEFAULT_STATE.notificationSettings,
@@ -2646,6 +2791,7 @@
             merged.notificationSettings.dispatchedLog = {};
           }
           sanitizeLegacySampleData(merged);
+          refreshDailyRoutinesOnObject(merged);
           if (!merged.selectedWishlistChartId && merged.wishlistItems.length > 0) {
             merged.selectedWishlistChartId = merged.wishlistItems[0].id;
           }
@@ -2682,6 +2828,8 @@
       let fbDb = null;
       let fbUnsubscribeSnapshot = null;
       let isApplyingRemoteSnapshot = false;
+      let hasPendingLocalChanges = false;
+      let isPushingToFirestore = false;
 
       function initFirebaseServices() {
         if (fbApp) return true;
@@ -2699,12 +2847,18 @@
         }
       }
 
-      function getFirestoreDocIdForUser(userObj) {
-        if (!userObj) return null;
-        if (userObj.email) {
-          return 'user_' + userObj.email.toLowerCase().replace(/[^a-z0-9]/g, '_');
-        }
-        return userObj.uid || null;
+      function preserveLocalDeviceUIState(targetObj) {
+        if (!targetObj || !state) return targetObj;
+        targetObj.platformMode = state.platformMode || detectDeviceLayoutMode();
+        targetObj.selectedDate = state.selectedDate || TODAY_STR;
+        targetObj.categoryFilter = state.categoryFilter || 'ALL';
+        targetObj.habitFilterType = state.habitFilterType || 'ALL';
+        targetObj.shoppingFilterStore = state.shoppingFilterStore || 'ALL';
+        targetObj.taskFilterType = state.taskFilterType || 'ALL';
+        targetObj.taskFilterRoom = state.taskFilterRoom || 'ALL';
+        targetObj.financeCategoryFilter = state.financeCategoryFilter || 'ALL';
+        targetObj.homeTodayFilter = state.homeTodayFilter || 'ALL';
+        return targetObj;
       }
 
       let pendingSyncMode = null; // 'push' | 'pull' | 'auto'
@@ -2726,24 +2880,24 @@
 
         if (status === 'syncing') {
           iconEl.textContent = '⏳';
-          labelEl.textContent = 'Salvando...';
+          labelEl.textContent = labelText || 'Salvando...';
           btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/25 border border-sky-400/40 text-sky-100 transition flex items-center gap-1.5 cursor-pointer';
           if (modalStatusEl) {
-            modalStatusEl.textContent = 'Sincronizando...';
+            modalStatusEl.textContent = 'Sincronizando alterações com o Firebase Firestore...';
           }
         } else if (status === 'expired') {
           iconEl.textContent = '☁️';
-          labelEl.textContent = 'Conectar';
+          labelEl.textContent = labelText || 'Conectar';
           btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/30 hover:bg-amber-500/40 border border-amber-400/50 text-amber-100 transition flex items-center gap-1.5 cursor-pointer';
           if (modalStatusEl) {
-            modalStatusEl.textContent = 'Desconectado.';
+            modalStatusEl.textContent = 'Sessão de nuvem desconectada. Clique em Enviar ou Baixar para reconectar.';
           }
         } else {
           iconEl.textContent = '☁️';
-          labelEl.textContent = 'Conectado';
+          labelEl.textContent = labelText || 'Conectado';
           btn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 text-emerald-100 transition flex items-center gap-1.5 cursor-pointer';
           if (modalStatusEl) {
-            modalStatusEl.textContent = `Conectado. Última gravação: ${state.lastUpdated || 'agora'}`;
+            modalStatusEl.textContent = `Conectado em tempo real. Última gravação: ${state.lastUpdated || 'agora'}`;
           }
         }
       }
@@ -2752,24 +2906,35 @@
         if (!currentUser || !initFirebaseServices() || !fbDb) return false;
         const fbUser = fbAuth && fbAuth.currentUser;
         if (!fbUser) {
-          setCloudSyncHeaderState('expired', 'Conectar Firebase');
+          setCloudSyncHeaderState('expired', 'Conectar');
           return false;
         }
+        if (autoDriveSyncTimer) {
+          clearTimeout(autoDriveSyncTimer);
+          autoDriveSyncTimer = null;
+        }
         try {
+          isPushingToFirestore = true;
           setCloudSyncHeaderState('syncing', 'Salvando...');
+          const pushTimestamp = Number(state.updatedAtMs || Date.now());
           const payload = JSON.parse(JSON.stringify(state));
-          payload.updatedAtMs = Number(state.updatedAtMs || Date.now());
+          payload.updatedAtMs = pushTimestamp;
           payload.ownerEmail = currentUser.email || fbUser.email || '';
           payload.ownerUid = fbUser.uid;
 
-          // Grava tanto no doc por UID (compatível com regra request.auth.uid == userId) quanto por e-mail se permitido
-          await fbDb.collection('users').doc(fbUser.uid).set(payload, { merge: true });
-          setCloudSyncHeaderState('ok', 'Sincronizado');
+          // Substituição completa do documento (sem merge: true) para garantir que exclusões em mapas aninhados persistam
+          await fbDb.collection('users').doc(fbUser.uid).set(payload);
+          if (Number(state.updatedAtMs || 0) <= pushTimestamp) {
+            hasPendingLocalChanges = false;
+          }
+          isPushingToFirestore = false;
+          setCloudSyncHeaderState('ok', 'Conectado');
           if (showSuccessToast) {
-            showToast(`Sincronizado no Firebase (${state.habits.length} hábitos • ${state.tasks.length} tarefas)!`, '☁️');
+            showToast(`Sincronizado na nuvem (${state.habits.length} hábitos • ${state.tasks.length} tarefas)!`, '☁️');
           }
           return true;
         } catch (err) {
+          isPushingToFirestore = false;
           setCloudSyncHeaderState('expired', 'Verificar Regras');
           if (showSuccessToast) {
             showToast('Verifique se o Firestore Database foi criado e as Regras publicadas no console do Firebase.', '⚠️');
@@ -2782,7 +2947,7 @@
         if (!currentUser || !initFirebaseServices() || !fbDb) return false;
         const fbUser = fbAuth && fbAuth.currentUser;
         if (!fbUser) {
-          setCloudSyncHeaderState('expired', 'Conectar Firebase');
+          setCloudSyncHeaderState('expired', 'Conectar');
           return false;
         }
         try {
@@ -2793,26 +2958,28 @@
             if (cloudData && Array.isArray(cloudData.plans)) {
               const needsPurgePush = !cloudData.sampleDataPurgedV3;
               sanitizeLegacySampleData(cloudData);
+              preserveLocalDeviceUIState(cloudData);
+              const routineMutated = refreshDailyRoutinesOnObject(cloudData);
               isApplyingRemoteSnapshot = true;
+              hasPendingLocalChanges = false;
               localStorage.setItem(getUserStorageKey(currentUser.email), JSON.stringify(cloudData));
               state = loadState();
               renderAll();
               isApplyingRemoteSnapshot = false;
-              if (needsPurgePush) {
+              if (needsPurgePush || routineMutated) {
                 pushStateToFirestoreNow(false);
               }
-              setCloudSyncHeaderState('ok', 'Sincronizado');
+              setCloudSyncHeaderState('ok', 'Conectado');
               if (showSuccessToast) {
-                showToast(`Dados atualizados do Firebase (${state.habits.length} hábitos • ${state.tasks.length} tarefas)!`, '⬇️');
+                showToast(`Dados atualizados da nuvem (${state.habits.length} hábitos • ${state.tasks.length} tarefas)!`, '⬇️');
               }
               return true;
             }
           }
-          // Se ainda não existe documento na nuvem, sobe o estado atual deste aparelho!
           await pushStateToFirestoreNow(false);
-          setCloudSyncHeaderState('ok', 'Sincronizado');
+          setCloudSyncHeaderState('ok', 'Conectado');
           if (showSuccessToast) {
-            showToast('Seus dados locais foram salvos como base inicial no Firebase!', '☁️');
+            showToast('Seus dados locais foram salvos como base inicial na nuvem!', '☁️');
           }
           return true;
         } catch (err) {
@@ -2830,8 +2997,11 @@
         fbUnsubscribeSnapshot = fbDb.collection('users').doc(fbUser.uid).onSnapshot((docSnap) => {
           if (isApplyingRemoteSnapshot) return;
           if (!docSnap.exists) {
-            // Primeiro acesso deste usuário no Firestore: envia os dados locais (ex.: os 5 hábitos + 1 tarefa do PC) para a nuvem!
             pushStateToFirestoreNow(false);
+            return;
+          }
+          // Evita que um snapshot antigo sobrescreva edições locais ainda na janela de debounce
+          if ((hasPendingLocalChanges || isPushingToFirestore) && docSnap.metadata.hasPendingWrites) {
             return;
           }
           const cloudData = docSnap.data();
@@ -2841,21 +3011,22 @@
           const cloudMs = Number(cloudData.updatedAtMs || 0);
           const localMs = Number(state.updatedAtMs || 0);
 
-          if (cloudMs > localMs || needsPurgePush) {
+          if ((cloudMs > localMs && !hasPendingLocalChanges) || needsPurgePush) {
+            preserveLocalDeviceUIState(cloudData);
+            const routineMutated = refreshDailyRoutinesOnObject(cloudData);
             isApplyingRemoteSnapshot = true;
             localStorage.setItem(getUserStorageKey(currentUser.email), JSON.stringify(cloudData));
             state = loadState();
             renderAll();
             isApplyingRemoteSnapshot = false;
             setCloudSyncHeaderState('ok', 'Conectado');
-            if (needsPurgePush) {
+            if (needsPurgePush || routineMutated) {
               pushStateToFirestoreNow(false);
             }
-          } else if (localMs > cloudMs && ! docSnap.metadata.hasPendingWrites) {
-            // Os dados locais deste aparelho (ex.: PC) são mais novos que os da nuvem -> atualiza a nuvem automaticamente!
+          } else if (localMs > cloudMs && !docSnap.metadata.hasPendingWrites) {
             pushStateToFirestoreNow(false);
           } else {
-            setCloudSyncHeaderState('ok', 'Sincronizado');
+            setCloudSyncHeaderState('ok', 'Conectado');
           }
         }, () => {
           setCloudSyncHeaderState('expired', 'Verificar Firestore');
@@ -2874,6 +3045,7 @@
       function saveState() {
         state.lastUpdated = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         state.updatedAtMs = Date.now();
+        hasPendingLocalChanges = true;
         try {
           const key = currentUser && currentUser.email ? getUserStorageKey(currentUser.email) : STORAGE_KEY;
           localStorage.setItem(key, JSON.stringify(state));
@@ -2960,283 +3132,7 @@
         document.getElementById('btnLogoutAccount').classList.add('hidden');
       }
 
-      const EMBEDDED_CLIENT_ID = '781685938825-oghdgl8pv81c7ghntfqffdgoticvg680.apps.googleusercontent.com';
 
-      function loadGoogleApiConfig() {
-        const defaults = {
-          clientId: EMBEDDED_CLIENT_ID,
-          accessToken: '',
-          tokenExpiresAt: 0,
-          driveFolderId: '',
-          driveFileId: ''
-        };
-        try {
-          const raw = localStorage.getItem(GOOGLE_API_CONFIG_KEY);
-          if (!raw) return defaults;
-          const parsed = JSON.parse(raw);
-          return {
-            clientId: parsed.clientId || EMBEDDED_CLIENT_ID,
-            accessToken: parsed.accessToken || '',
-            tokenExpiresAt: parsed.tokenExpiresAt || 0,
-            driveFolderId: parsed.driveFolderId || '',
-            driveFileId: parsed.driveFileId || ''
-          };
-        } catch (e) {
-          return defaults;
-        }
-      }
-
-      function saveGoogleApiConfig(cfg) {
-        try {
-          localStorage.setItem(GOOGLE_API_CONFIG_KEY, JSON.stringify(cfg));
-        } catch (e) {}
-      }
-
-      let googleApiConfig = loadGoogleApiConfig();
-      let gisScriptLoaded = false;
-
-      function ensureGoogleIdentityScriptLoaded(callback) {
-        if (window.google && window.google.accounts && window.google.accounts.oauth2) {
-          callback(true);
-          return;
-        }
-        if (gisScriptLoaded) {
-          setTimeout(() => callback(!!(window.google && window.google.accounts)), 600);
-          return;
-        }
-        gisScriptLoaded = true;
-        const script = document.createElement('script');
-        script.src = 'https://accounts.google.com/gsi/client';
-        script.async = true;
-        script.defer = true;
-        script.onload = () => callback(true);
-        script.onerror = () => callback(false);
-        document.head.appendChild(script);
-      }
-
-      // Real Google Drive API v3: Find or create folder 'Prumo_Backups' (with cache: no-store)
-      async function getOrCreateDriveFolder(accessToken) {
-        const q = encodeURIComponent("name='Prumo_Backups' and mimeType='application/vnd.google-apps.folder' and trashed=false");
-        const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime%20desc&fields=files(id,name)&_t=${Date.now()}`, {
-          cache: 'no-store',
-          headers: { Authorization: 'Bearer ' + accessToken }
-        });
-        if (searchResp.status === 401 || searchResp.status === 403) {
-          googleApiConfig.tokenExpiresAt = 0;
-          saveGoogleApiConfig(googleApiConfig);
-          setCloudSyncHeaderState('expired', 'Reconectar Nuvem');
-          throw new Error('Sessão de sincronização expirada (401).');
-        }
-        if (!searchResp.ok) {
-          throw new Error('Falha ao consultar pasta no Google Drive.');
-        }
-        const searchData = await searchResp.json();
-        if (searchData.files && searchData.files.length > 0) {
-          return searchData.files[0].id;
-        }
-        const createResp = await fetch('https://www.googleapis.com/drive/v3/files', {
-          method: 'POST',
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            name: 'Prumo_Backups',
-            mimeType: 'application/vnd.google-apps.folder'
-          })
-        });
-        if (!createResp.ok) {
-          throw new Error('Não foi possível criar a pasta Prumo_Backups no Google Drive.');
-        }
-        const created = await createResp.json();
-        return created.id;
-      }
-
-      // Real Google Drive API v3: Upload or update JSON file inside 'Prumo_Backups'
-      async function uploadJsonToGoogleDrive(accessToken, fileName, jsonPayload, folderId) {
-        const q = encodeURIComponent(`name='${fileName}' and '${folderId}' in parents and trashed=false`);
-        const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime%20desc&fields=files(id,name)&_t=${Date.now()}`, {
-          cache: 'no-store',
-          headers: { Authorization: 'Bearer ' + accessToken }
-        });
-        if (searchResp.status === 401 || searchResp.status === 403) {
-          googleApiConfig.tokenExpiresAt = 0;
-          saveGoogleApiConfig(googleApiConfig);
-          setCloudSyncHeaderState('expired', 'Reconectar Nuvem');
-          throw new Error('Token Google expirado (401).');
-        }
-        const searchData = searchResp.ok ? await searchResp.json() : { files: [] };
-        const existingFileId = searchData.files && searchData.files.length > 0 ? searchData.files[0].id : null;
-
-        const metadata = existingFileId
-          ? { name: fileName, mimeType: 'application/json' }
-          : { name: fileName, mimeType: 'application/json', parents: [folderId] };
-
-        const boundary = 'prumo_multipart_boundary_' + Date.now();
-        const delimiter = `--${boundary}\r\n`;
-        const closeDelimiter = `\r\n--${boundary}--`;
-        const bodyContent =
-          delimiter +
-          'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
-          JSON.stringify(metadata) +
-          '\r\n' +
-          delimiter +
-          'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
-          JSON.stringify(jsonPayload, null, 2) +
-          closeDelimiter;
-
-        const url = existingFileId
-          ? `https://www.googleapis.com/upload/drive/v3/files/${existingFileId}?uploadType=multipart&fields=id,name,webViewLink`
-          : 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,webViewLink';
-
-        const uploadResp = await fetch(url, {
-          method: existingFileId ? 'PATCH' : 'POST',
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
-            'Content-Type': `multipart/related; boundary=${boundary}`
-          },
-          body: bodyContent
-        });
-
-        if (!uploadResp.ok) {
-          if (uploadResp.status === 401 || uploadResp.status === 403) {
-            googleApiConfig.tokenExpiresAt = 0;
-            saveGoogleApiConfig(googleApiConfig);
-            setCloudSyncHeaderState('expired', 'Reconectar Nuvem');
-          }
-          throw new Error('Erro ao gravar arquivo no Google Drive (' + uploadResp.status + ').');
-        }
-        return await uploadResp.json();
-      }
-
-      // Real Google Drive API v3: Download user's latest main database file from 'Prumo_Backups' (bypassing mobile cache!)
-      async function downloadUserDatabaseFromGoogleDrive(accessToken, email) {
-        const folderId = await getOrCreateDriveFolder(accessToken);
-        const slug = email.split('@')[0].replace(/[^a-z0-9]/gi, '_');
-        const mainFileName = `prumo_dados_${slug}.json`;
-
-        const q = encodeURIComponent(`name='${mainFileName}' and '${folderId}' in parents and trashed=false`);
-        const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime%20desc&fields=files(id,name,modifiedTime)&_t=${Date.now()}`, {
-          cache: 'no-store',
-          headers: { Authorization: 'Bearer ' + accessToken }
-        });
-        if (!searchResp.ok) return null;
-        const searchData = await searchResp.json();
-        if (!searchData.files || searchData.files.length === 0) return null;
-
-        const fileId = searchData.files[0].id;
-        const fileResp = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&_t=${Date.now()}`, {
-          cache: 'no-store',
-          headers: { Authorization: 'Bearer ' + accessToken }
-        });
-        if (!fileResp.ok) return null;
-        return await fileResp.json();
-      }
-
-      // Complete OAuth Login flow after receiving real Google Access Token
-      async function handleRealGoogleAccessToken(accessToken, expiresInSec, isSilentRenew) {
-        try {
-          if (!isSilentRenew) {
-            showToast('Conectando à sua Conta Google e sincronizando Google Drive...', '⏳');
-          }
-          setCloudSyncHeaderState('syncing', 'Sincronizando...');
-          googleApiConfig.accessToken = accessToken;
-          googleApiConfig.tokenExpiresAt = Date.now() + ((Number(expiresInSec) || 3500) * 1000);
-          saveGoogleApiConfig(googleApiConfig);
-
-          // 1. Fetch real Google profile from Drive API v3 (works with drive.file scope!) or OAuth2 userinfo
-          let userEmail = 'minhaconta.google@gmail.com';
-          let userName = 'Minha Conta Google';
-          try {
-            const driveAboutResp = await fetch('https://www.googleapis.com/drive/v3/about?fields=user(displayName,emailAddress,photoLink)', {
-              headers: { Authorization: 'Bearer ' + accessToken }
-            });
-            if (driveAboutResp.ok) {
-              const aboutData = await driveAboutResp.json();
-              if (aboutData && aboutData.user) {
-                if (aboutData.user.emailAddress) userEmail = aboutData.user.emailAddress.toLowerCase();
-                if (aboutData.user.displayName) userName = aboutData.user.displayName;
-              }
-            } else {
-              const profResp = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                headers: { Authorization: 'Bearer ' + accessToken }
-              });
-              if (profResp.ok) {
-                const prof = await profResp.json();
-                if (prof.email) userEmail = prof.email.toLowerCase();
-                if (prof.name) userName = prof.name;
-              }
-            }
-          } catch (e) {}
-
-          // 2. Register or update account in local registry & immediately persist active login session
-          let acc = accountsRegistry.find(a => a.email.toLowerCase() === userEmail);
-          if (!acc) {
-            acc = {
-              name: userName,
-              email: userEmail,
-              pin: '',
-              driveFolder: '/Prumo_Backups/',
-              isRealGoogleOAuth: true,
-              createdAt: TODAY_STR
-            };
-            accountsRegistry.unshift(acc);
-          } else {
-            acc.isRealGoogleOAuth = true;
-            acc.name = userName || acc.name;
-          }
-          saveAccountsRegistry(accountsRegistry);
-
-          // Salva imediatamente a sessão ativa no navegador antes mesmo de concluir a sincronização com o Drive
-          loginWithGoogleAccount(acc);
-
-          // 3. Try to load existing database from the user's real Google Drive, or upload current state
-          const folderId = await getOrCreateDriveFolder(accessToken);
-          googleApiConfig.driveFolderId = folderId;
-          saveGoogleApiConfig(googleApiConfig);
-
-          const slug = userEmail.split('@')[0].replace(/[^a-z0-9]/gi, '_');
-          const mainFileName = `prumo_dados_${slug}.json`;
-          const mode = pendingSyncMode;
-          pendingSyncMode = null;
-
-          if (mode === 'push') {
-            await uploadJsonToGoogleDrive(accessToken, mainFileName, state, folderId);
-            setCloudSyncHeaderState('ok', 'Sincronizado');
-            showToast('Dados deste aparelho enviados para o Google Drive com sucesso!', '⬆️');
-            return;
-          }
-
-          const cloudData = await downloadUserDatabaseFromGoogleDrive(accessToken, userEmail);
-          const localUpdatedMs = Number(state.updatedAtMs || 0);
-          const cloudUpdatedMs = cloudData ? Number(cloudData.updatedAtMs || 0) : 0;
-
-          if (mode === 'pull' && cloudData && Array.isArray(cloudData.plans)) {
-            localStorage.setItem(getUserStorageKey(userEmail), JSON.stringify(cloudData));
-            state = loadState();
-            renderAll();
-            setCloudSyncHeaderState('ok', 'Sincronizado');
-            showToast('Dados mais recentes baixados do Google Drive para este aparelho!', '⬇️');
-          } else if (cloudData && Array.isArray(cloudData.plans) && (localUpdatedMs === 0 || cloudUpdatedMs >= localUpdatedMs)) {
-            localStorage.setItem(getUserStorageKey(userEmail), JSON.stringify(cloudData));
-            state = loadState();
-            renderAll();
-            setCloudSyncHeaderState('ok', 'Sincronizado');
-            showToast(`Sincronizado com o Google Drive (${state.habits.length} hábitos • ${state.tasks.length} tarefas)!`, '☁️');
-          } else {
-            // Local data is newer than cloud (e.g., edited on PC while token was expired) -> push local data to Drive!
-            await uploadJsonToGoogleDrive(accessToken, mainFileName, state, folderId);
-            setCloudSyncHeaderState('ok', 'Sincronizado');
-            showToast(`Suas alterações locais mais recentes foram salvas no Google Drive!`, '☁️');
-          }
-        } catch (err) {
-          showToast(err.message || 'Erro ao acessar a API do Google Drive.', '⚠️');
-        }
-      }
-
-      function updateRealDriveStatusUI() {}
-
-      let isRenewingToken = false;
 
       async function triggerRealGoogleOAuthPopup(silentRenew) {
         if (initFirebaseServices() && fbAuth) {
@@ -3331,6 +3227,7 @@
           try { await fbAuth.signOut(); } catch (e) {}
         }
         currentUser = null;
+        hasPendingLocalChanges = false;
         try {
           localStorage.removeItem(ACTIVE_SESSION_KEY);
         } catch (e) {}
@@ -3727,16 +3624,25 @@
         renderHomeTodayQuickCheck();
       }
 
+      function isTaskCompletedToday(task) {
+        return Boolean(task && task.done && task.lastDone === TODAY_STR);
+      }
+
       function isTaskScheduledForToday(task) {
         if (!task) return false;
+        // Se a tarefa já está marcada como concluída, só pertence ao painel de HOJE se tiver sido concluída HOJE
+        if (task.done) {
+          return isTaskCompletedToday(task);
+        }
         const todayWeekday = getDayOfWeekIndex(TODAY_STR);
         const hasCustomDays = Array.isArray(task.customDays) && task.customDays.length > 0;
-        if (hasCustomDays && task.customDays.includes(todayWeekday)) return true;
-        if (task.nextDue === TODAY_STR) return true;
-        if (task.lastDone === TODAY_STR) return true;
+        if (hasCustomDays) {
+          return task.customDays.includes(todayWeekday) || (task.nextDue && task.nextDue <= TODAY_STR);
+        }
+        if (task.type === 'Pontual') return true;
         if (task.frequency === 'Diária') return true;
-        if (task.type === 'Pontual' && !task.done) return true;
         if (task.frequency === 'Toda Segunda' && todayWeekday === 1) return true;
+        if (task.nextDue && task.nextDue <= TODAY_STR) return true;
         return false;
       }
 
@@ -3746,8 +3652,12 @@
         task.done = !task.done;
         if (task.done) {
           task.lastDone = TODAY_STR;
-          if (Array.isArray(task.customDays) && task.customDays.length > 0) {
+          if (task.type === 'Pontual') {
+            task.nextDue = 'Concluída';
+            showToast(`Tarefa pontual "${task.title}" concluída hoje!`, '✅');
+          } else if (Array.isArray(task.customDays) && task.customDays.length > 0) {
             task.nextDue = getNextScheduledDateForCustomDays(task.customDays, TODAY_STR);
+            showToast(`Tarefa "${task.title}" concluída! Próxima: ${formatPtDate(task.nextDue)}`, '🧹');
           } else {
             const daysToAdd = (task.frequency || '').includes('15')
               ? 15
@@ -3757,8 +3667,13 @@
               ? 1
               : 7;
             task.nextDue = addDaysStr(TODAY_STR, daysToAdd);
+            showToast(`Tarefa "${task.title}" concluída! Próxima: ${formatPtDate(task.nextDue)}`, '🧹');
           }
-          showToast(`Tarefa "${task.title}" concluída! Próxima: ${formatPtDate(task.nextDue)}`, '🧹');
+        } else {
+          // Desmarcou: volta imediatamente ao estado pendente de hoje
+          task.lastDone = '—';
+          task.nextDue = TODAY_STR;
+          showToast(`Tarefa "${task.title}" reaberta para hoje.`, '🔄');
         }
         saveState();
         renderAll();
@@ -3773,6 +3688,8 @@
         const activeFilter = state.homeTodayFilter || 'ALL';
         const showCompleted = state.homeShowCompletedToday !== false;
         if (chkCompleted) chkCompleted.checked = showCompleted;
+        const chkSettingsCompleted = document.getElementById('chkSettingsShowCompletedToday');
+        if (chkSettingsCompleted) chkSettingsCompleted.checked = showCompleted;
 
         document.querySelectorAll('#homeTodayFilterPills [data-home-today-filter]').forEach(btn => {
           const f = btn.getAttribute('data-home-today-filter');
@@ -3823,11 +3740,11 @@
             });
           });
 
-        // 3. Household Tasks scheduled for today
+        // 3. Household Tasks scheduled for today (only pending today or completed today)
         state.tasks
           .filter(t => isTaskScheduledForToday(t))
           .forEach(t => {
-            const isDoneToday = !!t.done;
+            const isDoneToday = isTaskCompletedToday(t);
             unifiedItems.push({
               kind: 'TASKS',
               id: t.id,
@@ -4271,9 +4188,8 @@
         }
         habit.progressByDate[TODAY_STR] = next;
 
+        recalculateHabitStreak(habit);
         if (prev < habit.target && next >= habit.target) {
-          habit.streak += 1;
-          if (habit.streak > habit.bestStreak) habit.bestStreak = habit.streak;
           const isScheduledType = habit.freqType && habit.freqType !== 'daily';
           showToast(
             isScheduledType
@@ -4281,8 +4197,6 @@
               : `Hábito diário "${habit.title}" concluído! Sequência: ${habit.streak} dias 🔥`,
             '🔥'
           );
-        } else if (prev >= habit.target && next < habit.target) {
-          habit.streak = Math.max(0, habit.streak - 1);
         }
 
         saveState();
@@ -5110,8 +5024,9 @@
       }
 
       function renderTasksModule() {
-        const doneCount = state.tasks.filter(t => t.done).length;
-        document.getElementById('tasksProgressBadge').textContent = `${doneCount}/${state.tasks.length} concluídas`;
+        const activeTasksPool = state.tasks.filter(t => !(state.hidePastCompletedOneOffTasks !== false && t.type === 'Pontual' && t.done && t.lastDone && t.lastDone !== '—' && t.lastDone < TODAY_STR));
+        const doneCount = activeTasksPool.filter(t => t.done).length;
+        document.getElementById('tasksProgressBadge').textContent = `${doneCount}/${activeTasksPool.length} concluídas hoje`;
 
         const tabMap = {
           ALL: 'tabBtnTasksAll',
@@ -5133,7 +5048,14 @@
             : 'px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer';
         });
 
+        const hidePastOneOff = state.hidePastCompletedOneOffTasks !== false;
+        const chkHidePastEl = document.getElementById('chkHidePastCompletedOneOffTasks');
+        if (chkHidePastEl) chkHidePastEl.checked = hidePastOneOff;
+
         const filtered = state.tasks.filter(t => {
+          if (hidePastOneOff && t.type === 'Pontual' && t.done && t.lastDone && t.lastDone !== '—' && t.lastDone < TODAY_STR) {
+            return false;
+          }
           const typeOk = state.taskFilterType === 'ALL' || t.type === state.taskFilterType;
           const roomOk = state.taskFilterRoom === 'ALL' || t.room === state.taskFilterRoom;
           return typeOk && roomOk;
@@ -6252,7 +6174,24 @@
 
       let updateNotificationSettingsUIRef = null;
 
+      function checkAndHandleDayRollover() {
+        const currentLocalDay = getLocalTodayStr();
+        const prevTodayStr = TODAY_STR;
+        if (currentLocalDay !== prevTodayStr) {
+          TODAY_STR = currentLocalDay;
+          if (state.selectedDate === prevTodayStr) {
+            state.selectedDate = TODAY_STR;
+          }
+          const changed = refreshDailyRoutinesOnObject(state);
+          if (changed) saveState();
+          renderAll();
+          return true;
+        }
+        return false;
+      }
+
       function renderAll() {
+        refreshDailyRoutinesOnObject(state);
         syncModuleTitlesAcrossUI();
         renderPlatformModeUI();
         renderHomeScreen();
@@ -6263,6 +6202,7 @@
         renderFinanceModule();
         renderModule5();
         renderModule6();
+        renderCustomizeModal();
         renderBackupSnapshots();
         if (typeof updateNotificationSettingsUIRef === 'function') {
           updateNotificationSettingsUIRef();
@@ -6372,6 +6312,20 @@
               buttons[k].className = 'py-2 px-2.5 rounded-lg text-xs font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5';
             }
           });
+          if (tabKey === 'appearance') {
+            renderCustomizeModal();
+          }
+        }
+
+        function openSettingsModalAtTab(tabKey) {
+          renderCustomizeModal();
+          renderNotificationSettingsUI();
+          switchSettingsModalTab(tabKey || 'notifications');
+          const modalBkpEl = document.getElementById('modalBackupDrive');
+          if (modalBkpEl) {
+            modalBkpEl.classList.remove('hidden');
+            modalBkpEl.classList.add('flex');
+          }
         }
 
         document.querySelectorAll('[data-settings-tab]').forEach((btn) => {
@@ -6380,20 +6334,48 @@
           });
         });
 
-        const btnOpenCustFromSettings = document.getElementById('btnOpenCustomizeFromSettings');
-        if (btnOpenCustFromSettings) {
-          btnOpenCustFromSettings.addEventListener('click', () => {
-            const modalBkpEl = document.getElementById('modalBackupDrive');
-            if (modalBkpEl) {
-              modalBkpEl.classList.add('hidden');
-              modalBkpEl.classList.remove('flex');
-            }
-            renderCustomizeModal();
-            const modalCustEl = document.getElementById('modalCustomizeHome');
-            if (modalCustEl) {
-              modalCustEl.classList.remove('hidden');
-              modalCustEl.classList.add('flex');
-            }
+        const chkSettingsCompletedToday = document.getElementById('chkSettingsShowCompletedToday');
+        if (chkSettingsCompletedToday) {
+          chkSettingsCompletedToday.addEventListener('change', (e) => {
+            state.homeShowCompletedToday = e.target.checked;
+            saveState();
+            renderHomeTodayQuickCheck();
+          });
+        }
+
+        const chkHidePastOneOff = document.getElementById('chkHidePastCompletedOneOffTasks');
+        if (chkHidePastOneOff) {
+          chkHidePastOneOff.addEventListener('change', (e) => {
+            state.hidePastCompletedOneOffTasks = e.target.checked;
+            saveState();
+            renderTasksModule();
+            showToast(
+              state.hidePastCompletedOneOffTasks
+                ? 'Tarefas pontuais concluídas em dias passados serão ocultadas automaticamente.'
+                : 'Todas as tarefas pontuais passadas serão exibidas no Módulo 3.',
+              '👁️'
+            );
+          });
+        }
+
+        const btnCleanupOld = document.getElementById('btnCleanupOldCompleted');
+        if (btnCleanupOld) {
+          btnCleanupOld.addEventListener('click', () => {
+            const beforePlans = state.plans.length;
+            const beforeTasks = state.tasks.length;
+            state.plans = state.plans.filter(p => !(p.done && p.date && p.date < TODAY_STR));
+            state.tasks = state.tasks.filter(t => !(t.type === 'Pontual' && t.done && t.lastDone && t.lastDone !== '—' && t.lastDone < TODAY_STR));
+            const removedPlans = beforePlans - state.plans.length;
+            const removedTasks = beforeTasks - state.tasks.length;
+            const totalRemoved = removedPlans + removedTasks;
+            saveState();
+            renderAll();
+            showToast(
+              totalRemoved > 0
+                ? `Limpeza concluída: ${removedPlans} plano(s) e ${removedTasks} tarefa(s) pontual(is) antiga(s) removidos!`
+                : 'Nenhum plano ou tarefa pontual antiga concluída para limpar.',
+              '🧹'
+            );
           });
         }
 
@@ -6405,6 +6387,21 @@
           if (/Linux/i.test(ua)) return 'Linux';
           if (/Mac/i.test(ua)) return 'macOS';
           return 'Navegador Web';
+        }
+
+        function loadLocalFcmDeviceMeta() {
+          try {
+            const raw = localStorage.getItem(LOCAL_FCM_DEVICE_KEY);
+            return raw ? JSON.parse(raw) : null;
+          } catch (e) {
+            return null;
+          }
+        }
+
+        function saveLocalFcmDeviceMeta(metaObj) {
+          try {
+            localStorage.setItem(LOCAL_FCM_DEVICE_KEY, JSON.stringify(metaObj));
+          } catch (e) {}
         }
 
         function renderNotificationSettingsUI() {
@@ -6466,27 +6463,76 @@
           const fcmBox = document.getElementById('fcmSavedTokenBox');
           const fcmDevLabel = document.getElementById('fcmSavedDeviceLabel');
           const btnBindLabel = document.getElementById('btnBindFcmDeviceLabel');
+          const localFcmMeta = loadLocalFcmDeviceMeta();
+          const tokensList = Array.isArray(state.fcmTokens) ? state.fcmTokens : [];
+          const isThisDeviceInCloudList = Boolean(
+            localFcmMeta &&
+            localFcmMeta.token &&
+            tokensList.some(t => t.token === localFcmMeta.token)
+          );
 
-          if (ns.fcmToken) {
+          if (isThisDeviceInCloudList) {
             if (fcmBadge) {
-              fcmBadge.textContent = '✅ Aparelho Conectado';
+              fcmBadge.textContent = '✅ Este Aparelho Vinculado';
               fcmBadge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200';
             }
             if (fcmBox) fcmBox.classList.remove('hidden');
             if (fcmDevLabel) {
-              fcmDevLabel.textContent = (ns.fcmDeviceName || detectCurrentOsLabel()) + (ns.fcmLinkedAt ? ' • ' + ns.fcmLinkedAt : '');
+              fcmDevLabel.textContent = (localFcmMeta.device || detectCurrentOsLabel()) + (localFcmMeta.linkedAt ? ' • ' + localFcmMeta.linkedAt : '');
             }
             if (btnBindLabel) {
               btnBindLabel.textContent = 'Atualizar Vínculo Deste Aparelho na Nuvem';
             }
           } else {
             if (fcmBadge) {
-              fcmBadge.textContent = 'Não vinculado';
+              fcmBadge.textContent = tokensList.length > 0 ? `${tokensList.length} aparelho(s) na conta` : 'Não vinculado';
               fcmBadge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white text-indigo-700 border border-indigo-200';
             }
             if (fcmBox) fcmBox.classList.add('hidden');
             if (btnBindLabel) {
               btnBindLabel.textContent = 'Vincular Este Aparelho às Notificações na Nuvem';
+            }
+          }
+
+          const listWrapper = document.getElementById('fcmDevicesListWrapper');
+          const listContainer = document.getElementById('fcmDevicesListContainer');
+          if (listWrapper && listContainer) {
+            if (tokensList.length === 0) {
+              listWrapper.classList.add('hidden');
+              listContainer.innerHTML = '';
+            } else {
+              listWrapper.classList.remove('hidden');
+              listContainer.innerHTML = tokensList.map((entry, idx) => {
+                const isCurrent = Boolean(localFcmMeta && localFcmMeta.token === entry.token);
+                const dateShort = entry.linkedAt || (entry.updatedAt ? entry.updatedAt.slice(0, 10) : '');
+                return `
+                  <div class="p-2 rounded-lg bg-white/90 border border-indigo-200/80 flex items-center justify-between gap-2 text-[11px]">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                      <span>${isCurrent ? '📲' : '💻'}</span>
+                      <span class="font-semibold text-slate-800 truncate">${entry.device || 'Aparelho'}</span>
+                      ${isCurrent ? '<span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[9px]">Este aparelho</span>' : ''}
+                      ${dateShort ? `<span class="text-slate-400 text-[10px]">• ${dateShort}</span>` : ''}
+                    </div>
+                    <button type="button" data-remove-fcm-idx="${idx}" class="text-rose-600 hover:text-rose-800 font-semibold text-[10px] cursor-pointer shrink-0">
+                      Remover
+                    </button>
+                  </div>
+                `;
+              }).join('');
+              listContainer.querySelectorAll('[data-remove-fcm-idx]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                  const idx = parseInt(btn.getAttribute('data-remove-fcm-idx'), 10);
+                  const removed = state.fcmTokens[idx];
+                  if (!removed) return;
+                  state.fcmTokens.splice(idx, 1);
+                  if (localFcmMeta && localFcmMeta.token === removed.token) {
+                    try { localStorage.removeItem(LOCAL_FCM_DEVICE_KEY); } catch (e) {}
+                  }
+                  saveState();
+                  renderNotificationSettingsUI();
+                  showToast('Aparelho removido da lista de notificações em nuvem.', '🗑️');
+                });
+              });
             }
           }
 
@@ -6587,7 +6633,7 @@
         }
 
         function buildDailyPendingSummaryText(shiftLabel) {
-          const nowStr = new Date().toISOString().slice(0, 10);
+          const nowStr = getLocalTodayStr();
           const pendingPlans = state.plans.filter(p => p.date === nowStr && !p.done);
           const shiftPlans = shiftLabel
             ? pendingPlans.filter(p => p.shift === shiftLabel)
@@ -6621,7 +6667,7 @@
           return 'Pendentes agora: ' + parts.join(' • ') + '.';
         }
 
-        // Função interna que vincula o aparelho ao FCM usando a EMBEDDED_FCM_VAPID_KEY
+        // Função interna que vincula este aparelho ao FCM usando a EMBEDDED_FCM_VAPID_KEY
         async function bindCurrentDeviceToFcmCloud(silentMode) {
           if (!('Notification' in window)) {
             if (!silentMode) {
@@ -6676,11 +6722,18 @@
             state.notificationSettings.fcmDeviceName = deviceName;
             state.notificationSettings.fcmLinkedAt = nowLabel;
 
+            saveLocalFcmDeviceMeta({
+              token,
+              device: deviceName,
+              linkedAt: nowLabel
+            });
+
             if (!Array.isArray(state.fcmTokens)) state.fcmTokens = [];
             const existingIdx = state.fcmTokens.findIndex(t => t.token === token);
             const tokenEntry = {
               token,
               device: deviceName,
+              linkedAt: nowLabel,
               userAgent: (navigator.userAgent || '').slice(0, 120),
               updatedAt: new Date().toISOString()
             };
@@ -6787,18 +6840,16 @@
           }
         } catch (e) {}
 
-        // Motor Agendador Local (Modo 1 & Híbrido): verifica turnos (Manhã/Tarde/Noite), compromissos com hora exata e boletos do dia
+        // Motor Agendador Local (Modo 1 & Híbrido) + Virada Automática de Meia-Noite
         function runScheduledNotificationsTick() {
+          checkAndHandleDayRollover();
           if (!currentUser) return;
           const ns = state.notificationSettings || DEFAULT_STATE.notificationSettings;
           if (!ns || ns.mode === 'disabled' || ns.mode === 'cloud_fcm') return;
           if (!('Notification' in window) || Notification.permission !== 'granted') return;
 
           const now = new Date();
-          const yyyy = now.getFullYear();
-          const mm = String(now.getMonth() + 1).padStart(2, '0');
-          const dd = String(now.getDate()).padStart(2, '0');
-          const todayKey = `${yyyy}-${mm}-${dd}`;
+          const todayKey = getLocalTodayStr();
           const hhmm = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
 
           if (!ns.dispatchedLog || typeof ns.dispatchedLog !== 'object') {
@@ -6881,9 +6932,13 @@
         setInterval(runScheduledNotificationsTick, 20000);
         document.addEventListener('visibilitychange', () => {
           if (!document.hidden) {
+            checkAndHandleDayRollover();
             renderNotificationSettingsUI();
             runScheduledNotificationsTick();
           }
+        });
+        window.addEventListener('focus', () => {
+          checkAndHandleDayRollover();
         });
 
         document.getElementById('btnBackToHome').addEventListener('click', openHomeView);
@@ -6895,18 +6950,7 @@
         document.getElementById('pillBestStreak').addEventListener('click', () => openModule1View('habits'));
         document.getElementById('pillBackupStatus').addEventListener('click', () => openModule3View());
 
-        // Shortcuts bar
-        document.getElementById('btnShortcutPlans').addEventListener('click', () => openModule1View('plans'));
-        document.getElementById('btnShortcutHabits').addEventListener('click', () => openModule1View('habits'));
-        document.getElementById('btnShortcutPostpone').addEventListener('click', () => {
-          state.selectedDate = TODAY_STR;
-          postponeAllPendingForSelectedDate();
-        });
-        document.getElementById('btnShortcutExport').addEventListener('click', () => {
-          const modal = document.getElementById('modalBackupDrive');
-          modal.classList.remove('hidden');
-          modal.classList.add('flex');
-        });
+
 
         // Automatic Device Mode Detection (Desktop, Tablet Landscape, Celular) on load, resize, and orientation change
         applyAutoDetectedDeviceMode(true);
@@ -7128,22 +7172,7 @@
           renderAll();
         });
 
-        // Customize Home Modal
-        const modalCust = document.getElementById('modalCustomizeHome');
-        document.getElementById('btnCustomizeModules').addEventListener('click', () => {
-          renderCustomizeModal();
-          modalCust.classList.remove('hidden');
-          modalCust.classList.add('flex');
-        });
-        const closeCust = () => {
-          modalCust.classList.add('hidden');
-          modalCust.classList.remove('flex');
-        };
-        document.getElementById('btnCloseCustomizeModal').addEventListener('click', closeCust);
-        document.getElementById('btnDoneCustomizeModal').addEventListener('click', () => {
-          closeCust();
-          showToast('Configuração dos módulos salva!', '✅');
-        });
+        // Inline Module Customization inside Settings Modal (Tab 2)
         const btnResetNames = document.getElementById('btnResetModuleNames');
         if (btnResetNames) {
           btnResetNames.addEventListener('click', () => {
@@ -7162,10 +7191,7 @@
         // Unified Settings Modal (Notificações, Aparência & App, Nuvem, Backup & Conta)
         const modalBkp = document.getElementById('modalBackupDrive');
         document.getElementById('btnOpenBackupModal').addEventListener('click', () => {
-          renderBackupSnapshots();
-          renderNotificationSettingsUI();
-          modalBkp.classList.remove('hidden');
-          modalBkp.classList.add('flex');
+          openSettingsModalAtTab('notifications');
         });
         const closeBkp = () => {
           modalBkp.classList.add('hidden');
@@ -7214,8 +7240,6 @@
         // Module 2 & 3 Back Buttons and Shortcuts
         document.getElementById('btnBackFromMod2').addEventListener('click', openHomeView);
         document.getElementById('btnBackFromMod3').addEventListener('click', openHomeView);
-        document.getElementById('btnShortcutShopping').addEventListener('click', openModule2View);
-        document.getElementById('btnShortcutTasks').addEventListener('click', openModule3View);
 
         // Module 2 Controls: Market One-Hand Mode, Finish Trip, Store Filters, Quick Replenish, Forms
         document.getElementById('btnToggleMarketMode').addEventListener('click', () => {
@@ -7648,7 +7672,6 @@
 
         // Module 4 Navigation & Listeners
         document.getElementById('btnBackFromMod4').addEventListener('click', openHomeView);
-        document.getElementById('btnShortcutFinance').addEventListener('click', () => openModule4View('statement'));
         document.getElementById('tabBtnFinStatement').addEventListener('click', () => switchModule4Tab('statement'));
         document.getElementById('tabBtnFinBills').addEventListener('click', () => switchModule4Tab('bills'));
         document.getElementById('tabBtnFinBudgets').addEventListener('click', () => switchModule4Tab('budgets'));
@@ -7759,7 +7782,6 @@
         if (warDateEl && !warDateEl.value) warDateEl.value = TODAY_STR;
 
         document.getElementById('btnBackFromMod5').addEventListener('click', openHomeView);
-        document.getElementById('btnShortcutWishlist').addEventListener('click', () => openModule5View('wishlist'));
         document.getElementById('tabBtnMod5Wishlist').addEventListener('click', () => switchModule5Tab('wishlist'));
         document.getElementById('tabBtnMod5Warranties').addEventListener('click', () => switchModule5Tab('warranties'));
         document.getElementById('tabBtnMod5Maintenance').addEventListener('click', () => switchModule5Tab('maintenance'));
@@ -7920,7 +7942,6 @@
 
         // Module 6 Navigation & Listeners
         document.getElementById('btnBackFromMod6').addEventListener('click', openHomeView);
-        document.getElementById('btnShortcutPantry').addEventListener('click', () => openModule6View('pantry'));
         document.getElementById('tabBtnMod6Pantry').addEventListener('click', () => switchModule6Tab('pantry'));
         document.getElementById('tabBtnMod6Menu').addEventListener('click', () => switchModule6Tab('menu'));
 
@@ -8063,7 +8084,7 @@
 
         document.getElementById('btnCloudSyncNow').addEventListener('click', () => {
           if (initFirebaseServices() && fbAuth && fbAuth.currentUser) {
-            pullStateFromFirestoreNow(true);
+            openSettingsModalAtTab('cloud');
           } else {
             pendingSyncMode = 'auto';
             triggerRealGoogleOAuthPopup(false);
