@@ -2134,16 +2134,16 @@
           </div>
         </div>
 
-        <!-- Configuração de Web Push (Modo 2 — Firebase Cloud Messaging VAPID Key & Token) -->
+        <!-- Vinculação de Web Push em Nuvem (Modo 2 — Chave VAPID já integrada internamente ao sistema) -->
         <div id="fcmCloudConfigPanel" class="p-4 rounded-xl bg-indigo-50/60 border border-indigo-200 space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h4 class="text-xs sm:text-sm font-bold text-indigo-900 flex items-center gap-1.5">
                 <span>☁️</span>
-                <span>Web Push em Nuvem — Firebase Cloud Messaging (Modo 2)</span>
+                <span>Notificações Push em Nuvem neste Aparelho</span>
               </h4>
               <p class="text-[11px] text-indigo-700 mt-0.5">
-                Informe a chave pública VAPID Key do projeto <strong>planner-76385</strong> e vincule este aparelho para salvar o token FCM no Firestore.
+                Vincule este dispositivo com 1 clique para receber alertas em segundo plano sincronizados com sua conta.
               </p>
             </div>
             <span id="fcmLinkStatusBadge" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white text-indigo-700 border border-indigo-200">
@@ -2151,29 +2151,14 @@
             </span>
           </div>
 
-          <div class="space-y-2">
-            <label for="inputFcmVapidKey" class="block text-[11px] font-bold uppercase text-indigo-800">
-              Chave Pública VAPID Key (Firebase Console &rarr; Cloud Messaging &rarr; Certificados Web)
-            </label>
-            <input id="inputFcmVapidKey" type="text" placeholder="Ex.: BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U" class="w-full px-3 py-2 rounded-xl border border-indigo-200 text-xs bg-white text-slate-900 font-mono" />
-          </div>
+          <button id="btnBindFcmDevice" type="button" class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs">
+            <span>📲</span>
+            <span id="btnBindFcmDeviceLabel">Vincular Este Aparelho às Notificações na Nuvem</span>
+          </button>
 
-          <div class="flex flex-wrap items-center gap-2">
-            <button id="btnBindFcmDevice" type="button" class="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs">
-              <span>📲</span>
-              <span>Vincular Aparelho e Salvar Token FCM no Firestore</span>
-            </button>
-            <button id="btnCopyFcmToken" type="button" class="hidden py-2.5 px-3 rounded-xl bg-white hover:bg-slate-100 text-indigo-700 border border-indigo-200 font-semibold text-xs transition cursor-pointer">
-              📋 Copiar Token
-            </button>
-          </div>
-
-          <div id="fcmSavedTokenBox" class="hidden p-2.5 rounded-lg bg-white/90 border border-indigo-200 text-[11px] text-slate-600 space-y-1">
-            <div class="flex items-center justify-between gap-2">
-              <span class="font-bold text-slate-800">Aparelho vinculado ao Firestore:</span>
-              <span id="fcmSavedDeviceLabel" class="font-semibold text-emerald-700">Ativo</span>
-            </div>
-            <p id="fcmSavedTokenPreview" class="font-mono text-[10px] text-slate-500 break-all"></p>
+          <div id="fcmSavedTokenBox" class="hidden p-2.5 rounded-lg bg-white/90 border border-indigo-200 text-[11px] text-slate-600 flex items-center justify-between gap-2">
+            <span class="font-bold text-slate-800">Aparelho sincronizado na nuvem:</span>
+            <span id="fcmSavedDeviceLabel" class="font-semibold text-emerald-700">Ativo</span>
           </div>
         </div>
       </div>
@@ -2506,7 +2491,6 @@
           eveningTime: '20:00',
           exactPlanTimeEnabled: true,
           dueBillsEnabled: true,
-          vapidKey: '',
           fcmToken: '',
           fcmDeviceName: '',
           fcmLinkedAt: '',
@@ -2682,6 +2666,7 @@
       }
 
       // ==================== FIREBASE REALTIME CLOUD CONFIGURATION (planner-76385) ====================
+      const EMBEDDED_FCM_VAPID_KEY = "BGf_l7IuQNlZt2HOySc56olwqsd-8F2Ezc8V29G-hmZEC6eqtOG-FHxm0cuHw_e9_LyHBsIJvWIlOhEg50Glxsw";
       const firebaseConfig = {
         apiKey: "AIzaSyA0XnYXum1ODbKtz5KqO6X25qvQJ9XhYOs",
         authDomain: "planner-76385.firebaseapp.com",
@@ -6468,11 +6453,6 @@
           const chkBills = document.getElementById('chkNotifDueBillsToday');
           if (chkBills) chkBills.checked = ns.dueBillsEnabled !== false;
 
-          const inpVapid = document.getElementById('inputFcmVapidKey');
-          if (inpVapid && document.activeElement !== inpVapid) {
-            inpVapid.value = ns.vapidKey || '';
-          }
-
           const fcmPanel = document.getElementById('fcmCloudConfigPanel');
           if (fcmPanel) {
             if (ns.mode === 'local_sw' || ns.mode === 'disabled') {
@@ -6485,21 +6465,19 @@
           const fcmBadge = document.getElementById('fcmLinkStatusBadge');
           const fcmBox = document.getElementById('fcmSavedTokenBox');
           const fcmDevLabel = document.getElementById('fcmSavedDeviceLabel');
-          const fcmTokPrev = document.getElementById('fcmSavedTokenPreview');
-          const btnCopyTok = document.getElementById('btnCopyFcmToken');
+          const btnBindLabel = document.getElementById('btnBindFcmDeviceLabel');
 
           if (ns.fcmToken) {
             if (fcmBadge) {
-              fcmBadge.textContent = '✅ Vinculado ao Firestore';
+              fcmBadge.textContent = '✅ Aparelho Conectado';
               fcmBadge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200';
             }
             if (fcmBox) fcmBox.classList.remove('hidden');
-            if (btnCopyTok) btnCopyTok.classList.remove('hidden');
             if (fcmDevLabel) {
               fcmDevLabel.textContent = (ns.fcmDeviceName || detectCurrentOsLabel()) + (ns.fcmLinkedAt ? ' • ' + ns.fcmLinkedAt : '');
             }
-            if (fcmTokPrev) {
-              fcmTokPrev.textContent = 'Token FCM: ' + ns.fcmToken;
+            if (btnBindLabel) {
+              btnBindLabel.textContent = 'Atualizar Vínculo Deste Aparelho na Nuvem';
             }
           } else {
             if (fcmBadge) {
@@ -6507,7 +6485,9 @@
               fcmBadge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white text-indigo-700 border border-indigo-200';
             }
             if (fcmBox) fcmBox.classList.add('hidden');
-            if (btnCopyTok) btnCopyTok.classList.add('hidden');
+            if (btnBindLabel) {
+              btnBindLabel.textContent = 'Vincular Este Aparelho às Notificações na Nuvem';
+            }
           }
 
           updatePwaInstallButtonUI();
@@ -6528,7 +6508,6 @@
           const inpEvening = document.getElementById('inputNotifTimeEvening');
           const chkExact = document.getElementById('chkNotifExactPlanTime');
           const chkBills = document.getElementById('chkNotifDueBillsToday');
-          const inpVapid = document.getElementById('inputFcmVapidKey');
 
           if (selMode) ns.mode = selMode.value;
           if (chkMorning) ns.morningEnabled = chkMorning.checked;
@@ -6539,7 +6518,6 @@
           if (inpEvening && inpEvening.value) ns.eveningTime = inpEvening.value;
           if (chkExact) ns.exactPlanTimeEnabled = chkExact.checked;
           if (chkBills) ns.dueBillsEnabled = chkBills.checked;
-          if (inpVapid) ns.vapidKey = inpVapid.value.trim();
 
           saveState();
           renderNotificationSettingsUI();
@@ -6557,8 +6535,7 @@
           'chkNotifShiftEvening',
           'inputNotifTimeEvening',
           'chkNotifExactPlanTime',
-          'chkNotifDueBillsToday',
-          'inputFcmVapidKey'
+          'chkNotifDueBillsToday'
         ].forEach((id) => {
           const el = document.getElementById(id);
           if (el) {
@@ -6598,7 +6575,6 @@
                   return true;
                 }
               }
-              // Fallback direto para Desktop caso SW não esteja ativo no ambiente
               new Notification(payload.title, {
                 body: payload.body,
                 icon: payload.icon,
@@ -6645,6 +6621,92 @@
           return 'Pendentes agora: ' + parts.join(' • ') + '.';
         }
 
+        // Função interna que vincula o aparelho ao FCM usando a EMBEDDED_FCM_VAPID_KEY
+        async function bindCurrentDeviceToFcmCloud(silentMode) {
+          if (!('Notification' in window)) {
+            if (!silentMode) {
+              showToast('Este navegador não suporta Web Push (no iOS, instale o app na Tela de Início primeiro).', '⚠️');
+            }
+            return false;
+          }
+          const perm = Notification.permission === 'granted'
+            ? 'granted'
+            : await Notification.requestPermission();
+          renderNotificationSettingsUI();
+          if (perm !== 'granted') {
+            if (!silentMode) {
+              showToast('Permissão de notificação necessária para vincular este aparelho.', '⚠️');
+            }
+            return false;
+          }
+          try {
+            initFirebaseServices();
+            if (!firebase.messaging || !firebase.messaging.isSupported || !firebase.messaging.isSupported()) {
+              if (!silentMode) {
+                showToast('Notificações em nuvem exigem contexto HTTPS ou PWA instalado.', '⚠️');
+              }
+              return false;
+            }
+            if (!silentMode) {
+              showToast('Vinculando aparelho às notificações em nuvem...', '⏳');
+            }
+            const messaging = firebase.messaging();
+            const reg = swRegistrationRef || (await navigator.serviceWorker.register('./sw.js'));
+            const token = await messaging.getToken({
+              vapidKey: EMBEDDED_FCM_VAPID_KEY,
+              serviceWorkerRegistration: reg
+            });
+            if (!token) {
+              if (!silentMode) {
+                showToast('Não foi possível concluir o vínculo com o servidor de notificações.', '⚠️');
+              }
+              return false;
+            }
+            const deviceName = detectCurrentOsLabel();
+            const nowLabel = new Date().toLocaleString('pt-BR', {
+              day: '2-digit',
+              month: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit'
+            });
+            if (!state.notificationSettings) {
+              state.notificationSettings = JSON.parse(JSON.stringify(DEFAULT_STATE.notificationSettings));
+            }
+            state.notificationSettings.fcmToken = token;
+            state.notificationSettings.fcmDeviceName = deviceName;
+            state.notificationSettings.fcmLinkedAt = nowLabel;
+
+            if (!Array.isArray(state.fcmTokens)) state.fcmTokens = [];
+            const existingIdx = state.fcmTokens.findIndex(t => t.token === token);
+            const tokenEntry = {
+              token,
+              device: deviceName,
+              userAgent: (navigator.userAgent || '').slice(0, 120),
+              updatedAt: new Date().toISOString()
+            };
+            if (existingIdx >= 0) {
+              state.fcmTokens[existingIdx] = tokenEntry;
+            } else {
+              state.fcmTokens.unshift(tokenEntry);
+            }
+
+            saveState();
+            renderNotificationSettingsUI();
+            if (currentUser && fbAuth && fbAuth.currentUser) {
+              await pushStateToFirestoreNow(false);
+            }
+            if (!silentMode) {
+              showToast(`Aparelho (${deviceName}) vinculado às notificações na nuvem com sucesso!`, '☁️');
+            }
+            return true;
+          } catch (err) {
+            if (!silentMode) {
+              showToast('Não foi possível vincular às notificações em nuvem neste navegador.', '⚠️');
+            }
+            return false;
+          }
+        }
+
         const btnReqPerm = document.getElementById('btnRequestNotificationPermission');
         if (btnReqPerm) {
           btnReqPerm.addEventListener('click', async () => {
@@ -6662,6 +6724,10 @@
                   'Seus alertas de compromissos, turnos e boletos estão prontos neste aparelho.',
                   'prumo-perm-granted'
                 );
+                const ns = state.notificationSettings || {};
+                if (ns.mode === 'hybrid' || ns.mode === 'cloud_fcm') {
+                  bindCurrentDeviceToFcmCloud(true);
+                }
               } else {
                 showToast('Permissão negada ou pendente nas configurações do navegador.', '⚠️');
               }
@@ -6694,101 +6760,11 @@
           });
         }
 
-        // Modo 2: Vincular Aparelho no Firebase Cloud Messaging (FCM) e salvar token no Firestore
         const btnBindFcm = document.getElementById('btnBindFcmDevice');
         if (btnBindFcm) {
           btnBindFcm.addEventListener('click', async () => {
             saveNotificationSettingsFromInputs(false);
-            const ns = state.notificationSettings || {};
-            const vapidKey = (ns.vapidKey || '').trim();
-            if (!vapidKey) {
-              showToast('Informe a chave pública VAPID Key do Firebase Cloud Messaging antes de vincular!', '⚠️');
-              const inp = document.getElementById('inputFcmVapidKey');
-              if (inp) inp.focus();
-              return;
-            }
-            if (!('Notification' in window)) {
-              showToast('Este navegador não suporta Web Push (no iOS, instale o app na Tela de Início primeiro).', '⚠️');
-              return;
-            }
-            const perm = await Notification.requestPermission();
-            renderNotificationSettingsUI();
-            if (perm !== 'granted') {
-              showToast('Permissão de notificação necessária para gerar o token FCM.', '⚠️');
-              return;
-            }
-            try {
-              initFirebaseServices();
-              if (!firebase.messaging || !firebase.messaging.isSupported || !firebase.messaging.isSupported()) {
-                showToast('Firebase Cloud Messaging não suportado neste contexto/navegador.', '⚠️');
-                return;
-              }
-              showToast('Gerando token FCM e vinculando aparelho no Firestore...', '⏳');
-              const messaging = firebase.messaging();
-              const reg = swRegistrationRef || (await navigator.serviceWorker.register('./sw.js'));
-              const token = await messaging.getToken({
-                vapidKey,
-                serviceWorkerRegistration: reg
-              });
-              if (!token) {
-                showToast('Não foi possível obter o token FCM. Verifique a VAPID Key informada.', '⚠️');
-                return;
-              }
-              const deviceName = detectCurrentOsLabel();
-              const nowLabel = new Date().toLocaleString('pt-BR', {
-                day: '2-digit',
-                month: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit'
-              });
-              state.notificationSettings.fcmToken = token;
-              state.notificationSettings.fcmDeviceName = deviceName;
-              state.notificationSettings.fcmLinkedAt = nowLabel;
-
-              if (!Array.isArray(state.fcmTokens)) state.fcmTokens = [];
-              const existingIdx = state.fcmTokens.findIndex(t => t.token === token);
-              const tokenEntry = {
-                token,
-                device: deviceName,
-                userAgent: (navigator.userAgent || '').slice(0, 120),
-                updatedAt: new Date().toISOString()
-              };
-              if (existingIdx >= 0) {
-                state.fcmTokens[existingIdx] = tokenEntry;
-              } else {
-                state.fcmTokens.unshift(tokenEntry);
-              }
-
-              saveState();
-              renderNotificationSettingsUI();
-              if (currentUser && fbAuth && fbAuth.currentUser) {
-                await pushStateToFirestoreNow(false);
-              }
-              showToast('Aparelho vinculado! Token FCM salvo junto aos seus dados no Firestore.', '☁️');
-            } catch (err) {
-              showToast('Erro ao gerar token FCM: verifique a VAPID Key do projeto planner-76385.', '⚠️');
-            }
-          });
-        }
-
-        const btnCopyFcm = document.getElementById('btnCopyFcmToken');
-        if (btnCopyFcm) {
-          btnCopyFcm.addEventListener('click', () => {
-            const tok = state.notificationSettings && state.notificationSettings.fcmToken;
-            if (!tok) return;
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(tok).then(() => {
-                showToast('Token FCM copiado para a área de transferência!', '📋');
-              }).catch(() => {});
-            } else {
-              const ta = document.createElement('textarea');
-              ta.value = tok;
-              document.body.appendChild(ta);
-              ta.select();
-              try { document.execCommand('copy'); } catch (e) {}
-              document.body.removeChild(ta);
-              showToast('Token FCM copiado!', '📋');
-            }
+            await bindCurrentDeviceToFcmCloud(false);
           });
         }
 
