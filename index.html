@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head> 
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0f172a" />
@@ -260,7 +260,10 @@
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span class="font-bold text-sm sm:text-base tracking-tight">Prumo</span>
+              <div class="flex items-baseline gap-1.5">
+                <span class="font-bold text-sm sm:text-base tracking-tight">Prumo</span>
+                <span id="appVersionBadge" class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-white/10 text-white/75 tracking-normal">v1.0.0</span>
+              </div>
               <span id="activeCategoryHeaderPill" class="hidden text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-white/15 text-white">Início</span>
             </div>
           </div>
@@ -502,13 +505,12 @@
 
 
 
-      <!-- Modular Grid (The 6 Modules) -->
+      <!-- Modular Grid (The 6 Modules — 2 cols x 3 rows on Mobile, 3 cols x 2 rows on Desktop) -->
       <div>
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="text-sm font-bold uppercase tracking-wider text-slate-500">Módulos do Sistema</h2>
-          <span class="text-xs text-slate-400">Estrutura modular expansível</span>
+        <div class="flex items-center justify-between mb-2.5 sm:mb-3">
+          <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500">Categorias</h2>
         </div>
-        <div id="modulesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div id="modulesGrid" class="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4">
           <!-- Rendered dynamically by JS -->
         </div>
       </div>
@@ -837,7 +839,6 @@
             <button type="button" data-habit-filter="SCHEDULED" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">📅 Dias Programados / Semanais</button>
             <button type="button" data-habit-filter="TODAY" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">⚡ Para Fazer Hoje</button>
           </div>
-          <span class="text-[11px] text-slate-500">🛡️ Dias de descanso não quebram seu streak</span>
         </div>
 
         <!-- Detailed Habits Cards & Streak History -->
@@ -886,15 +887,12 @@
       <!-- Checkout & Auto-Expense Bar inside Module 2 -->
       <div class="bg-emerald-950 text-white rounded-2xl p-4 sm:p-5 border border-emerald-800 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div class="space-y-1">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Integração Automática com Gastos + Histórico</span>
-          </div>
-          <h3 class="text-sm sm:text-base font-bold">Finalizar Compra no Supermercado (Dia X → Planilha de Gastos)</h3>
-          <p class="text-xs text-emerald-200/90">Ao finalizar, o valor do carrinho entra automaticamente na <strong>Planilha de Gastos (Módulo 4)</strong> e o preço unitário de cada item fica salvo no <strong>Gráfico de Variação de Preços</strong>.</p>
+          <h3 class="text-sm sm:text-base font-bold">Finalizar Compra no Supermercado</h3>
+          <p class="text-xs text-emerald-200/90">Registra o total na Planilha de Gastos e salva os preços unitários no histórico.</p>
         </div>
         <div class="flex flex-wrap items-center gap-2.5 shrink-0">
           <div>
-            <label class="block text-[10px] uppercase tracking-wider text-emerald-300 mb-0.5">Data da Compra (Dia X)</label>
+            <label class="block text-[10px] uppercase tracking-wider text-emerald-300 mb-0.5">Data da Compra</label>
             <input id="inputShoppingTripDate" type="date" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-emerald-700 text-xs font-semibold text-white" />
           </div>
           <div>
@@ -1027,8 +1025,7 @@
             <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Preço Unit. (R$)</label>
             <input id="shopPriceInput" type="number" step="0.01" min="0" placeholder="0.00" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
           </div>
-          <div class="sm:col-span-2 lg:col-span-6 flex items-center justify-between pt-2 border-t border-slate-100">
-            <div></div>
+          <div class="sm:col-span-2 lg:col-span-6 flex items-center justify-end pt-2 border-t border-slate-100">
             <button id="btnSubmitShopItem" type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm shrink-0">
               + Adicionar à Lista
             </button>
@@ -1109,7 +1106,7 @@
               <input id="pricePointProductName" type="text" required placeholder="Ex.: Azeite de Oliva Extra Virgem 500ml" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
             <div>
-              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Data (Dia X)</label>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Data</label>
               <input id="pricePointDate" type="date" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
             <div>
@@ -1146,11 +1143,11 @@
               <input id="directTripStoreInput" type="text" required placeholder="Ex.: Compra do Mês no Atacadão, Feira de Domingo..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white" />
             </div>
             <div>
-              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Data (Dia X) *</label>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Data *</label>
               <input id="directTripDateInput" type="date" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white" />
             </div>
             <div>
-              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Valor Total R$ Y *</label>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Valor Total (R$) *</label>
               <input id="directTripAmountInput" type="number" step="0.01" min="0.01" required placeholder="450.00" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white" />
             </div>
             <div class="flex items-end">
@@ -1453,7 +1450,7 @@
               </select>
             </div>
             <div>
-              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Data (Dia X)</label>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Data</label>
               <input id="finDateInput" type="date" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
             <div>
@@ -1720,7 +1717,7 @@
               <input id="wishStoreInput" type="text" placeholder="Ex.: Amazon, Mercado Livre, Magalu..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
             <div>
-              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Data da Cotação (Dia X)</label>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Data da Cotação</label>
               <input id="wishDateInput" type="date" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
             <div>
@@ -1763,7 +1760,7 @@
                 <span>📈</span>
                 <span>Acompanhamento de Preço & Histórico de Links (Decisão de Compra)</span>
               </h3>
-              <p class="text-xs text-slate-500">Compare as cotações registradas em cada Dia X para saber o momento ideal de comprar</p>
+              <p class="text-xs text-slate-500">Compare as cotações registradas para saber o momento ideal de comprar</p>
             </div>
             <div class="flex items-center gap-2">
               <label class="text-xs font-semibold text-slate-600">Item:</label>
@@ -1789,7 +1786,7 @@
               <input id="quoteUpdateStoreInput" type="text" required placeholder="Ex.: Mercado Livre" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white" />
             </div>
             <div>
-              <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Data (Dia X) *</label>
+              <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Data *</label>
               <input id="quoteUpdateDateInput" type="date" required class="w-full px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white" />
             </div>
             <div>
@@ -2177,7 +2174,6 @@
           <div class="pt-3 border-t border-slate-100 space-y-2.5">
             <div class="flex items-center justify-between">
               <h5 class="text-xs font-bold text-slate-800">⏰ Horários do Resumo de Pendências por Turno</h5>
-              <span class="text-[10px] font-semibold text-slate-400">Dispara no horário ou assim que o aparelho acordar</span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -2369,9 +2365,6 @@
               <span>☁️</span>
               <span>Sincronização em Tempo Real (Firebase Firestore)</span>
             </h4>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
-              planner-76385
-            </span>
           </div>
           <p id="modalCloudSyncStatusText" class="text-xs font-semibold text-slate-700">Conectado. Última gravação: agora</p>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -2444,7 +2437,7 @@
 
       <!-- Rodapé do Modal -->
       <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
-        <span id="settingsModalFooterSummary">Prumo PWA v4 • 6 Módulos Integrados</span>
+        <span id="settingsModalFooterSummary">Prumo v1.0.0</span>
         <button id="btnDoneBackupModal" type="button" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold hover:bg-slate-800 cursor-pointer">
           Fechar
         </button>
@@ -2496,6 +2489,7 @@
 
   <script>
     (function () {
+      const APP_VERSION = 'v1.0.0';
       const STORAGE_KEY = 'prumo_state_v1';
       const ACCOUNTS_REGISTRY_KEY = 'prumo_google_accounts_v1';
       const ACTIVE_SESSION_KEY = 'prumo_active_google_user_v1';
@@ -2598,67 +2592,49 @@
             id: 'mod1',
             order: 1,
             visible: true,
-            phase: 'Ativo',
-            activePhase: true,
             icon: '📅',
             title: '1. Planos para o Dia & Hábitos',
-            subtitle: 'Agenda por turnos (Manhã, Tarde, Noite), adiamento rápido e check-in de hábitos.',
-            integrationNote: 'Conectado ao painel de resumo diário e lembretes de tarefas e manutenções.'
+            subtitle: 'Agenda por turnos (Manhã, Tarde, Noite), adiamento rápido e check-in de hábitos.'
           },
           {
             id: 'mod2',
             order: 2,
             visible: true,
-            phase: 'Ativo',
-            activePhase: true,
             icon: '🛒',
             title: '2. Lista de Compras de Rotina',
-            subtitle: 'Supermercado, feira e farmácia com Modo Mercado prático.',
-            integrationNote: 'Conectado à Despensa (Módulo 6) e à Planilha de Gastos (Módulo 4).'
+            subtitle: 'Supermercado, feira e farmácia com Modo Mercado prático.'
           },
           {
             id: 'mod3',
             order: 3,
             visible: true,
-            phase: 'Ativo',
-            activePhase: true,
             icon: '🧹',
             title: '3. Lista de Tarefas da Casa',
-            subtitle: 'Afazeres pontuais com prioridade e rodízio automático de limpeza por cômodo.',
-            integrationNote: 'Reinicia tarefas domésticas recorrentes e recebe alertas de manutenção (Módulo 5).'
+            subtitle: 'Afazeres pontuais com prioridade e rodízio automático de limpeza por cômodo.'
           },
           {
             id: 'mod4',
             order: 4,
             visible: true,
-            phase: 'Ativo',
-            activePhase: true,
             icon: '💰',
             title: '4. Planilha de Gastos & Contas Fixas',
-            subtitle: 'Painel de boletos do mês, gastos automáticos de supermercado e barras de orçamento.',
-            integrationNote: 'Recebe automaticamente as compras finalizadas no Supermercado (Módulo 2) e as Contas Fixas pagas.'
+            subtitle: 'Painel de boletos do mês, gastos automáticos de supermercado e barras de orçamento.'
           },
           {
             id: 'mod5',
             order: 5,
             visible: true,
-            phase: 'Ativo',
-            activePhase: true,
             icon: '🏠',
             title: '5. Aquisições & Manutenção da Casa',
-            subtitle: 'Lista de desejos com foto do link, histórico de preços no Dia X, garantias e revisões.',
-            integrationNote: 'Ao marcar um eletrodoméstico ou móvel como "Comprado", vai para Garantias e lança o gasto no Módulo 4.'
+            subtitle: 'Lista de desejos com foto do link, histórico de preços, garantias e revisões.'
           },
           {
             id: 'mod6',
             order: 6,
             visible: true,
-            phase: 'Ativo',
-            activePhase: true,
             icon: '🍲',
             title: '6. Despensa & Cardápio Semanal',
-            subtitle: 'Controle de estoque com alerta de validade, receitas e geração automática de compras.',
-            integrationNote: 'Cruza os ingredientes do cardápio da semana com o estoque da Despensa para gerar só o que falta comprar.'
+            subtitle: 'Controle de estoque com alerta de validade, receitas e geração automática de compras.'
           }
         ],
         plans: [],
@@ -3868,40 +3844,44 @@
         sortedModules.forEach(mod => {
           const card = document.createElement('div');
           const pal = MODULE_VISUAL_PALETTE[mod.id] || MODULE_VISUAL_PALETTE.mod1;
-          card.className = 'bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs hover:shadow-md transition flex flex-col justify-between cursor-pointer';
+          card.className = 'bg-white rounded-2xl p-3 sm:p-5 border border-slate-200/90 shadow-2xs hover:shadow-md transition flex flex-col justify-between cursor-pointer';
           card.style.borderTop = `3px solid ${pal.accentBorder}`;
 
           let statusMetric = '';
           if (mod.id === 'mod1') {
-            statusMetric = `${pendingToday} plano(s) • ${completedHabitsToday}/${scheduledHabitsTodayCount} hábitos hoje`;
+            statusMetric = `${pendingToday} plano(s) • ${completedHabitsToday}/${scheduledHabitsTodayCount} hábitos`;
           } else if (mod.id === 'mod2') {
-            statusMetric = `${shopCount} na lista (${shopCartCount} no carrinho)`;
+            statusMetric = `${shopCount} item(ns) (${shopCartCount} no carrinho)`;
           } else if (mod.id === 'mod3') {
-            statusMetric = `${pendingTasksCount} tarefa(s) pendente(s)`;
+            statusMetric = `${pendingTasksCount} pendente(s)`;
           } else if (mod.id === 'mod4') {
-            const marketSpent = state.transactions
-              .filter(t => t.type === 'Despesa' && t.category === 'Supermercado & Feira')
-              .reduce((a, b) => a + Number(b.amount || 0), 0);
-            statusMetric = `Mercado: ${formatCurrencyBRL(marketSpent)} • ${state.fixedBills.filter(b => !b.paid).length} boleto(s)`;
+            const currentYm = TODAY_STR.slice(0, 7);
+            const openBills = state.fixedBills.filter(b => !isFixedBillPaidInMonth(b, currentYm)).length;
+            statusMetric = `${openBills} boleto(s) em aberto`;
           } else if (mod.id === 'mod5') {
             statusMetric = `${state.wishlistItems.length} desejos • ${state.warranties.length} garantias`;
           } else if (mod.id === 'mod6') {
             const lowStock = state.pantryItems.filter(p => Number(p.qty) <= Number(p.minQty)).length;
-            statusMetric = `${state.pantryItems.length} no estoque (${lowStock} baixo)`;
+            statusMetric = `${state.pantryItems.length} itens (${lowStock} em falta)`;
           }
+
+          const cleanMobileTitle = (mod.title || '').replace(/^\d+\.\s*/, '');
 
           card.innerHTML = `
             <div>
-              <div class="flex items-center justify-between gap-2 mb-2.5">
-                <span class="text-xl">${mod.icon}</span>
-                <span class="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${pal.pillBg}">${pal.tag}</span>
+              <div class="flex items-center justify-between gap-1.5 mb-1.5 sm:mb-2.5">
+                <span class="text-lg sm:text-xl leading-none">${mod.icon}</span>
+                <span class="hidden sm:inline-block text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${pal.pillBg}">${pal.tag}</span>
               </div>
-              <h3 class="text-sm sm:text-base font-bold text-slate-900">${mod.title}</h3>
-              <p class="text-xs text-slate-500 mt-1 leading-relaxed">${mod.subtitle}</p>
+              <h3 class="text-xs sm:text-base font-bold text-slate-900 leading-snug line-clamp-2">
+                <span class="sm:hidden">${cleanMobileTitle}</span>
+                <span class="hidden sm:inline">${mod.title}</span>
+              </h3>
+              <p class="hidden sm:block text-xs text-slate-500 mt-1 leading-relaxed">${mod.subtitle}</p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-              <span class="text-[11px] font-medium text-slate-500 truncate">${statusMetric}</span>
-              <button type="button" data-module-id="${mod.id}" class="btn-open-module px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer shrink-0 ${pal.btnBg}">
+            <div class="mt-2.5 sm:mt-4 pt-2 sm:pt-3 border-t border-slate-100 flex items-center justify-between gap-1.5">
+              <span class="text-[10px] sm:text-[11px] font-medium text-slate-500 truncate">${statusMetric}</span>
+              <button type="button" data-module-id="${mod.id}" class="btn-open-module px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold transition cursor-pointer shrink-0 ${pal.btnBg}">
                 Abrir →
               </button>
             </div>
@@ -7180,6 +7160,10 @@
 
       // Attach All Event Listeners
       window.addEventListener('DOMContentLoaded', () => {
+        const verBadge = document.getElementById('appVersionBadge');
+        if (verBadge) verBadge.textContent = APP_VERSION;
+        const verFooter = document.getElementById('settingsModalFooterSummary');
+        if (verFooter) verFooter.textContent = `Prumo ${APP_VERSION}`;
         document.getElementById('btnGoHomeTop').addEventListener('click', openHomeView);
 
         // Home Today Quick-Check Filter Pills & Completed Toggle
