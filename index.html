@@ -1971,7 +1971,7 @@
 
       <!-- ==================== ABA 1: 🔔 NOTIFICAÇÕES ==================== -->
       <div id="settingsPaneNotifications" class="space-y-4">
-        <!-- Permissão do Sistema e Teste Rápido -->
+        <!-- Permissão do Sistema e Testes (Imediato + Agendado 1 min) -->
         <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
@@ -1988,14 +1988,18 @@
             </span>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-            <button id="btnRequestNotificationPermission" type="button" class="w-full py-2.5 px-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+            <button id="btnRequestNotificationPermission" type="button" class="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
               <span>🔓</span>
-              <span>Ativar Permissão do Sistema</span>
+              <span>Ativar Permissão</span>
             </button>
-            <button id="btnTestNotificationNow" type="button" class="w-full py-2.5 px-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs">
+            <button id="btnTestNotificationNow" type="button" class="w-full py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
               <span>🚀</span>
-              <span>Testar Notificação Agora</span>
+              <span>Testar Agora</span>
+            </button>
+            <button id="btnTestScheduled1Min" type="button" class="w-full py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
+              <span>⏱️</span>
+              <span>Testar Agendado (1 min)</span>
             </button>
           </div>
         </div>
@@ -2010,9 +2014,9 @@
               Escolha como o Prumo deve enviar alertas no seu computador ou celular:
             </p>
             <select id="selectNotificationMode" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-semibold text-slate-900 bg-white">
-              <option value="hybrid">⚡ Híbrido (Modo 1 Local SW + Modo 2 Push em Nuvem FCM) — Recomendado</option>
-              <option value="local_sw">⏱️ Modo 1: Agendador Local via Service Worker (Offline / App Aberto ou em 2º Plano)</option>
-              <option value="cloud_fcm">☁️ Modo 2: Push em Nuvem via Firebase Cloud Messaging (FCM Web Push)</option>
+              <option value="hybrid">⚡ Híbrido (Agendador Service Worker + Push em Nuvem FCM) — Recomendado</option>
+              <option value="local_sw">⏱️ Modo 1: Agendador Autônomo via Service Worker (Offline / App em 2º Plano)</option>
+              <option value="cloud_fcm">☁️ Modo 2: Push em Nuvem FCM + Recuperação Automática de Turno</option>
               <option value="disabled">🔕 Desativado (Não enviar notificações automáticas)</option>
             </select>
           </div>
@@ -2021,7 +2025,7 @@
           <div class="pt-3 border-t border-slate-100 space-y-2.5">
             <div class="flex items-center justify-between">
               <h5 class="text-xs font-bold text-slate-800">⏰ Horários do Resumo de Pendências por Turno</h5>
-              <span class="text-[10px] font-semibold text-slate-400">Planos + Hábitos + Tarefas</span>
+              <span class="text-[10px] font-semibold text-slate-400">Dispara no horário ou assim que o aparelho acordar</span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -2052,6 +2056,10 @@
                 <input id="inputNotifTimeEvening" type="time" value="20:00" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold bg-white" />
               </div>
             </div>
+
+            <div id="notifShiftStatusSummary" class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 flex flex-wrap items-center justify-between gap-2">
+              <span>Status dos disparos automáticos de hoje: verificando...</span>
+            </div>
           </div>
 
           <!-- Regras Adicionais: Horário Exato do Compromisso e Boletos Vencendo Hoje -->
@@ -2060,8 +2068,8 @@
             <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
               <input id="chkNotifExactPlanTime" type="checkbox" checked class="mt-0.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
               <div class="text-xs">
-                <p class="font-semibold text-slate-800">Avisar no horário exato de cada compromisso do dia</p>
-                <p class="text-[11px] text-slate-500">Dispara um lembrete pontual quando um plano do Módulo 1 possui horário definido (ex.: 09:30, 15:00).</p>
+                <p class="font-semibold text-slate-800">Avisar no horário de cada compromisso do dia</p>
+                <p class="text-[11px] text-slate-500">Dispara um lembrete quando um plano do Módulo 1 possui horário definido (ex.: 09:30, 15:00).</p>
               </div>
             </label>
             <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
@@ -2272,7 +2280,7 @@
 
       <!-- Rodapé do Modal -->
       <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
-        <span id="settingsModalFooterSummary">Prumo PWA v3 • 6 Módulos Integrados</span>
+        <span id="settingsModalFooterSummary">Prumo PWA v4 • 6 Módulos Integrados</span>
         <button id="btnDoneBackupModal" type="button" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold hover:bg-slate-800 cursor-pointer">
           Fechar
         </button>
@@ -2651,7 +2659,6 @@
               streak++;
             } else if (isSched) {
               if (i === 0) {
-                // Hoje ainda está em aberto: não quebra o streak acumulado dos dias anteriores
                 continue;
               }
               break;
@@ -2732,7 +2739,6 @@
           targetState.habits.forEach(h => {
             if (!h) return;
             const prevStreak = h.streak;
-            // Se getDayOfWeekIndex já estiver acessível, recalcula o streak real
             if (typeof getDayOfWeekIndex === 'function') {
               recalculateHabitStreak(h);
               if (h.streak !== prevStreak) mutated = true;
@@ -2830,6 +2836,8 @@
       let isApplyingRemoteSnapshot = false;
       let hasPendingLocalChanges = false;
       let isPushingToFirestore = false;
+      let triggerNotificationCheckRef = null;
+      let syncSwScheduleRef = null;
 
       function initFirebaseServices() {
         if (fbApp) return true;
@@ -2858,6 +2866,15 @@
         targetObj.taskFilterRoom = state.taskFilterRoom || 'ALL';
         targetObj.financeCategoryFilter = state.financeCategoryFilter || 'ALL';
         targetObj.homeTodayFilter = state.homeTodayFilter || 'ALL';
+        // Preserva también os logs de notificações já disparadas hoje neste aparelho
+        if (state.notificationSettings && state.notificationSettings.dispatchedLog) {
+          if (!targetObj.notificationSettings) targetObj.notificationSettings = {};
+          targetObj.notificationSettings.dispatchedLog = Object.assign(
+            {},
+            targetObj.notificationSettings.dispatchedLog || {},
+            state.notificationSettings.dispatchedLog
+          );
+        }
         return targetObj;
       }
 
@@ -2922,7 +2939,6 @@
           payload.ownerEmail = currentUser.email || fbUser.email || '';
           payload.ownerUid = fbUser.uid;
 
-          // Substituição completa do documento (sem merge: true) para garantir que exclusões em mapas aninhados persistam
           await fbDb.collection('users').doc(fbUser.uid).set(payload);
           if (Number(state.updatedAtMs || 0) <= pushTimestamp) {
             hasPendingLocalChanges = false;
@@ -2966,6 +2982,9 @@
               state = loadState();
               renderAll();
               isApplyingRemoteSnapshot = false;
+              if (typeof triggerNotificationCheckRef === 'function') {
+                triggerNotificationCheckRef();
+              }
               if (needsPurgePush || routineMutated) {
                 pushStateToFirestoreNow(false);
               }
@@ -3000,7 +3019,6 @@
             pushStateToFirestoreNow(false);
             return;
           }
-          // Evita que um snapshot antigo sobrescreva edições locais ainda na janela de debounce
           if ((hasPendingLocalChanges || isPushingToFirestore) && docSnap.metadata.hasPendingWrites) {
             return;
           }
@@ -3020,6 +3038,9 @@
             renderAll();
             isApplyingRemoteSnapshot = false;
             setCloudSyncHeaderState('ok', 'Conectado');
+            if (typeof triggerNotificationCheckRef === 'function') {
+              triggerNotificationCheckRef();
+            }
             if (needsPurgePush || routineMutated) {
               pushStateToFirestoreNow(false);
             }
@@ -3027,6 +3048,9 @@
             pushStateToFirestoreNow(false);
           } else {
             setCloudSyncHeaderState('ok', 'Conectado');
+            if (typeof triggerNotificationCheckRef === 'function') {
+              triggerNotificationCheckRef();
+            }
           }
         }, () => {
           setCloudSyncHeaderState('expired', 'Verificar Firestore');
@@ -3051,6 +3075,9 @@
           localStorage.setItem(key, JSON.stringify(state));
         } catch (err) {
           // Ignore storage quota errors in sandboxed frames
+        }
+        if (typeof syncSwScheduleRef === 'function') {
+          syncSwScheduleRef();
         }
         scheduleAutoGoogleDriveSync();
       }
@@ -3630,7 +3657,6 @@
 
       function isTaskScheduledForToday(task) {
         if (!task) return false;
-        // Se a tarefa já está marcada como concluída, só pertence ao painel de HOJE se tiver sido concluída HOJE
         if (task.done) {
           return isTaskCompletedToday(task);
         }
@@ -3670,7 +3696,6 @@
             showToast(`Tarefa "${task.title}" concluída! Próxima: ${formatPtDate(task.nextDue)}`, '🧹');
           }
         } else {
-          // Desmarcou: volta imediatamente ao estado pendente de hoje
           task.lastDone = '—';
           task.nextDue = TODAY_STR;
           showToast(`Tarefa "${task.title}" reaberta para hoje.`, '🔄');
@@ -6207,6 +6232,9 @@
         if (typeof updateNotificationSettingsUIRef === 'function') {
           updateNotificationSettingsUIRef();
         }
+        if (typeof syncSwScheduleRef === 'function') {
+          syncSwScheduleRef();
+        }
       }
 
       // Attach All Event Listeners
@@ -6230,16 +6258,31 @@
           });
         }
 
-        // ==================== PWA SERVICE WORKER (v3) & 2-MODE PUSH NOTIFICATIONS ====================
+        // ==================== PWA SERVICE WORKER (v4) & 2-MODE PUSH NOTIFICATIONS ====================
         let swRegistrationRef = null;
         if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-          navigator.serviceWorker.register('./sw.js').then((reg) => {
+          navigator.serviceWorker.register('./sw.js').then(async (reg) => {
             swRegistrationRef = reg;
+            try {
+              if (reg.periodicSync && reg.periodicSync.register) {
+                await reg.periodicSync.register('prumo-notif-periodic', {
+                  minInterval: 15 * 60 * 1000
+                }).catch(() => {});
+              }
+            } catch (e) {}
+            try {
+              if (reg.sync && reg.sync.register) {
+                await reg.sync.register('prumo-notif-sync').catch(() => {});
+              }
+            } catch (e) {}
+            syncNotificationScheduleWithServiceWorker();
+            runScheduledNotificationsTick();
           }).catch(() => {});
 
           navigator.serviceWorker.addEventListener('message', (event) => {
             const msg = event.data;
-            if (msg && msg.type === 'PRUMO_NOTIFICATION_CLICK') {
+            if (!msg || typeof msg !== 'object') return;
+            if (msg.type === 'PRUMO_NOTIFICATION_CLICK') {
               const d = msg.data || {};
               if (d.targetModule === 'mod4_bills') {
                 openModule4View('bills');
@@ -6247,6 +6290,18 @@
                 openModule1View('plans');
               } else if (currentUser) {
                 openHomeView();
+              }
+            } else if (msg.type === 'PRUMO_SW_DISPATCHED_LOG' && msg.logKey) {
+              if (!state.notificationSettings) {
+                state.notificationSettings = JSON.parse(JSON.stringify(DEFAULT_STATE.notificationSettings));
+              }
+              if (!state.notificationSettings.dispatchedLog) {
+                state.notificationSettings.dispatchedLog = {};
+              }
+              if (!state.notificationSettings.dispatchedLog[msg.logKey]) {
+                state.notificationSettings.dispatchedLog[msg.logKey] = true;
+                saveState();
+                renderNotificationSettingsUI();
               }
             }
           });
@@ -6450,6 +6505,27 @@
           const chkBills = document.getElementById('chkNotifDueBillsToday');
           if (chkBills) chkBills.checked = ns.dueBillsEnabled !== false;
 
+          // Atualiza o painel de status dos 3 turnos de hoje
+          const shiftStatusEl = document.getElementById('notifShiftStatusSummary');
+          if (shiftStatusEl) {
+            const todayKey = getLocalTodayStr();
+            const dLog = (ns && ns.dispatchedLog) || {};
+            const mTime = ns.morningTime || '08:00';
+            const aTime = ns.afternoonTime || '14:00';
+            const eTime = ns.eveningTime || '20:00';
+            const mSent = Boolean(dLog[`${todayKey}_shift_Manhã_${mTime}`]);
+            const aSent = Boolean(dLog[`${todayKey}_shift_Tarde_${aTime}`]);
+            const eSent = Boolean(dLog[`${todayKey}_shift_Noite_${eTime}`]);
+            shiftStatusEl.innerHTML = `
+              <span class="font-semibold text-slate-700">Status hoje (${formatPtDate(todayKey)}):</span>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${mSent ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">☀️ Manhã (${mTime}): ${mSent ? '✓ Disparado' : (ns.morningEnabled !== false ? '⏳ Agendado' : 'Off')}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${aSent ? 'bg-emerald-100 text-emerald-800' : 'bg-sky-100 text-sky-800'}">🌤️ Tarde (${aTime}): ${aSent ? '✓ Disparado' : (ns.afternoonEnabled !== false ? '⏳ Agendado' : 'Off')}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${eSent ? 'bg-emerald-100 text-emerald-800' : 'bg-indigo-100 text-indigo-800'}">🌙 Noite (${eTime}): ${eSent ? '✓ Disparado' : (ns.eveningEnabled !== false ? '⏳ Agendado' : 'Off')}</span>
+              </div>
+            `;
+          }
+
           const fcmPanel = document.getElementById('fcmCloudConfigPanel');
           if (fcmPanel) {
             if (ns.mode === 'local_sw' || ns.mode === 'disabled') {
@@ -6567,6 +6643,8 @@
 
           saveState();
           renderNotificationSettingsUI();
+          syncNotificationScheduleWithServiceWorker();
+          runScheduledNotificationsTick();
           if (showFeedback) {
             showToast('Preferências de notificações salvas e sincronizadas!', '🔔');
           }
@@ -6604,19 +6682,21 @@
             try {
               if ('serviceWorker' in navigator) {
                 const reg = swRegistrationRef || (await navigator.serviceWorker.getRegistration());
-                if (reg && reg.active) {
-                  reg.active.postMessage({
-                    type: 'SHOW_LOCAL_NOTIFICATION',
-                    payload
-                  });
-                  return true;
-                } else if (reg && reg.showNotification) {
+                if (reg && reg.showNotification) {
                   await reg.showNotification(payload.title, {
                     body: payload.body,
                     icon: payload.icon,
                     badge: payload.badge,
                     tag: payload.tag,
-                    data: payload.data
+                    renotify: true,
+                    vibrate: [200, 100, 200],
+                    data: Object.assign({ url: payload.url }, payload.data)
+                  });
+                  return true;
+                } else if (reg && reg.active) {
+                  reg.active.postMessage({
+                    type: 'SHOW_LOCAL_NOTIFICATION',
+                    payload
                   });
                   return true;
                 }
@@ -6639,33 +6719,178 @@
             ? pendingPlans.filter(p => p.shift === shiftLabel)
             : pendingPlans;
 
-          let pendingHabits = 0;
+          const pendingHabitNames = [];
           state.habits.forEach(h => {
             const cur = (h.progressByDate && h.progressByDate[nowStr]) || 0;
             if (isHabitScheduledForDate(h, nowStr) && cur < (h.target || 1)) {
-              pendingHabits++;
+              pendingHabitNames.push(h.title);
             }
           });
 
-          const pendingTasks = state.tasks.filter(t => isTaskScheduledForToday(t) && !t.done).length;
+          const pendingTaskObjs = state.tasks.filter(t => isTaskScheduledForToday(t) && !t.done);
           const todayDayNum = new Date().getDate();
-          const dueBills = state.fixedBills.filter(b => !b.paid && Number(b.dueDay) === todayDayNum).length;
+          const dueBillsObjs = state.fixedBills.filter(b => !b.paid && Number(b.dueDay) === todayDayNum);
 
           const parts = [];
           if (shiftLabel && shiftPlans.length > 0) {
-            parts.push(`${shiftPlans.length} plano(s) no turno da ${shiftLabel}`);
+            const samplePlans = shiftPlans.slice(0, 2).map(p => p.title).join(', ');
+            parts.push(`${shiftPlans.length} plano(s) na ${shiftLabel} (${samplePlans})`);
           } else if (pendingPlans.length > 0) {
-            parts.push(`${pendingPlans.length} compromisso(s) no dia`);
+            const samplePlans = pendingPlans.slice(0, 2).map(p => p.title).join(', ');
+            parts.push(`${pendingPlans.length} compromisso(s) hoje (${samplePlans})`);
           }
-          if (pendingHabits > 0) parts.push(`${pendingHabits} hábito(s) para concluir`);
-          if (pendingTasks > 0) parts.push(`${pendingTasks} tarefa(s) da casa`);
-          if (dueBills > 0) parts.push(`${dueBills} boleto(s) vencendo hoje`);
+          if (pendingHabitNames.length > 0) {
+            const sampleHabits = pendingHabitNames.slice(0, 2).join(', ');
+            parts.push(`${pendingHabitNames.length} hábito(s) (${sampleHabits})`);
+          }
+          if (pendingTaskObjs.length > 0) {
+            const sampleTasks = pendingTaskObjs.slice(0, 2).map(t => t.title).join(', ');
+            parts.push(`${pendingTaskObjs.length} tarefa(s) da casa (${sampleTasks})`);
+          }
+          if (dueBillsObjs.length > 0) {
+            parts.push(`${dueBillsObjs.length} boleto(s) vencendo hoje`);
+          }
 
           if (parts.length === 0) {
             return 'Tudo em dia por aqui! Nenhuma pendência aberta neste turno. 🎉';
           }
-          return 'Pendentes agora: ' + parts.join(' • ') + '.';
+          return 'Para hoje: ' + parts.join(' • ') + '.';
         }
+
+        function computeTimestampMsForTodayTime(dateStr, hhmmStr) {
+          try {
+            const [y, m, d] = (dateStr || getLocalTodayStr()).split('-').map(Number);
+            const [hh, mm] = (hhmmStr || '08:00').split(':').map(Number);
+            return new Date(y, m - 1, d, hh || 0, mm || 0, 0, 0).getTime();
+          } catch (e) {
+            return 0;
+          }
+        }
+
+        function buildServiceWorkerSchedulePayload() {
+          const ns = state.notificationSettings || DEFAULT_STATE.notificationSettings;
+          const todayKey = getLocalTodayStr();
+          const mTime = ns.morningTime || '08:00';
+          const aTime = ns.afternoonTime || '14:00';
+          const eTime = ns.eveningTime || '20:00';
+
+          const items = [
+            {
+              enabled: ns.morningEnabled !== false,
+              time: mTime,
+              windowEnd: aTime > mTime ? aTime : '13:59',
+              logKey: `${todayKey}_shift_Manhã_${mTime}`,
+              title: `☀️ Rotina da Manhã (${mTime}) — Prumo`,
+              body: buildDailyPendingSummaryText('Manhã'),
+              data: { targetModule: 'mod1_plans' }
+            },
+            {
+              enabled: ns.afternoonEnabled !== false,
+              time: aTime,
+              windowEnd: eTime > aTime ? eTime : '19:59',
+              logKey: `${todayKey}_shift_Tarde_${aTime}`,
+              title: `🌤️ Resumo da Tarde (${aTime}) — Prumo`,
+              body: buildDailyPendingSummaryText('Tarde'),
+              data: { targetModule: 'mod1_plans' }
+            },
+            {
+              enabled: ns.eveningEnabled !== false,
+              time: eTime,
+              windowEnd: '23:59',
+              logKey: `${todayKey}_shift_Noite_${eTime}`,
+              title: `🌙 Resumo da Noite (${eTime}) — Prumo`,
+              body: buildDailyPendingSummaryText('Noite'),
+              data: { targetModule: 'mod1_plans' }
+            }
+          ];
+
+          if (ns.exactPlanTimeEnabled !== false && Array.isArray(state.plans)) {
+            state.plans
+              .filter(p => p && p.date === todayKey && !p.done && p.time)
+              .forEach(plan => {
+                items.push({
+                  enabled: true,
+                  time: plan.time,
+                  windowEnd: '23:59',
+                  logKey: `${todayKey}_plan_${plan.id}_${plan.time}`,
+                  title: `⏰ Compromisso (${plan.time}): ${plan.title}`,
+                  body: `Turno: ${plan.shift} • Categoria: ${plan.category}${plan.notes ? ' — ' + plan.notes : ''}`,
+                  data: { targetModule: 'mod1_plans' }
+                });
+              });
+          }
+
+          if (ns.dueBillsEnabled !== false && Array.isArray(state.fixedBills)) {
+            const todayDayNum = new Date().getDate();
+            const dueTodayBills = state.fixedBills.filter(b => !b.paid && Number(b.dueDay) === todayDayNum);
+            if (dueTodayBills.length > 0) {
+              const names = dueTodayBills.map(b => `${b.name} (${formatCurrencyBRL(b.amount)})`).join(', ');
+              items.push({
+                enabled: true,
+                time: mTime,
+                windowEnd: '23:59',
+                logKey: `${todayKey}_due_bills_${dueTodayBills.length}`,
+                title: `📄 ${dueTodayBills.length} Conta(s) Fixa(s) Vencendo Hoje!`,
+                body: `Boletos em aberto hoje: ${names}.`,
+                data: { targetModule: 'mod4_bills' }
+              });
+            }
+          }
+
+          const upcomingTriggers = items
+            .filter(it => it.enabled)
+            .map(it => Object.assign({}, it, {
+              timestampMs: computeTimestampMsForTodayTime(todayKey, it.time)
+            }));
+
+          // Inclui também o gatilho da manhã de amanhã para o SO (TimestampTrigger) se o usuário já configurou a rotina
+          if (ns.morningEnabled !== false) {
+            const tomorrowKey = addDaysStr(todayKey, 1);
+            upcomingTriggers.push({
+              enabled: true,
+              logKey: `${tomorrowKey}_shift_Manhã_${mTime}`,
+              title: `☀️ Bom dia! Sua Rotina de Hoje (${mTime}) — Prumo`,
+              body: 'Toque para conferir seus hábitos, planos e tarefas programadas para hoje.',
+              timestampMs: computeTimestampMsForTodayTime(tomorrowKey, mTime),
+              data: { targetModule: 'mod1_plans' }
+            });
+          }
+
+          return {
+            todayKey,
+            mode: ns.mode || 'hybrid',
+            dispatchedLog: Object.assign({}, ns.dispatchedLog || {}),
+            items,
+            upcomingTriggers
+          };
+        }
+
+        async function syncNotificationScheduleWithServiceWorker() {
+          if (!currentUser) return;
+          try {
+            const schedulePayload = buildServiceWorkerSchedulePayload();
+            if ('caches' in window) {
+              const cache = await caches.open('prumo-notif-schedule-v1');
+              await cache.put(
+                '/__prumo_notif_schedule__.json',
+                new Response(JSON.stringify(schedulePayload), {
+                  status: 200,
+                  headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }
+                })
+              );
+            }
+            if ('serviceWorker' in navigator) {
+              const reg = swRegistrationRef || (await navigator.serviceWorker.getRegistration());
+              if (reg && reg.active) {
+                reg.active.postMessage({
+                  type: 'SYNC_NOTIFICATION_SCHEDULE',
+                  schedulePayload
+                });
+              }
+            }
+          } catch (e) {}
+        }
+        syncSwScheduleRef = syncNotificationScheduleWithServiceWorker;
 
         // Função interna que vincula este aparelho ao FCM usando a EMBEDDED_FCM_VAPID_KEY
         async function bindCurrentDeviceToFcmCloud(silentMode) {
@@ -6777,6 +7002,7 @@
                   'Seus alertas de compromissos, turnos e boletos estão prontos neste aparelho.',
                   'prumo-perm-granted'
                 );
+                syncNotificationScheduleWithServiceWorker();
                 const ns = state.notificationSettings || {};
                 if (ns.mode === 'hybrid' || ns.mode === 'cloud_fcm') {
                   bindCurrentDeviceToFcmCloud(true);
@@ -6813,6 +7039,53 @@
           });
         }
 
+        const btnTestSched1Min = document.getElementById('btnTestScheduled1Min');
+        if (btnTestSched1Min) {
+          btnTestSched1Min.addEventListener('click', async () => {
+            if (!('Notification' in window)) {
+              showToast('Este navegador não suporta notificações nativas.', '⚠️');
+              return;
+            }
+            if (Notification.permission !== 'granted') {
+              const perm = await Notification.requestPermission();
+              renderNotificationSettingsUI();
+              if (perm !== 'granted') {
+                showToast('Ative a permissão de notificação primeiro!', '⚠️');
+                return;
+              }
+            }
+            const summaryBody = buildDailyPendingSummaryText('');
+            const tag = 'prumo-sched-test-' + Date.now();
+            const title = '⏱️ Disparo Automático Agendado (1 min) — Prumo';
+
+            // Agenda tanto no Service Worker quanto como fallback na página para 60 segundos
+            let sentToSw = false;
+            try {
+              if ('serviceWorker' in navigator) {
+                const reg = swRegistrationRef || (await navigator.serviceWorker.getRegistration());
+                if (reg && reg.active) {
+                  reg.active.postMessage({
+                    type: 'SCHEDULE_DELAYED_NOTIFICATION',
+                    delayMs: 60000,
+                    title,
+                    body: summaryBody,
+                    tag
+                  });
+                  sentToSw = true;
+                }
+              }
+            } catch (e) {}
+
+            setTimeout(() => {
+              if (!sentToSw) {
+                dispatchPrumoNotification(title, summaryBody, tag, { targetModule: 'mod1_plans' });
+              }
+            }, 60500);
+
+            showToast('Agendado! Daqui a 1 minuto você receberá a notificação automática (pode minimizar o app ou bloquear a tela).', '⏱️');
+          });
+        }
+
         const btnBindFcm = document.getElementById('btnBindFcmDevice');
         if (btnBindFcm) {
           btnBindFcm.addEventListener('click', async () => {
@@ -6827,7 +7100,7 @@
             const fgMessaging = firebase.messaging();
             fgMessaging.onMessage((payload) => {
               const ns = state.notificationSettings || {};
-              if (ns.mode === 'disabled' || ns.mode === 'local_sw') return;
+              if (ns.mode === 'disabled') return;
               const notif = (payload && payload.notification) || {};
               const data = (payload && payload.data) || {};
               dispatchPrumoNotification(
@@ -6840,12 +7113,12 @@
           }
         } catch (e) {}
 
-        // Motor Agendador Local (Modo 1 & Híbrido) + Virada Automática de Meia-Noite
+        // Motor Agendador Automático com Janela Inteligente de Recuperação (funciona mesmo se o celular estava em repouso no minuto exato)
         function runScheduledNotificationsTick() {
           checkAndHandleDayRollover();
           if (!currentUser) return;
           const ns = state.notificationSettings || DEFAULT_STATE.notificationSettings;
-          if (!ns || ns.mode === 'disabled' || ns.mode === 'cloud_fcm') return;
+          if (!ns || ns.mode === 'disabled') return;
           if (!('Notification' in window) || Notification.permission !== 'granted') return;
 
           const now = new Date();
@@ -6857,16 +7130,37 @@
           }
 
           let logUpdated = false;
+          const mTime = ns.morningTime || '08:00';
+          const aTime = ns.afternoonTime || '14:00';
+          const eTime = ns.eveningTime || '20:00';
 
-          // 1. Resumo dos 3 Turnos Predefinidos (Manhã, Tarde, Noite)
+          // 1. Resumo dos 3 Turnos Predefinidos com Janela Inteligente de Recuperação (hhmm >= sc.time && hhmm < sc.windowEnd)
           const shiftConfigs = [
-            { enabled: ns.morningEnabled !== false, time: ns.morningTime || '08:00', shift: 'Manhã', icon: '☀️' },
-            { enabled: ns.afternoonEnabled !== false, time: ns.afternoonTime || '14:00', shift: 'Tarde', icon: '🌤️' },
-            { enabled: ns.eveningEnabled !== false, time: ns.eveningTime || '20:00', shift: 'Noite', icon: '🌙' }
+            {
+              enabled: ns.morningEnabled !== false,
+              time: mTime,
+              windowEnd: aTime > mTime ? aTime : '13:59',
+              shift: 'Manhã',
+              icon: '☀️'
+            },
+            {
+              enabled: ns.afternoonEnabled !== false,
+              time: aTime,
+              windowEnd: eTime > aTime ? eTime : '19:59',
+              shift: 'Tarde',
+              icon: '🌤️'
+            },
+            {
+              enabled: ns.eveningEnabled !== false,
+              time: eTime,
+              windowEnd: '23:59',
+              shift: 'Noite',
+              icon: '🌙'
+            }
           ];
 
           shiftConfigs.forEach((sc) => {
-            if (sc.enabled && sc.time === hhmm) {
+            if (sc.enabled && hhmm >= sc.time && hhmm < sc.windowEnd) {
               const logKey = `${todayKey}_shift_${sc.shift}_${sc.time}`;
               if (!ns.dispatchedLog[logKey]) {
                 ns.dispatchedLog[logKey] = true;
@@ -6882,17 +7176,17 @@
             }
           });
 
-          // 2. Horário Exato de Cada Compromisso do Dia
+          // 2. Horário de Cada Compromisso do Dia (com recuperação caso o aparelho estivesse em repouso no minuto exato)
           if (ns.exactPlanTimeEnabled !== false) {
             state.plans
-              .filter(p => p.date === todayKey && !p.done && p.time === hhmm)
+              .filter(p => p && p.date === todayKey && !p.done && p.time && hhmm >= p.time)
               .forEach((plan) => {
                 const logKey = `${todayKey}_plan_${plan.id}_${plan.time}`;
                 if (!ns.dispatchedLog[logKey]) {
                   ns.dispatchedLog[logKey] = true;
                   logUpdated = true;
                   dispatchPrumoNotification(
-                    `⏰ Compromisso Agora (${plan.time}): ${plan.title}`,
+                    `⏰ Compromisso (${plan.time}): ${plan.title}`,
                     `Turno: ${plan.shift} • Categoria: ${plan.category}${plan.notes ? ' — ' + plan.notes : ''}`,
                     logKey,
                     { targetModule: 'mod1_plans' }
@@ -6903,7 +7197,7 @@
 
           // 3. Alerta de Contas Fixas (Boletos) Vencendo no Dia
           if (ns.dueBillsEnabled !== false) {
-            const billTriggerTime = ns.morningTime || '08:00';
+            const billTriggerTime = mTime;
             if (hhmm >= billTriggerTime) {
               const todayDayNum = now.getDate();
               const dueTodayBills = state.fixedBills.filter(b => !b.paid && Number(b.dueDay) === todayDayNum);
@@ -6926,10 +7220,15 @@
 
           if (logUpdated) {
             saveState();
+            renderNotificationSettingsUI();
+          } else {
+            syncNotificationScheduleWithServiceWorker();
           }
         }
+        triggerNotificationCheckRef = runScheduledNotificationsTick;
 
-        setInterval(runScheduledNotificationsTick, 20000);
+        setInterval(runScheduledNotificationsTick, 15000);
+        setTimeout(runScheduledNotificationsTick, 1200);
         document.addEventListener('visibilitychange', () => {
           if (!document.hidden) {
             checkAndHandleDayRollover();
@@ -6939,6 +7238,14 @@
         });
         window.addEventListener('focus', () => {
           checkAndHandleDayRollover();
+          runScheduledNotificationsTick();
+        });
+        window.addEventListener('pageshow', () => {
+          checkAndHandleDayRollover();
+          runScheduledNotificationsTick();
+        });
+        window.addEventListener('online', () => {
+          runScheduledNotificationsTick();
         });
 
         document.getElementById('btnBackToHome').addEventListener('click', openHomeView);
