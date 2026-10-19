@@ -2396,6 +2396,34 @@
         return `${y}-${m}-${d}`;
       }
 
+      function getTaskIntervalDays(taskOrFreq) {
+        if (!taskOrFreq) return null;
+        if (typeof taskOrFreq === 'object') {
+          if (
+            Array.isArray(taskOrFreq.customDays) &&
+            taskOrFreq.customDays.length > 0 &&
+            String(taskOrFreq.frequency || '').startsWith('Customizado')
+          ) {
+            return null;
+          }
+          taskOrFreq = taskOrFreq.frequency || '';
+        }
+        const f = String(taskOrFreq);
+        if (f.includes('15') || f.includes('Quinzenal')) return 15;
+        if (f.includes('30') || f.includes('Mensal')) return 30;
+        if (f.includes('7') || f.includes('Semanal')) return 7;
+        return null;
+      }
+
+      function daysBetweenDatesStr(fromStr, toStr) {
+        if (!fromStr || !toStr || !/^\d{4}-\d{2}-\d{2}$/.test(fromStr) || !/^\d{4}-\d{2}-\d{2}$/.test(toStr)) return 0;
+        const p1 = fromStr.split('-').map(Number);
+        const p2 = toStr.split('-').map(Number);
+        const d1 = new Date(p1[0], p1[1] - 1, p1[2]);
+        const d2 = new Date(p2[0], p2[1] - 1, p2[2]);
+        return Math.round((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+      }
+
       const DEFAULT_STATE = {
         platformMode: 'desktop',
         selectedDate: TODAY_STR,
@@ -2713,13 +2741,62 @@
         if (Array.isArray(targetState.tasks)) {
           targetState.tasks.forEach(task => {
             if (!task) return;
+            const intervalDays = getTaskIntervalDays(task);
+            if (intervalDays) {
+              if (task.type !== 'Recorrente') {
+                task.type = 'Recorrente';
+                mutated = true;
+              }
+              if (Array.isArray(task.customDays) && task.customDays.length > 0) {
+                task.customDays = [];
+                mutated = true;
+              }
+              const hasValidLastDone = Boolean(task.lastDone && /^\d{4}-\d{2}-\d{2}$/.test(task.lastDone));
+              if (hasValidLastDone) {
+                const expectedNextDue = addDaysStr(task.lastDone, intervalDays);
+                if (task.done) {
+                  if (task.nextDue !== expectedNextDue) {
+                    task.nextDue = expectedNextDue;
+                    mutated = true;
+                  }
+                  if (TODAY_STR >= task.nextDue) {
+                    task.done = false;
+                    task.nextDue = TODAY_STR;
+                    if (Array.isArray(task.subtasks)) {
+                      task.subtasks.forEach(s => { s.done = false; });
+                    }
+                    mutated = true;
+                  }
+                } else if (expectedNextDue > TODAY_STR) {
+                  // Recupera tarefas de 7, 15 ou 30 dias concluídas recentemente cujo prazo ainda está correndo
+                  task.done = true;
+                  task.nextDue = expectedNextDue;
+                  mutated = true;
+                } else if (!task.nextDue || task.nextDue < TODAY_STR) {
+                  task.nextDue = TODAY_STR;
+                  mutated = true;
+                }
+              } else if (!task.done && (!task.nextDue || task.nextDue < TODAY_STR)) {
+                task.nextDue = TODAY_STR;
+                mutated = true;
+              }
+              return;
+            }
+
             const isRecurring = task.type === 'Recorrente' || (Array.isArray(task.customDays) && task.customDays.length > 0);
             if (isRecurring && task.done && task.lastDone && task.lastDone !== '—' && task.lastDone < TODAY_STR) {
-              task.done = false;
-              if (Array.isArray(task.subtasks)) {
-                task.subtasks.forEach(s => { s.done = false; });
+              const waitUntilNextDue =
+                task.frequency === 'Toda Segunda' &&
+                task.nextDue &&
+                /^\d{4}-\d{2}-\d{2}$/.test(task.nextDue) &&
+                TODAY_STR < task.nextDue;
+              if (!waitUntilNextDue) {
+                task.done = false;
+                if (Array.isArray(task.subtasks)) {
+                  task.subtasks.forEach(s => { s.done = false; });
+                }
+                mutated = true;
               }
-              mutated = true;
             }
             if (isRecurring && !task.done) {
               if (Array.isArray(task.customDays) && task.customDays.length > 0) {
@@ -3688,22 +3765,25 @@
         const task = state.tasks.find(t => t.id === taskId);
         if (!task) return;
         task.done = !task.done;
+        const intervalDays = getTaskIntervalDays(task);
         if (task.done) {
           task.lastDone = TODAY_STR;
-          if (task.type === 'Pontual') {
+          if (intervalDays) {
+            task.type = 'Recorrente';
+            task.customDays = [];
+            task.nextDue = addDaysStr(TODAY_STR, intervalDays);
+            showToast(`Tarefa "${task.title}" concluída! Prazo de ${intervalDays} dias iniciado a partir de hoje (próxima: ${formatPtDate(task.nextDue)}).`, '🧹');
+          } else if (task.type === 'Pontual') {
             task.nextDue = 'Concluída';
             showToast(`Tarefa pontual "${task.title}" concluída hoje!`, '✅');
           } else if (Array.isArray(task.customDays) && task.customDays.length > 0) {
             task.nextDue = getNextScheduledDateForCustomDays(task.customDays, TODAY_STR);
             showToast(`Tarefa "${task.title}" concluída! Próxima: ${formatPtDate(task.nextDue)}`, '🧹');
+          } else if (task.frequency === 'Toda Segunda') {
+            task.nextDue = getNextScheduledDateForCustomDays([1], TODAY_STR);
+            showToast(`Tarefa "${task.title}" concluída! Próxima: ${formatPtDate(task.nextDue)}`, '🧹');
           } else {
-            const daysToAdd = (task.frequency || '').includes('15')
-              ? 15
-              : (task.frequency || '').includes('30')
-              ? 30
-              : (task.frequency || '').includes('Diária')
-              ? 1
-              : 7;
+            const daysToAdd = (task.frequency || '').includes('Diária') ? 1 : 7;
             task.nextDue = addDaysStr(TODAY_STR, daysToAdd);
             showToast(`Tarefa "${task.title}" concluída! Próxima: ${formatPtDate(task.nextDue)}`, '🧹');
           }
@@ -5017,6 +5097,14 @@
       // ==================== MODULE 3: HOUSEHOLD TASKS LOGIC ====================
       function updateTaskCustomDaysPanelUI() {
         const freqVal = document.getElementById('taskFreqInput').value;
+        const typeEl = document.getElementById('taskTypeInput');
+        if (typeEl) {
+          if (freqVal === 'Esta Semana') {
+            typeEl.value = 'Pontual';
+          } else {
+            typeEl.value = 'Recorrente';
+          }
+        }
         const panel = document.getElementById('taskCustomDaysPanel');
         if (!panel) return;
         if (freqVal === 'Customizado') {
@@ -5113,8 +5201,11 @@
         const todayWeekday = getDayOfWeekIndex(TODAY_STR);
 
         filtered.forEach(task => {
-          const hasCustomDays = Array.isArray(task.customDays) && task.customDays.length > 0;
-          const isScheduledToday = hasCustomDays && task.customDays.includes(todayWeekday);
+          const intervalDays = getTaskIntervalDays(task);
+          const hasCustomDays = !intervalDays && Array.isArray(task.customDays) && task.customDays.length > 0;
+          const isScheduledToday = hasCustomDays
+            ? task.customDays.includes(todayWeekday)
+            : (!task.done && task.nextDue && task.nextDue <= TODAY_STR);
 
           const card = document.createElement('div');
           card.className = `bg-white rounded-2xl p-4 sm:p-5 border transition flex flex-col justify-between gap-3 ${
@@ -5132,10 +5223,23 @@
               ? 'bg-amber-50 text-amber-700 border-amber-200'
               : 'bg-emerald-50 text-emerald-700 border-emerald-200';
 
+          const isRecurringCard = task.type === 'Recorrente' || Boolean(intervalDays);
           const typeBadge =
-            task.type === 'Recorrente'
+            isRecurringCard
               ? 'bg-sky-50 text-sky-800 border-sky-200'
               : 'bg-slate-100 text-slate-700 border-slate-200';
+
+          let intervalStatusBadgeHtml = '';
+          if (intervalDays) {
+            if (task.done && task.nextDue && /^\d{4}-\d{2}-\d{2}$/.test(task.nextDue)) {
+              const remDays = Math.max(0, daysBetweenDatesStr(TODAY_STR, task.nextDue));
+              intervalStatusBadgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">⏳ Prazo de ${intervalDays}d contando • Faltam ${remDays} dia(s)</span>`;
+            } else {
+              intervalStatusBadgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">⏱️ Conta ${intervalDays} dias ao concluir</span>`;
+            }
+          } else if (isScheduledToday && !task.done) {
+            intervalStatusBadgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">⚡ Dia programado hoje</span>`;
+          }
 
           const customDaysStripHtml = hasCustomDays
             ? `<div class="mt-2.5 flex items-center gap-1">
@@ -5164,6 +5268,17 @@
                </div>`
             : '';
 
+          const lastDoneFormatted = (task.lastDone && /^\d{4}-\d{2}-\d{2}$/.test(task.lastDone))
+            ? formatPtDate(task.lastDone)
+            : (task.lastDone || '—');
+          const nextDueFormatted = (task.nextDue && /^\d{4}-\d{2}-\d{2}$/.test(task.nextDue))
+            ? (
+                !task.done && intervalDays && task.nextDue <= TODAY_STR
+                  ? `Hoje (+${intervalDays} dias após concluir)`
+                  : formatPtDate(task.nextDue)
+              )
+            : (task.nextDue || '—');
+
           card.innerHTML = `
             <div>
               <div class="flex items-start gap-3">
@@ -5176,14 +5291,10 @@
                 </button>
                 <div class="flex-1 min-w-0">
                   <div class="flex flex-wrap items-center gap-1.5 mb-1">
-                    <span class="text-[11px] font-semibold px-2 py-0.5 rounded border ${typeBadge}">${task.type === 'Recorrente' ? '🔄 ' + task.frequency : '📌 Pontual'}</span>
+                    <span class="text-[11px] font-semibold px-2 py-0.5 rounded border ${typeBadge}">${isRecurringCard ? '🔄 ' + task.frequency : '📌 Pontual'}</span>
                     <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-700">${task.room}</span>
                     <span class="text-[11px] font-semibold px-2 py-0.5 rounded border ${prioBadge}">${task.priority}</span>
-                    ${
-                      isScheduledToday && !task.done
-                        ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">⚡ Dia programado hoje</span>`
-                        : ''
-                    }
+                    ${intervalStatusBadgeHtml}
                   </div>
                   <h4 class="text-sm font-bold ${task.done ? 'line-through text-slate-400' : 'text-slate-900'}">${task.title}</h4>
                   ${customDaysStripHtml}
@@ -5193,7 +5304,7 @@
             </div>
 
             <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-              <span>Última vez: <strong>${task.lastDone || '—'}</strong> • Próxima: <strong>${task.nextDue || '—'}</strong></span>
+              <span>Concluída em: <strong>${lastDoneFormatted}</strong> • Próxima: <strong>${nextDueFormatted}</strong></span>
               ${
                 true
                   ? `<div class="flex items-center gap-2">
@@ -8184,9 +8295,10 @@
           const editId = document.getElementById('editTaskId').value;
           const title = document.getElementById('taskTitleInput').value.trim();
           if (!title) return;
-          const type = document.getElementById('taskTypeInput').value;
-          const room = document.getElementById('taskRoomInput').value;
           const rawFreq = document.getElementById('taskFreqInput').value;
+          const intervalDays = getTaskIntervalDays(rawFreq);
+          const type = intervalDays ? 'Recorrente' : document.getElementById('taskTypeInput').value;
+          const room = document.getElementById('taskRoomInput').value;
           const customDays = rawFreq === 'Customizado' ? getSelectedTaskWeekdays() : [];
           const frequency = rawFreq === 'Customizado'
             ? `Customizado (${customDays.map(d => WEEKDAY_NAMES_SHORT[d]).join(', ')})`
@@ -8207,6 +8319,19 @@
               task.customDays = customDays;
               task.priority = priority;
               task.subtasks = subtasks;
+              if (intervalDays) {
+                if (task.done && task.lastDone && /^\d{4}-\d{2}-\d{2}$/.test(task.lastDone)) {
+                  task.nextDue = addDaysStr(task.lastDone, intervalDays);
+                  if (TODAY_STR >= task.nextDue) {
+                    task.done = false;
+                    task.nextDue = TODAY_STR;
+                  }
+                } else {
+                  task.nextDue = TODAY_STR;
+                }
+              } else if (customDays.length > 0 && !task.done) {
+                task.nextDue = getNextScheduledDateForCustomDays(customDays, addDaysStr(TODAY_STR, -1));
+              }
               showToast('Tarefa atualizada com sucesso!', '✏️');
             }
           } else {
@@ -8223,7 +8348,12 @@
               done: false,
               subtasks
             });
-            showToast('Nova tarefa cadastrada!', '🧹');
+            showToast(
+              intervalDays
+                ? `Tarefa cadastrada! O prazo de ${intervalDays} dias começará a contar quando você marcá-la como concluída.`
+                : 'Nova tarefa cadastrada!',
+              '🧹'
+            );
           }
           resetTaskForm();
           saveState();
