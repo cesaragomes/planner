@@ -266,7 +266,7 @@
             <div class="flex items-center gap-2">
               <div class="flex items-baseline gap-1.5">
                 <span class="font-bold text-sm sm:text-base tracking-tight">Prumo</span>
-                <span id="appVersionBadge" class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-white/10 text-white/75 tracking-normal">v1.0.1</span>
+                <span id="appVersionBadge" class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-white/10 text-white/75 tracking-normal">v1.1.0</span>
               </div>
               <span id="activeCategoryHeaderPill" class="hidden text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-white/15 text-white">Início</span>
             </div>
@@ -288,9 +288,14 @@
           <span id="cloudSyncIcon">☁️</span>
           <span id="cloudSyncLabel">Conectado</span>
         </button>
+        <button id="btnOpenGlobalSearch" type="button" title="Busca Global Rápida (Ctrl+K)" class="hidden px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 border border-white/15 text-white transition items-center gap-1.5 cursor-pointer shadow-2xs">
+          <span>🔍</span>
+          <span class="hidden sm:inline">Buscar</span>
+          <kbd class="hidden lg:inline-block text-[10px] px-1.5 py-0.5 rounded bg-black/30 text-white/80 font-mono">Ctrl+K</kbd>
+        </button>
         <button id="btnOpenBackupModal" type="button" title="Abrir Configurações do Prumo" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 border border-white/15 text-white transition flex items-center gap-1.5 cursor-pointer shadow-2xs">
           <span>⚙️</span>
-          <span>Configurações</span>
+          <span class="hidden sm:inline">Configurações</span>
         </button>
       </div>
     </div>
@@ -561,6 +566,41 @@
         </div>
         <div id="quickHabitStrip" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
           <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Timer Pomodoro de Foco Integrado (Módulo 1) -->
+      <div id="pomodoroTimerCard" class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-xl shrink-0">
+            ⏱️
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <h3 class="text-sm font-bold text-slate-900">Timer Pomodoro de Foco</h3>
+              <span id="pomodoroStatusBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">Pronto para Focar</span>
+            </div>
+            <p class="text-xs text-slate-500">Use blocos de foco para concluir seus compromissos e tarefas sem distrações</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+          <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
+            <button type="button" data-pomo-mins="25" class="px-2.5 py-1 rounded-lg font-semibold bg-white text-slate-900 shadow-2xs cursor-pointer transition">25m Foco</button>
+            <button type="button" data-pomo-mins="50" class="px-2.5 py-1 rounded-lg font-semibold text-slate-600 hover:text-slate-900 cursor-pointer transition">50m Profundo</button>
+            <button type="button" data-pomo-mins="15" class="px-2.5 py-1 rounded-lg font-semibold text-slate-600 hover:text-slate-900 cursor-pointer transition">15m Rápido</button>
+            <button type="button" data-pomo-mins="5" class="px-2.5 py-1 rounded-lg font-semibold text-slate-600 hover:text-slate-900 cursor-pointer transition">5m Pausa</button>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span id="pomodoroTimeDisplay" class="font-mono text-xl sm:text-2xl font-bold text-slate-900 px-3 py-1 rounded-xl bg-slate-50 border border-slate-200">25:00</span>
+            <button id="btnPomodoroStartPause" type="button" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition cursor-pointer shadow-2xs">
+              ▶ Iniciar
+            </button>
+            <button id="btnPomodoroReset" type="button" class="px-2.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer" title="Reiniciar Timer">
+              ↺
+            </button>
+          </div>
         </div>
       </div>
 
@@ -949,6 +989,10 @@
           </div>
           <div class="flex flex-wrap items-center gap-2">
             <input id="shopSearchInput" type="search" placeholder="🔍 Buscar produto na lista..." class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white w-48 sm:w-56" />
+            <button id="btnShareShoppingWhatsapp" type="button" title="Copiar ou enviar lista formatada para o WhatsApp" class="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold transition cursor-pointer flex items-center gap-1">
+              <span>📲</span>
+              <span>WhatsApp / Copiar</span>
+            </button>
             <button id="btnUncheckAllCart" type="button" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer">
               🧹 Desmarcar Carrinho
             </button>
@@ -1207,7 +1251,14 @@
           <button type="button" data-room-filter="Quartos" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">🛏️ Quartos</button>
           <button type="button" data-room-filter="Lavanderia / Externa" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">🧺 Lavanderia / Externa</button>
         </div>
-        <div class="flex items-center gap-2 text-xs text-slate-600">
+        <div class="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+          <select id="selectTaskDurationFilter" class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 bg-white cursor-pointer">
+            <option value="ALL">⏱️ Todos os tempos</option>
+            <option value="10">⚡ Até 10 min</option>
+            <option value="15">⚡ Até 15 min</option>
+            <option value="30">⏱️ Até 30 min</option>
+            <option value="60">🕐 Mais de 30 min</option>
+          </select>
           <span id="tasksProgressBadge" class="font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">0/0 concluídas</span>
         </div>
       </div>
@@ -1297,9 +1348,21 @@
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-6 gap-3 items-end">
-            <div class="sm:col-span-5">
+            <div class="sm:col-span-4">
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Checklist de Passos / Subtarefas (separe por vírgula)</label>
               <input id="taskSubtasksInput" type="text" placeholder="Ex.: Aspirar tapete da sala, Passar nos cantos do sofá..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Tempo Estimado</label>
+              <select id="taskDurationInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white font-semibold">
+                <option value="5">⚡ 5 min</option>
+                <option value="10">⚡ 10 min</option>
+                <option value="15" selected>⏱️ 15 min</option>
+                <option value="20">⏱️ 20 min</option>
+                <option value="30">⏱️ 30 min</option>
+                <option value="45">🕐 45 min</option>
+                <option value="60">🕐 60+ min</option>
+              </select>
             </div>
             <div>
               <button id="btnSubmitTask" type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
@@ -1473,28 +1536,64 @@
                   <option value="Lazer & Outros">🎉 Lazer & Outros</option>
                   <option value="Renda / Salário">💵 Renda / Salário</option>
                 </select>
-                <input id="finSearchInput" type="search" placeholder="🔍 Buscar lançamento..." class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white w-44 sm:w-56" />
+                <input id="finSearchInput" type="search" placeholder="🔍 Buscar lançamento..." class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white w-40 sm:w-52" />
+                <button id="btnExportFinanceCsv" type="button" title="Exportar lançamentos para Excel / Planilha CSV" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer flex items-center gap-1">
+                  <span>⬇️</span>
+                  <span>Exportar CSV</span>
+                </button>
               </div>
-              <button id="btnSubmitFinTx" type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
-                + Lançar na Planilha
-              </button>
+              <div class="flex flex-wrap items-center gap-2">
+                <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1.5 rounded-xl border border-slate-200">
+                  <label for="finInstallmentsInput" class="text-[11px] font-bold text-slate-600">Parcelas:</label>
+                  <select id="finInstallmentsInput" class="text-xs font-bold text-slate-900 bg-transparent focus:outline-none cursor-pointer">
+                    <option value="1">1x (À vista)</option>
+                    <option value="2">2x sem/com juros</option>
+                    <option value="3">3x</option>
+                    <option value="4">4x</option>
+                    <option value="5">5x</option>
+                    <option value="6">6x</option>
+                    <option value="8">8x</option>
+                    <option value="10">10x</option>
+                    <option value="12">12x</option>
+                    <option value="18">18x</option>
+                    <option value="24">24x</option>
+                  </select>
+                </div>
+                <button id="btnSubmitFinTx" type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
+                  + Lançar na Planilha
+                </button>
+              </div>
             </div>
           </form>
         </div>
 
-        <!-- Distribuição de Despesas por Categoria no Mês -->
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-3">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <h4 class="text-xs sm:text-sm font-bold text-slate-900">📊 Distribuição de Despesas por Categoria no Mês</h4>
-              <p class="text-[11px] text-slate-500">Proporção dos gastos realizados no mês selecionado</p>
+        <!-- Gráficos Financeiros: Distribuição por Categoria & Evolução Mês a Mês (6 Meses) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h4 class="text-xs sm:text-sm font-bold text-slate-900">📊 Distribuição de Despesas por Categoria</h4>
+                <p class="text-[11px] text-slate-500">Proporção dos gastos realizados no mês selecionado</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+              <div class="sm:col-span-5 relative h-48 w-full">
+                <canvas id="canvasFinanceCategoryChart"></canvas>
+              </div>
+              <div id="financeCategoryBreakdownList" class="sm:col-span-7 space-y-2 text-xs"></div>
             </div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            <div class="md:col-span-5 relative h-52 w-full">
-              <canvas id="canvasFinanceCategoryChart"></canvas>
+
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h4 class="text-xs sm:text-sm font-bold text-slate-900">📈 Evolução Mês a Mês (Últimos 6 Meses)</h4>
+                <p class="text-[11px] text-slate-500">Comparativo de Receitas, Despesas Totais e Supermercado</p>
+              </div>
             </div>
-            <div id="financeCategoryBreakdownList" class="md:col-span-7 space-y-2 text-xs"></div>
+            <div class="relative h-48 w-full">
+              <canvas id="canvasFinanceMonthlyTrendChart"></canvas>
+            </div>
           </div>
         </div>
 
@@ -1871,7 +1970,7 @@
             <p class="text-xs text-slate-500">Controle revisões de longo prazo da casa e envie lembretes direto para a Lista de Tarefas (Módulo 3)</p>
           </div>
 
-          <form id="formAddMaintenanceItem" class="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-2 border-t border-slate-100">
+          <form id="formAddMaintenanceItem" class="grid grid-cols-1 sm:grid-cols-6 gap-3 pt-2 border-t border-slate-100">
             <input type="hidden" id="editMaintId" value="" />
             <div class="sm:col-span-2">
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Manutenção / Revisão *</label>
@@ -1884,6 +1983,10 @@
             <div>
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Ciclo (a cada X dias)</label>
               <input id="maintIntervalInput" type="number" min="7" max="730" value="180" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Custo Est. (R$)</label>
+              <input id="maintCostInput" type="number" step="0.01" min="0" placeholder="0.00" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
             <div class="flex items-end gap-1.5">
               <button id="btnSubmitMaint" type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
@@ -2024,6 +2127,21 @@
               </button>
             </div>
           </form>
+        </div>
+
+        <!-- Sugestão Inteligente de Receitas Anti-Desperdício (Módulo 6) -->
+        <div id="mod6AntiWasteBanner" class="hidden rounded-2xl bg-emerald-50/90 p-4 border border-emerald-200 shadow-2xs space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="text-base">♻️</span>
+              <div>
+                <h4 class="text-xs sm:text-sm font-bold text-emerald-900">Sugestão de Receitas Anti-Desperdício (Usar Estoque)</h4>
+                <p class="text-[11px] text-emerald-700">Pratos do seu Livro de Receitas que aproveitam itens vencendo em breve ou disponíveis na despensa</p>
+              </div>
+            </div>
+            <span id="mod6AntiWasteCount" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-200/80 text-emerald-900">0 sugestões</span>
+          </div>
+          <div id="mod6AntiWasteList" class="grid grid-cols-1 md:grid-cols-2 gap-2.5"></div>
         </div>
 
         <!-- Pantry Items Grid -->
@@ -2383,6 +2501,52 @@
           </div>
         </div>
 
+        <!-- Casa Compartilhada (Multi-morador em Tempo Real) -->
+        <div class="p-4 rounded-xl bg-indigo-50/60 border border-indigo-200 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-indigo-900 flex items-center gap-1.5">
+                <span>🏠</span>
+                <span>Casa Compartilhada (Multi-morador em Tempo Real)</span>
+              </h4>
+              <p class="text-[11px] text-indigo-700 mt-0.5">
+                Sincronize compras, despensa, contas e tarefas em tempo real entre duas ou mais contas da família.
+              </p>
+            </div>
+            <span id="sharedHouseholdStatusBadge" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white text-indigo-700 border border-indigo-200">
+              Individual
+            </span>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-white border border-indigo-200/80 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="min-w-0">
+              <span class="text-[10px] font-bold uppercase text-slate-400 block">Seu Código da Casa (Compartilhe com seu familiar):</span>
+              <code id="myPersonalHouseholdCode" class="font-mono text-xs font-bold text-slate-800 break-all">Conecte sua conta Google</code>
+            </div>
+            <button id="btnCopyHouseholdCode" type="button" class="px-2.5 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-xs cursor-pointer shrink-0 transition">
+              📋 Copiar Meu Código
+            </button>
+          </div>
+
+          <div class="space-y-1.5">
+            <label for="inputSharedHouseholdCode" class="block text-[11px] font-bold text-indigo-900">
+              Vincular ao Código da Casa de outro morador:
+            </label>
+            <div class="flex flex-wrap sm:flex-nowrap items-center gap-2">
+              <input id="inputSharedHouseholdCode" type="text" placeholder="Cole aqui o Código da Casa compartilhado..." class="flex-1 px-3 py-2 rounded-xl border border-indigo-200 text-xs font-semibold text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              <button id="btnConnectSharedHousehold" type="button" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition cursor-pointer shrink-0">
+                🔗 Vincular Casa
+              </button>
+              <button id="btnLeaveSharedHousehold" type="button" class="hidden px-3 py-2 rounded-xl bg-rose-100 hover:bg-rose-200 text-rose-800 font-semibold text-xs transition cursor-pointer shrink-0">
+                Sair da Casa
+              </button>
+            </div>
+            <p class="text-[10px] text-indigo-700/80">
+              💡 Importante: Nas Regras do Firestore, permita leitura/escrita para usuários autenticados (<code class="font-mono">allow read, write: if request.auth != null;</code>).
+            </p>
+          </div>
+        </div>
+
         <!-- Manutenção da Rotina (Reiniciar Rodízio Semanal e Limpar Concluídos Antigos) -->
         <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-3">
           <div>
@@ -2441,7 +2605,7 @@
 
       <!-- Rodapé do Modal -->
       <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
-        <span id="settingsModalFooterSummary">Prumo v1.0.1</span>
+        <span id="settingsModalFooterSummary">Prumo v1.1.0</span>
         <button id="btnDoneBackupModal" type="button" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold hover:bg-slate-800 cursor-pointer">
           Fechar
         </button>
@@ -2483,6 +2647,21 @@
     </div>
   </nav>
 
+  <!-- ==================== MODAL DE BUSCA GLOBAL RÁPIDA (CTRL+K) ==================== -->
+  <div id="modalGlobalSearch" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden items-start justify-center pt-12 sm:pt-20 p-3 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-5 shadow-2xl border border-slate-200 space-y-3 max-h-[82vh] flex flex-col">
+      <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+        <span class="text-lg">🔍</span>
+        <input id="inputGlobalSearch" type="search" placeholder="Buscar em todos os 6 módulos (planos, hábitos, compras, tarefas, contas, despensa...)" class="flex-1 px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        <span id="globalSearchCountBadge" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 shrink-0">0 itens</span>
+        <button id="btnCloseGlobalSearch" type="button" class="text-slate-400 hover:text-slate-700 text-sm font-bold px-2.5 py-1 rounded-lg hover:bg-slate-100 cursor-pointer">✕</button>
+      </div>
+      <div id="globalSearchResultsList" class="overflow-y-auto custom-scroll divide-y divide-slate-100 flex-1 pr-1">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification -->
   <div id="toastContainer" class="fixed bottom-5 right-5 z-50 hidden">
     <div class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl border border-slate-700 flex items-center gap-2.5 text-xs sm:text-sm font-medium">
@@ -2493,7 +2672,7 @@
 
   <script>
     (function () {
-      const APP_VERSION = 'v1.0.1';
+      const APP_VERSION = 'v1.1.0';
       const STORAGE_KEY = 'prumo_state_v1';
       const ACCOUNTS_REGISTRY_KEY = 'prumo_google_accounts_v1';
       const ACTIVE_SESSION_KEY = 'prumo_active_google_user_v1';
@@ -2650,6 +2829,8 @@
         shoppingItems: [],
         taskFilterType: 'ALL',
         taskFilterRoom: 'ALL',
+        taskFilterDuration: 'ALL',
+        sharedHouseholdDocId: '',
         tasks: [],
         selectedChartProduct: '',
         productPriceHistory: {},
@@ -3164,6 +3345,16 @@
         }
       }
 
+      const SHARED_HOUSEHOLD_STORAGE_KEY = 'prumo_shared_household_id_v1';
+
+      function getActiveFirestoreDocId(fbUser) {
+        try {
+          const sharedId = (localStorage.getItem(SHARED_HOUSEHOLD_STORAGE_KEY) || state.sharedHouseholdDocId || '').trim();
+          if (sharedId) return sharedId;
+        } catch (e) {}
+        return fbUser ? fbUser.uid : '';
+      }
+
       async function pushStateToFirestoreNow(showSuccessToast) {
         if (!currentUser || !initFirebaseServices() || !fbDb) return false;
         const fbUser = fbAuth && fbAuth.currentUser;
@@ -3171,6 +3362,8 @@
           setCloudSyncHeaderState('expired', 'Conectar');
           return false;
         }
+        const targetDocId = getActiveFirestoreDocId(fbUser);
+        if (!targetDocId) return false;
         if (autoDriveSyncTimer) {
           clearTimeout(autoDriveSyncTimer);
           autoDriveSyncTimer = null;
@@ -3183,8 +3376,9 @@
           payload.updatedAtMs = pushTimestamp;
           payload.ownerEmail = currentUser.email || fbUser.email || '';
           payload.ownerUid = fbUser.uid;
+          payload.sharedHouseholdDocId = targetDocId !== fbUser.uid ? targetDocId : '';
 
-          await fbDb.collection('users').doc(fbUser.uid).set(payload);
+          await fbDb.collection('users').doc(targetDocId).set(payload);
           if (Number(state.updatedAtMs || 0) <= pushTimestamp) {
             hasPendingLocalChanges = false;
           }
@@ -3211,9 +3405,10 @@
           setCloudSyncHeaderState('expired', 'Conectar');
           return false;
         }
+        const targetDocId = getActiveFirestoreDocId(fbUser);
         try {
           setCloudSyncHeaderState('syncing', 'Baixando...');
-          const snap = await fbDb.collection('users').doc(fbUser.uid).get({ source: 'server' }).catch(() => fbDb.collection('users').doc(fbUser.uid).get());
+          const snap = await fbDb.collection('users').doc(targetDocId).get({ source: 'server' }).catch(() => fbDb.collection('users').doc(targetDocId).get());
           if (snap && snap.exists) {
             const cloudData = snap.data();
             if (cloudData && Array.isArray(cloudData.plans)) {
@@ -3258,7 +3453,8 @@
           try { fbUnsubscribeSnapshot(); } catch (e) {}
           fbUnsubscribeSnapshot = null;
         }
-        fbUnsubscribeSnapshot = fbDb.collection('users').doc(fbUser.uid).onSnapshot((docSnap) => {
+        const targetDocId = getActiveFirestoreDocId(fbUser);
+        fbUnsubscribeSnapshot = fbDb.collection('users').doc(targetDocId).onSnapshot((docSnap) => {
           if (isApplyingRemoteSnapshot) return;
           if (!docSnap.exists) {
             pushStateToFirestoreNow(false);
@@ -3423,6 +3619,8 @@
         document.getElementById('headerUserBadge').classList.add('hidden');
         document.getElementById('headerUserBadge').classList.remove('flex');
         document.getElementById('btnLogoutAccount').classList.add('hidden');
+        const gSearchBtn = document.getElementById('btnOpenGlobalSearch');
+        if (gSearchBtn) { gSearchBtn.classList.add('hidden'); gSearchBtn.classList.remove('flex'); }
       }
 
 
@@ -3500,6 +3698,8 @@
         document.getElementById('headerUserName').textContent = accountObj.name || 'Usuário Google';
         document.getElementById('headerUserEmail').textContent = accountObj.email;
         document.getElementById('btnLogoutAccount').classList.remove('hidden');
+        const gSearchBtn = document.getElementById('btnOpenGlobalSearch');
+        if (gSearchBtn) { gSearchBtn.classList.remove('hidden'); gSearchBtn.classList.add('flex'); }
         const setAccName = document.getElementById('settingsConnectedUserName');
         const setAccEmail = document.getElementById('settingsConnectedUserEmail');
         if (setAccName) setAccName.textContent = accountObj.name || 'Usuário Google';
@@ -4000,6 +4200,22 @@
           });
         }
 
+        // 5. Garantias vencendo em até 30 dias
+        const expiringWarranties = state.warranties.filter(w => {
+          const expDate = addDaysStr(w.purchaseDate || TODAY_STR, (Number(w.warrantyMonths) || 12) * 30);
+          const remDays = daysBetweenDatesStr(TODAY_STR, expDate);
+          return remDays >= 0 && remDays <= 30;
+        });
+        if (expiringWarranties.length > 0) {
+          alerts.push({
+            icon: '🛡️',
+            title: `${expiringWarranties.length} garantia(s) vencendo em ≤ 30d`,
+            sub: expiringWarranties.slice(0, 2).map(w => w.name).join(', '),
+            action: 'mod5_warranties',
+            style: 'bg-indigo-50 border-indigo-200 text-indigo-900'
+          });
+        }
+
         if (alerts.length === 0) {
           banner.classList.add('hidden');
           listEl.innerHTML = '';
@@ -4025,6 +4241,7 @@
             else if (act === 'mod6_pantry') openModule6View('pantry');
             else if (act === 'mod5_maint') openModule5View('maintenance');
             else if (act === 'mod5_wish') openModule5View('wishlist');
+            else if (act === 'mod5_warranties') openModule5View('warranties');
           });
         });
       }
@@ -4532,6 +4749,47 @@
               <!-- 7-Day Schedule & Completion Strip -->
               <div class="mt-3.5 flex items-center gap-1.5">
                 ${weekStripHtml}
+              </div>
+
+              <!-- Mapa de Consistência Mensal (Heatmap 30 Dias) -->
+              <div class="mt-3 p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                ${(function () {
+                  let done30 = 0;
+                  let sched30 = 0;
+                  const cells = [];
+                  for (let d = 29; d >= 0; d--) {
+                    const dStr30 = addDaysStr(TODAY_STR, -d);
+                    const val30 = (habit.progressByDate && habit.progressByDate[dStr30]) || 0;
+                    const isDone30 = val30 >= habit.target;
+                    const dIdx30 = getDayOfWeekIndex(dStr30);
+                    const isSched30 = freq === 'daily'
+                      ? true
+                      : freq === 'specific_days'
+                      ? (Array.isArray(habit.scheduledDays) ? habit.scheduledDays.includes(dIdx30) : [1, 3, 5].includes(dIdx30))
+                      : true;
+                    if (isSched30) sched30++;
+                    if (isDone30) done30++;
+                    const dayNum = dStr30.slice(8, 10) + '/' + dStr30.slice(5, 7);
+                    const sqClass = isDone30
+                      ? 'bg-emerald-500 border-emerald-600 text-white'
+                      : d === 0
+                      ? 'bg-amber-100 border-amber-400'
+                      : !isSched30
+                      ? 'bg-slate-100 border-slate-200 opacity-45'
+                      : 'bg-white border-slate-300';
+                    cells.push(`<button type="button" data-habit-day-toggle="${habit.id}|${dStr30}" title="${dayNum}: ${isDone30 ? 'Concluído' : !isSched30 ? 'Descanso' : 'Pendente'} (clique p/ alternar)" class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-[4px] border transition hover:scale-110 cursor-pointer ${sqClass}"></button>`);
+                  }
+                  const rate30 = sched30 > 0 ? Math.min(100, Math.round((done30 / sched30) * 100)) : 0;
+                  return `
+                    <div class="flex items-center justify-between text-[10px] text-slate-500 mb-1.5">
+                      <span class="font-bold uppercase tracking-wider text-slate-600">📊 Mapa 30 Dias (${done30} check-ins)</span>
+                      <span class="font-bold text-emerald-700">${rate30}% consistência</span>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-1">
+                      ${cells.join('')}
+                    </div>
+                  `;
+                })()}
               </div>
 
               <div class="mt-3">
@@ -5217,6 +5475,19 @@
 
           const rowsHtml = items.map(item => {
             const subtotal = (Number(item.qty) || 1) * (Number(item.price) || 0);
+            const histSeries = state.productPriceHistory && state.productPriceHistory[item.name];
+            let bestPriceBadgeHtml = '';
+            if (Array.isArray(histSeries) && histSeries.length > 0) {
+              const bestPt = histSeries.reduce((minP, curP) => (Number(curP.price) < Number(minP.price) ? curP : minP), histSeries[0]);
+              if (bestPt && Number(bestPt.price) > 0) {
+                const isAtOrBelowBest = Number(item.price) > 0 && Number(item.price) <= Number(bestPt.price);
+                bestPriceBadgeHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                  isAtOrBelowBest
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                    : 'bg-amber-50 text-amber-800 border-amber-200'
+                }">🏷️ Menor: ${formatCurrencyBRL(bestPt.price)} (${bestPt.store || 'Histórico'})</span>`;
+              }
+            }
             return `
               <div class="p-3.5 sm:px-5 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 transition ${
                 item.inCart ? 'bg-emerald-50/40' : 'hover:bg-slate-50/80'
@@ -5237,6 +5508,7 @@
                       <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-medium">${item.store}</span>
                       <span><strong>${item.qty} ${item.unit}</strong> × ${formatCurrencyBRL(item.price)}</span>
                       <span class="font-semibold text-slate-700">= ${formatCurrencyBRL(subtotal)}</span>
+                      ${bestPriceBadgeHtml}
                     </div>
                   </div>
                 </div>
@@ -5645,13 +5917,23 @@
         const chkHidePastEl = document.getElementById('chkHidePastCompletedOneOffTasks');
         if (chkHidePastEl) chkHidePastEl.checked = hidePastOneOff;
 
+        const durSelectEl = document.getElementById('selectTaskDurationFilter');
+        if (durSelectEl) durSelectEl.value = state.taskFilterDuration || 'ALL';
+
         const filtered = state.tasks.filter(t => {
           if (hidePastOneOff && t.type === 'Pontual' && t.done && t.lastDone && t.lastDone !== '—' && t.lastDone < TODAY_STR) {
             return false;
           }
           const typeOk = state.taskFilterType === 'ALL' || t.type === state.taskFilterType;
           const roomOk = state.taskFilterRoom === 'ALL' || t.room === state.taskFilterRoom;
-          return typeOk && roomOk;
+          const durFilter = state.taskFilterDuration || 'ALL';
+          const taskMins = Number(t.durationMinutes) || 15;
+          let durOk = true;
+          if (durFilter === '10') durOk = taskMins <= 10;
+          else if (durFilter === '15') durOk = taskMins <= 15;
+          else if (durFilter === '30') durOk = taskMins <= 30;
+          else if (durFilter === '60') durOk = taskMins > 30;
+          return typeOk && roomOk && durOk;
         });
 
         const listEl = document.getElementById('tasksListContainer');
@@ -5776,6 +6058,7 @@
                   <div class="flex flex-wrap items-center gap-1.5 mb-1">
                     <span class="text-[11px] font-semibold px-2 py-0.5 rounded border ${typeBadge}">${isRecurringCard ? '🔄 ' + task.frequency : '📌 Pontual'}</span>
                     <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-700">${task.room}</span>
+                    <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">⏱️ ${Number(task.durationMinutes) || 15} min</span>
                     <span class="text-[11px] font-semibold px-2 py-0.5 rounded border ${prioBadge}">${task.priority}</span>
                     ${intervalStatusBadgeHtml}
                   </div>
@@ -5844,6 +6127,8 @@
             }
             updateTaskCustomDaysPanelUI();
             document.getElementById('taskPriorityInput').value = task.priority;
+            const durInp = document.getElementById('taskDurationInput');
+            if (durInp) durInp.value = String(task.durationMinutes || 15);
             document.getElementById('taskSubtasksInput').value = (task.subtasks || []).map(s => s.text).join(', ');
             document.getElementById('taskFormTitle').textContent = '✏️ Editando Tarefa Selecionada';
             document.getElementById('btnSubmitTask').textContent = 'Salvar Alterações';
@@ -5876,6 +6161,7 @@
 
       // ==================== MODULE 4: FINANCE, BILLS & BUDGETS LOGIC ====================
       let financeCategoryChartInstance = null;
+      let financeMonthlyTrendChartInstance = null;
 
       function shiftYearMonthStr(ymStr, deltaMonths) {
         const parts = (ymStr || TODAY_STR.slice(0, 7)).split('-').map(Number);
@@ -5956,6 +6242,87 @@
         });
       }
 
+      function renderFinanceMonthlyTrendChart(centerYm) {
+        const canvas = document.getElementById('canvasFinanceMonthlyTrendChart');
+        if (!canvas || typeof Chart === 'undefined') return;
+        const mod4Visible = !document.getElementById('viewModule4').classList.contains('hidden');
+        if (!mod4Visible) return;
+
+        const months = [];
+        for (let i = -5; i <= 0; i++) {
+          months.push(shiftYearMonthStr(centerYm || TODAY_STR.slice(0, 7), i));
+        }
+
+        const incomeSeries = [];
+        const expenseSeries = [];
+        const marketSeries = [];
+
+        months.forEach(ym => {
+          const txs = state.transactions.filter(t => (t.date || '').startsWith(ym));
+          const inc = txs.filter(t => t.type === 'Receita').reduce((a, b) => a + Number(b.amount || 0), 0);
+          const exp = txs.filter(t => t.type === 'Despesa').reduce((a, b) => a + Number(b.amount || 0), 0);
+          const mkt = txs.filter(t => t.type === 'Despesa' && t.category === 'Supermercado & Feira').reduce((a, b) => a + Number(b.amount || 0), 0);
+          incomeSeries.push(inc);
+          expenseSeries.push(exp);
+          marketSeries.push(mkt);
+        });
+
+        if (financeMonthlyTrendChartInstance) {
+          financeMonthlyTrendChartInstance.destroy();
+          financeMonthlyTrendChartInstance = null;
+        }
+
+        financeMonthlyTrendChartInstance = new Chart(canvas.getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: months.map(ym => {
+              const [y, m] = ym.split('-');
+              return `${m}/${y.slice(2)}`;
+            }),
+            datasets: [
+              {
+                label: 'Receitas',
+                data: incomeSeries,
+                backgroundColor: '#10b981',
+                borderRadius: 6
+              },
+              {
+                label: 'Despesas Totais',
+                data: expenseSeries,
+                backgroundColor: '#f43f5e',
+                borderRadius: 6
+              },
+              {
+                label: 'Supermercado',
+                data: marketSeries,
+                backgroundColor: '#f59e0b',
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                labels: { font: { family: 'Inter', size: 11 } }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: function(v) {
+                    return 'R$ ' + Number(v).toLocaleString('pt-BR');
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+
       function renderFinanceModule() {
         const activeMonth = state.selectedFinanceMonth || TODAY_STR.slice(0, 7);
         const monthInput = document.getElementById('inputSelectedFinMonth');
@@ -5983,6 +6350,7 @@
         balEl.className = `text-lg sm:text-xl font-bold mt-0.5 ${balance >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
 
         renderFinanceCategoryChart(monthExpenses);
+        renderFinanceMonthlyTrendChart(activeMonth);
 
         const searchQ = (state.finSearchQuery || '').trim().toLowerCase();
         const finSearchEl = document.getElementById('finSearchInput');
@@ -6686,7 +7054,10 @@
                 <span class="text-xs font-semibold text-slate-500">${m.room}</span>
               </div>
               <h4 class="text-sm font-bold text-slate-900">${m.title}</h4>
-              <p class="text-xs text-slate-500 mt-1">Última execução: <strong>${formatPtDate(m.lastDone)}</strong> • Próxima: <strong>${formatPtDate(m.nextDue)}</strong></p>
+              <p class="text-xs text-slate-500 mt-1">
+                Última execução: <strong>${formatPtDate(m.lastDone)}</strong> • Próxima: <strong>${formatPtDate(m.nextDue)}</strong>
+                ${Number(m.cost) > 0 ? ` • Custo Est.: <strong class="text-slate-800">${formatCurrencyBRL(m.cost)}</strong>` : ''}
+              </p>
             </div>
             <div class="pt-2.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
               <div class="flex flex-wrap items-center gap-1.5">
@@ -6715,6 +7086,8 @@
             document.getElementById('maintTitleInput').value = m.title || '';
             document.getElementById('maintRoomInput').value = m.room || '';
             document.getElementById('maintIntervalInput').value = m.intervalDays || 180;
+            const costInp = document.getElementById('maintCostInput');
+            if (costInp) costInp.value = m.cost || '';
             document.getElementById('btnSubmitMaint').textContent = 'Salvar';
             document.getElementById('btnCancelMaintEdit').classList.remove('hidden');
             document.getElementById('formAddMaintenanceItem').scrollIntoView({ behavior: 'smooth' });
@@ -6738,9 +7111,26 @@
             if (!m) return;
             m.lastDone = TODAY_STR;
             m.nextDue = addDaysStr(TODAY_STR, Number(m.intervalDays) || 180);
+            const maintCost = Number(m.cost) || 0;
+            if (maintCost > 0) {
+              state.transactions.unshift({
+                id: 'tx_maint_' + Date.now(),
+                date: TODAY_STR,
+                desc: `🔧 Manutenção Casa: ${m.title} (${m.room})`,
+                type: 'Despesa',
+                category: 'Moradia & Contas',
+                amount: maintCost,
+                origin: 'Automático • Módulo 5'
+              });
+            }
             saveState();
             renderAll();
-            showToast(`Manutenção registrada! Próxima revisão em ${formatPtDate(m.nextDue)}.`, '🔧');
+            showToast(
+              maintCost > 0
+                ? `Revisão concluída e custo de ${formatCurrencyBRL(maintCost)} lançado no Módulo 4! Próxima: ${formatPtDate(m.nextDue)}.`
+                : `Manutenção registrada! Próxima revisão em ${formatPtDate(m.nextDue)}.`,
+              '🔧'
+            );
           });
         });
 
@@ -6817,6 +7207,88 @@
         document.getElementById('mod6MetricLowStock').textContent = `${lowStockItems.length} item(ns)`;
         document.getElementById('mod6MetricExpiring').textContent = `${expiringItems.length} alerta(s)`;
         document.getElementById('mod6MetricRecipes').textContent = `${state.recipes.length} receita(s)`;
+
+        // 0. Render Smart Anti-Waste Recipe Suggestions Banner
+        const antiWasteBanner = document.getElementById('mod6AntiWasteBanner');
+        const antiWasteList = document.getElementById('mod6AntiWasteList');
+        const antiWasteCount = document.getElementById('mod6AntiWasteCount');
+        if (antiWasteBanner && antiWasteList && antiWasteCount) {
+          const suggestions = [];
+          state.recipes.forEach(rc => {
+            const ings = Array.isArray(rc.ingredients) ? rc.ingredients : [];
+            if (ings.length === 0) return;
+            const expiringMatches = [];
+            const inStockMatches = [];
+            ings.forEach(ing => {
+              const matched = findPantryItemMatchingIngredient(ing);
+              if (matched && Number(matched.qty) > 0) {
+                inStockMatches.push(matched.name);
+                if (matched.expiry && matched.expiry <= sevenDaysAhead) {
+                  expiringMatches.push(matched.name);
+                }
+              }
+            });
+            if (expiringMatches.length > 0 || inStockMatches.length > 0) {
+              suggestions.push({
+                recipe: rc,
+                expiringMatches,
+                inStockMatches,
+                totalIngs: ings.length,
+                score: expiringMatches.length * 10 + inStockMatches.length
+              });
+            }
+          });
+          suggestions.sort((a, b) => b.score - a.score);
+
+          if (suggestions.length === 0) {
+            antiWasteBanner.classList.add('hidden');
+            antiWasteList.innerHTML = '';
+          } else {
+            antiWasteBanner.classList.remove('hidden');
+            antiWasteCount.textContent = `${suggestions.length} receita(s) compatível(is)`;
+            antiWasteList.innerHTML = suggestions.slice(0, 4).map(s => `
+              <div class="p-3 rounded-xl bg-white border border-emerald-200 flex flex-wrap items-center justify-between gap-2 shadow-2xs">
+                <div class="min-w-0 flex-1">
+                  <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="text-xs font-bold text-slate-900">🍲 ${s.recipe.title}</span>
+                    ${
+                      s.expiringMatches.length > 0
+                        ? `<span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[10px] font-bold">⏳ Usa ${s.expiringMatches.join(', ')} (vencendo!)</span>`
+                        : `<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">✓ ${s.inStockMatches.length}/${s.totalIngs} em estoque</span>`
+                    }
+                  </div>
+                  <p class="text-[11px] text-slate-500 truncate mt-0.5">Na despensa: ${s.inStockMatches.join(', ')}</p>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button type="button" data-antiwaste-schedule="${s.recipe.id}" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-semibold cursor-pointer transition">
+                    📅 Escalar Hoje
+                  </button>
+                </div>
+              </div>
+            `).join('');
+
+            antiWasteList.querySelectorAll('[data-antiwaste-schedule]').forEach(btn => {
+              btn.addEventListener('click', () => {
+                const rcId = btn.getAttribute('data-antiwaste-schedule');
+                const rc = state.recipes.find(r => r.id === rcId);
+                if (!rc) return;
+                const todayWIdx = getDayOfWeekIndex(TODAY_STR);
+                const menuIdx = todayWIdx === 0 ? 6 : todayWIdx - 1;
+                if (state.weeklyMenu && state.weeklyMenu[menuIdx]) {
+                  if (!state.weeklyMenu[menuIdx].lunch) {
+                    state.weeklyMenu[menuIdx].lunch = rc.title;
+                  } else {
+                    state.weeklyMenu[menuIdx].dinner = rc.title;
+                  }
+                  saveState();
+                  renderAll();
+                  switchModule6Tab('menu');
+                  showToast(`"${rc.title}" escalado no Cardápio de ${state.weeklyMenu[menuIdx].day}!`, '🍽️');
+                }
+              });
+            });
+          }
+        }
 
         // 1. Render Pantry Cards (Filtered by Search Query)
         const pantryGrid = document.getElementById('pantryGridContainer');
@@ -9096,6 +9568,7 @@
             ? `Customizado (${customDays.map(d => WEEKDAY_NAMES_SHORT[d]).join(', ')})`
             : rawFreq;
           const priority = document.getElementById('taskPriorityInput').value;
+          const durationMinutes = parseInt((document.getElementById('taskDurationInput') && document.getElementById('taskDurationInput').value) || '15', 10) || 15;
           const rawSubs = document.getElementById('taskSubtasksInput').value.trim();
           const subtasks = rawSubs
             ? rawSubs.split(',').map(s => s.trim()).filter(Boolean).map(text => ({ text, done: false }))
@@ -9110,6 +9583,7 @@
               task.frequency = frequency;
               task.customDays = customDays;
               task.priority = priority;
+              task.durationMinutes = durationMinutes;
               task.subtasks = subtasks;
               if (intervalDays) {
                 if (task.done && task.lastDone && /^\d{4}-\d{2}-\d{2}$/.test(task.lastDone)) {
@@ -9135,6 +9609,7 @@
               frequency,
               customDays,
               priority,
+              durationMinutes,
               lastDone: '—',
               nextDue: customDays.length > 0 ? getNextScheduledDateForCustomDays(customDays, addDaysStr(TODAY_STR, -1)) : TODAY_STR,
               done: false,
@@ -9243,6 +9718,8 @@
           const amount = parseFloat(document.getElementById('finAmountInput').value);
           if (!desc || !amount || amount <= 0) return;
 
+          const installments = parseInt((document.getElementById('finInstallmentsInput') && document.getElementById('finInstallmentsInput').value) || '1', 10) || 1;
+
           if (editId) {
             const tx = state.transactions.find(t => t.id === editId);
             if (tx) {
@@ -9253,6 +9730,30 @@
               tx.amount = amount;
               showToast('Lançamento atualizado com sucesso!', '✏️');
             }
+          } else if (installments > 1 && type === 'Despesa') {
+            const perInstallment = Math.round((amount / installments) * 100) / 100;
+            const baseYm = date.slice(0, 7);
+            const dayPart = date.slice(8, 10) || '10';
+            const groupId = 'inst_' + Date.now();
+            for (let i = 0; i < installments; i++) {
+              const targetYm = shiftYearMonthStr(baseYm, i);
+              const instDate = `${targetYm}-${dayPart}`;
+              const instAmount = i === installments - 1
+                ? Math.round((amount - perInstallment * (installments - 1)) * 100) / 100
+                : perInstallment;
+              state.transactions.unshift({
+                id: `${groupId}_${i + 1}`,
+                date: instDate,
+                desc: `${desc} (Parcela ${i + 1}/${installments})`,
+                type,
+                category,
+                amount: instAmount,
+                origin: `Parcelado ${installments}x`
+              });
+            }
+            const instSel = document.getElementById('finInstallmentsInput');
+            if (instSel) instSel.value = '1';
+            showToast(`Compra parcelada em ${installments}x (${formatCurrencyBRL(perInstallment)}/mês) projetada nos próximos meses!`, '💳');
           } else {
             state.transactions.unshift({
               id: 'tx_' + Date.now(),
@@ -9596,6 +10097,8 @@
           document.getElementById('maintTitleInput').value = '';
           document.getElementById('maintRoomInput').value = '';
           document.getElementById('maintIntervalInput').value = '180';
+          const costInp = document.getElementById('maintCostInput');
+          if (costInp) costInp.value = '';
           document.getElementById('btnSubmitMaint').textContent = '+ Criar Ciclo';
           document.getElementById('btnCancelMaintEdit').classList.add('hidden');
         }
@@ -9608,6 +10111,7 @@
           const title = document.getElementById('maintTitleInput').value.trim();
           const room = document.getElementById('maintRoomInput').value.trim();
           const intervalDays = parseInt(document.getElementById('maintIntervalInput').value, 10) || 180;
+          const cost = parseFloat((document.getElementById('maintCostInput') && document.getElementById('maintCostInput').value) || '0') || 0;
           if (!title || !room) return;
 
           if (editId) {
@@ -9616,6 +10120,7 @@
               existing.title = title;
               existing.room = room;
               existing.intervalDays = intervalDays;
+              existing.cost = cost;
               existing.nextDue = addDaysStr(existing.lastDone || TODAY_STR, intervalDays);
               showToast(`Ciclo "${title}" atualizado!`, '✏️');
             }
@@ -9625,6 +10130,7 @@
               title,
               room,
               intervalDays,
+              cost,
               lastDone: TODAY_STR,
               nextDue: addDaysStr(TODAY_STR, intervalDays)
             });
@@ -9858,6 +10364,534 @@
 
         document.getElementById('btnForcePushToDrive').addEventListener('click', executeCloudPushNow);
         document.getElementById('btnForcePullFromDrive').addEventListener('click', executeCloudPullNow);
+
+        // ==================== NOVAS FUNCIONALIDADES v1.1.0 ====================
+
+        // 1. Casa Compartilhada (Multi-morador) UI & Eventos
+        function updateSharedHouseholdUI() {
+          const codeEl = document.getElementById('myPersonalHouseholdCode');
+          const statusBadge = document.getElementById('sharedHouseholdStatusBadge');
+          const inputCode = document.getElementById('inputSharedHouseholdCode');
+          const btnLeave = document.getElementById('btnLeaveSharedHousehold');
+          const fbUser = fbAuth && fbAuth.currentUser;
+          const myUid = (fbUser && fbUser.uid) || (currentUser && currentUser.uid) || '';
+          if (codeEl) {
+            codeEl.textContent = myUid || 'Faça login com o Google para gerar seu código';
+          }
+          let sharedId = '';
+          try {
+            sharedId = (localStorage.getItem(SHARED_HOUSEHOLD_STORAGE_KEY) || state.sharedHouseholdDocId || '').trim();
+          } catch (e) {}
+
+          if (sharedId && sharedId !== myUid) {
+            if (statusBadge) {
+              statusBadge.textContent = '🔗 Casa Compartilhada Ativa';
+              statusBadge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200';
+            }
+            if (inputCode && document.activeElement !== inputCode) {
+              inputCode.value = sharedId;
+            }
+            if (btnLeave) btnLeave.classList.remove('hidden');
+          } else {
+            if (statusBadge) {
+              statusBadge.textContent = 'Individual';
+              statusBadge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white text-indigo-700 border border-indigo-200';
+            }
+            if (btnLeave) btnLeave.classList.add('hidden');
+          }
+        }
+
+        const btnCopyHouseCode = document.getElementById('btnCopyHouseholdCode');
+        if (btnCopyHouseCode) {
+          btnCopyHouseCode.addEventListener('click', async () => {
+            const fbUser = fbAuth && fbAuth.currentUser;
+            const myUid = (fbUser && fbUser.uid) || (currentUser && currentUser.uid) || '';
+            if (!myUid) {
+              showToast('Conecte sua conta Google primeiro para copiar seu Código da Casa.', '⚠️');
+              return;
+            }
+            try {
+              await navigator.clipboard.writeText(myUid);
+              showToast('Código da Casa copiado! Envie para seu familiar colar nas Configurações.', '📋');
+            } catch (e) {
+              showToast('Seu Código: ' + myUid, '📋');
+            }
+          });
+        }
+
+        const btnConnectHouse = document.getElementById('btnConnectSharedHousehold');
+        if (btnConnectHouse) {
+          btnConnectHouse.addEventListener('click', async () => {
+            const inp = document.getElementById('inputSharedHouseholdCode');
+            const code = inp ? inp.value.trim() : '';
+            if (!code || code.length < 6) {
+              showToast('Cole um Código da Casa válido para vincular.', '⚠️');
+              return;
+            }
+            try {
+              localStorage.setItem(SHARED_HOUSEHOLD_STORAGE_KEY, code);
+            } catch (e) {}
+            state.sharedHouseholdDocId = code;
+            updateSharedHouseholdUI();
+            if (initFirebaseServices() && fbAuth && fbAuth.currentUser) {
+              attachRealtimeFirestoreListener(fbAuth.currentUser);
+              await pullStateFromFirestoreNow(true);
+            }
+            showToast('Casa Compartilhada vinculada! Sincronizando dados em tempo real...', '🏠');
+          });
+        }
+
+        const btnLeaveHouse = document.getElementById('btnLeaveSharedHousehold');
+        if (btnLeaveHouse) {
+          btnLeaveHouse.addEventListener('click', async () => {
+            try {
+              localStorage.removeItem(SHARED_HOUSEHOLD_STORAGE_KEY);
+            } catch (e) {}
+            state.sharedHouseholdDocId = '';
+            const inp = document.getElementById('inputSharedHouseholdCode');
+            if (inp) inp.value = '';
+            updateSharedHouseholdUI();
+            if (initFirebaseServices() && fbAuth && fbAuth.currentUser) {
+              attachRealtimeFirestoreListener(fbAuth.currentUser);
+              await pullStateFromFirestoreNow(true);
+            }
+            showToast('Você voltou para o banco de dados individual da sua conta.', '👤');
+          });
+        }
+
+        setInterval(updateSharedHouseholdUI, 3000);
+        setTimeout(updateSharedHouseholdUI, 800);
+
+        // 2. Busca Global Rápida (Ctrl+K / Botão Lupa no Topo)
+        const modalGlobalSearch = document.getElementById('modalGlobalSearch');
+        const inputGlobalSearch = document.getElementById('inputGlobalSearch');
+        const globalSearchResultsList = document.getElementById('globalSearchResultsList');
+        const globalSearchCountBadge = document.getElementById('globalSearchCountBadge');
+
+        function renderGlobalSearchResults(query) {
+          if (!globalSearchResultsList || !globalSearchCountBadge) return;
+          const q = (query || '').trim().toLowerCase();
+          const results = [];
+
+          // 1. Planos do Dia
+          state.plans.forEach(p => {
+            if (!q || (p.title && p.title.toLowerCase().includes(q)) || (p.category && p.category.toLowerCase().includes(q)) || (p.notes && p.notes.toLowerCase().includes(q))) {
+              results.push({
+                icon: '📅',
+                title: p.title,
+                sub: `Plano do Dia (${formatPtDate(p.date)} • ${p.shift}) • ${p.done ? 'Concluído' : 'Pendente'}`,
+                moduleBadge: 'Módulo 1',
+                onSelect: () => {
+                  state.selectedDate = p.date;
+                  openModule1View('plans');
+                }
+              });
+            }
+          });
+
+          // 2. Hábitos
+          state.habits.forEach(h => {
+            if (!q || (h.title && h.title.toLowerCase().includes(q))) {
+              results.push({
+                icon: h.icon || '🔥',
+                title: h.title,
+                sub: `Hábito • Sequência: 🔥 ${h.streak} • Recorde: ${h.bestStreak}`,
+                moduleBadge: 'Módulo 1',
+                onSelect: () => openModule1View('habits')
+              });
+            }
+          });
+
+          // 3. Lista de Compras
+          state.shoppingItems.forEach(s => {
+            if (!q || (s.name && s.name.toLowerCase().includes(q)) || (s.store && s.store.toLowerCase().includes(q)) || (s.aisle && s.aisle.toLowerCase().includes(q))) {
+              results.push({
+                icon: '🛒',
+                title: s.name,
+                sub: `Compras (${s.store} • ${s.aisle}) • ${s.qty} ${s.unit} × ${formatCurrencyBRL(s.price)}`,
+                moduleBadge: 'Módulo 2',
+                onSelect: () => {
+                  openModule2View();
+                  switchModule2Tab('list');
+                }
+              });
+            }
+          });
+
+          // 4. Tarefas da Casa
+          state.tasks.forEach(t => {
+            if (!q || (t.title && t.title.toLowerCase().includes(q)) || (t.room && t.room.toLowerCase().includes(q))) {
+              results.push({
+                icon: '🧹',
+                title: t.title,
+                sub: `Tarefa (${t.room} • ${t.type} • ⏱️ ${t.durationMinutes || 15} min)`,
+                moduleBadge: 'Módulo 3',
+                onSelect: () => openModule3View()
+              });
+            }
+          });
+
+          // 5. Finanças e Contas Fixas
+          state.transactions.forEach(tx => {
+            if (!q || (tx.desc && tx.desc.toLowerCase().includes(q)) || (tx.category && tx.category.toLowerCase().includes(q))) {
+              results.push({
+                icon: tx.type === 'Receita' ? '💵' : '💸',
+                title: tx.desc,
+                sub: `${tx.type} (${tx.category}) • ${formatCurrencyBRL(tx.amount)} em ${formatPtDate(tx.date)}`,
+                moduleBadge: 'Módulo 4',
+                onSelect: () => {
+                  if (tx.date) state.selectedFinanceMonth = tx.date.slice(0, 7);
+                  openModule4View('statement');
+                }
+              });
+            }
+          });
+          state.fixedBills.forEach(b => {
+            if (!q || (b.name && b.name.toLowerCase().includes(q))) {
+              results.push({
+                icon: '📄',
+                title: b.name,
+                sub: `Conta Fixa (Vence dia ${b.dueDay}) • ${formatCurrencyBRL(b.amount)}`,
+                moduleBadge: 'Módulo 4',
+                onSelect: () => openModule4View('bills')
+              });
+            }
+          });
+
+          // 6. Aquisições, Garantias e Manutenção
+          state.wishlistItems.forEach(w => {
+            if (!q || (w.name && w.name.toLowerCase().includes(q)) || (w.room && w.room.toLowerCase().includes(q))) {
+              results.push({
+                icon: '🛍️',
+                title: w.name,
+                sub: `Desejo Planejado (${w.room}) • Meta: ${formatCurrencyBRL(w.targetPrice)}`,
+                moduleBadge: 'Módulo 5',
+                onSelect: () => openModule5View('wishlist')
+              });
+            }
+          });
+          state.warranties.forEach(w => {
+            if (!q || (w.name && w.name.toLowerCase().includes(q)) || (w.store && w.store.toLowerCase().includes(q))) {
+              results.push({
+                icon: '🛡️',
+                title: w.name,
+                sub: `Garantia (${w.store || 'Loja'}) • Compra: ${formatPtDate(w.purchaseDate)}`,
+                moduleBadge: 'Módulo 5',
+                onSelect: () => openModule5View('warranties')
+              });
+            }
+          });
+          state.maintenanceCycles.forEach(m => {
+            if (!q || (m.title && m.title.toLowerCase().includes(q)) || (m.room && m.room.toLowerCase().includes(q))) {
+              results.push({
+                icon: '🔧',
+                title: m.title,
+                sub: `Manutenção (${m.room}) • Próxima: ${formatPtDate(m.nextDue)}`,
+                moduleBadge: 'Módulo 5',
+                onSelect: () => openModule5View('maintenance')
+              });
+            }
+          });
+
+          // 7. Despensa e Receitas
+          state.pantryItems.forEach(p => {
+            if (!q || (p.name && p.name.toLowerCase().includes(q)) || (p.location && p.location.toLowerCase().includes(q))) {
+              results.push({
+                icon: '🥫',
+                title: p.name,
+                sub: `Despensa (${p.location}) • Saldo: ${p.qty} ${p.unit || 'un'}`,
+                moduleBadge: 'Módulo 6',
+                onSelect: () => openModule6View('pantry')
+              });
+            }
+          });
+          state.recipes.forEach(rc => {
+            const ingText = Array.isArray(rc.ingredients) ? rc.ingredients.join(', ') : '';
+            if (!q || (rc.title && rc.title.toLowerCase().includes(q)) || ingText.toLowerCase().includes(q)) {
+              results.push({
+                icon: '🍲',
+                title: rc.title,
+                sub: `Receita • Ingredientes: ${ingText}`,
+                moduleBadge: 'Módulo 6',
+                onSelect: () => openModule6View('menu')
+              });
+            }
+          });
+
+          globalSearchCountBadge.textContent = `${results.length} resultado(s)`;
+          if (results.length === 0) {
+            globalSearchResultsList.innerHTML = `<div class="py-10 text-center text-xs text-slate-400">Nenhum item encontrado para "${query}".</div>`;
+            return;
+          }
+
+          globalSearchResultsList.innerHTML = results.slice(0, 40).map((r, idx) => `
+            <button type="button" data-gsearch-idx="${idx}" class="w-full p-3 hover:bg-slate-50 flex items-center justify-between gap-3 text-left transition cursor-pointer rounded-xl">
+              <div class="flex items-center gap-3 min-w-0">
+                <span class="text-lg shrink-0">${r.icon}</span>
+                <div class="min-w-0">
+                  <p class="text-xs sm:text-sm font-bold text-slate-900 truncate">${r.title}</p>
+                  <p class="text-[11px] text-slate-500 truncate mt-0.5">${r.sub}</p>
+                </div>
+              </div>
+              <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 shrink-0">${r.moduleBadge} →</span>
+            </button>
+          `).join('');
+
+          globalSearchResultsList.querySelectorAll('[data-gsearch-idx]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const idx = parseInt(btn.getAttribute('data-gsearch-idx'), 10);
+              const target = results[idx];
+              if (target && typeof target.onSelect === 'function') {
+                closeGlobalSearchModal();
+                target.onSelect();
+              }
+            });
+          });
+        }
+
+        function openGlobalSearchModal() {
+          if (!currentUser || !modalGlobalSearch) return;
+          modalGlobalSearch.classList.remove('hidden');
+          modalGlobalSearch.classList.add('flex');
+          renderGlobalSearchResults(inputGlobalSearch ? inputGlobalSearch.value : '');
+          if (inputGlobalSearch) {
+            setTimeout(() => {
+              inputGlobalSearch.focus();
+              inputGlobalSearch.select();
+            }, 40);
+          }
+        }
+
+        function closeGlobalSearchModal() {
+          if (!modalGlobalSearch) return;
+          modalGlobalSearch.classList.add('hidden');
+          modalGlobalSearch.classList.remove('flex');
+        }
+
+        const btnOpenGSearch = document.getElementById('btnOpenGlobalSearch');
+        if (btnOpenGSearch) btnOpenGSearch.addEventListener('click', openGlobalSearchModal);
+        const btnCloseGSearch = document.getElementById('btnCloseGlobalSearch');
+        if (btnCloseGSearch) btnCloseGSearch.addEventListener('click', closeGlobalSearchModal);
+        if (inputGlobalSearch) {
+          inputGlobalSearch.addEventListener('input', (e) => renderGlobalSearchResults(e.target.value));
+        }
+        if (modalGlobalSearch) {
+          modalGlobalSearch.addEventListener('click', (e) => {
+            if (e.target === modalGlobalSearch) closeGlobalSearchModal();
+          });
+        }
+        window.addEventListener('keydown', (e) => {
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+            e.preventDefault();
+            openGlobalSearchModal();
+          } else if (e.key === 'Escape' && modalGlobalSearch && !modalGlobalSearch.classList.contains('hidden')) {
+            closeGlobalSearchModal();
+          }
+        });
+
+        // 3. Timer Pomodoro de Foco (Módulo 1)
+        let pomoTotalSeconds = 25 * 60;
+        let pomoRemainingSeconds = 25 * 60;
+        let pomoIntervalId = null;
+        let pomoIsRunning = false;
+
+        function updatePomodoroDisplay() {
+          const disp = document.getElementById('pomodoroTimeDisplay');
+          const badge = document.getElementById('pomodoroStatusBadge');
+          const btnStart = document.getElementById('btnPomodoroStartPause');
+          if (!disp) return;
+          const mins = Math.floor(pomoRemainingSeconds / 60);
+          const secs = pomoRemainingSeconds % 60;
+          disp.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+          if (btnStart) {
+            btnStart.textContent = pomoIsRunning ? '⏸ Pausar' : '▶ Iniciar';
+          }
+          if (badge) {
+            if (pomoIsRunning) {
+              badge.textContent = '🔥 Em Foco Ativo';
+              badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800';
+            } else if (pomoRemainingSeconds < pomoTotalSeconds && pomoRemainingSeconds > 0) {
+              badge.textContent = '⏸ Pausado';
+              badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800';
+            } else {
+              badge.textContent = 'Pronto para Focar';
+              badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700';
+            }
+          }
+        }
+
+        function playPomodoroBeep() {
+          try {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (!AudioCtx) return;
+            const ctx = new AudioCtx();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, ctx.currentTime);
+            gain.gain.setValueAtTime(0.18, ctx.currentTime);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.45);
+          } catch (e) {}
+        }
+
+        document.querySelectorAll('[data-pomo-mins]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const mins = parseInt(btn.getAttribute('data-pomo-mins'), 10) || 25;
+            if (pomoIntervalId) {
+              clearInterval(pomoIntervalId);
+              pomoIntervalId = null;
+            }
+            pomoIsRunning = false;
+            pomoTotalSeconds = mins * 60;
+            pomoRemainingSeconds = pomoTotalSeconds;
+            document.querySelectorAll('[data-pomo-mins]').forEach(b => {
+              b.className = b === btn
+                ? 'px-2.5 py-1 rounded-lg font-semibold bg-white text-slate-900 shadow-2xs cursor-pointer transition'
+                : 'px-2.5 py-1 rounded-lg font-semibold text-slate-600 hover:text-slate-900 cursor-pointer transition';
+            });
+            updatePomodoroDisplay();
+          });
+        });
+
+        const btnPomoStart = document.getElementById('btnPomodoroStartPause');
+        if (btnPomoStart) {
+          btnPomoStart.addEventListener('click', () => {
+            if (pomoIsRunning) {
+              clearInterval(pomoIntervalId);
+              pomoIntervalId = null;
+              pomoIsRunning = false;
+              updatePomodoroDisplay();
+            } else {
+              if (pomoRemainingSeconds <= 0) pomoRemainingSeconds = pomoTotalSeconds;
+              pomoIsRunning = true;
+              updatePomodoroDisplay();
+              pomoIntervalId = setInterval(() => {
+                pomoRemainingSeconds = Math.max(0, pomoRemainingSeconds - 1);
+                updatePomodoroDisplay();
+                if (pomoRemainingSeconds <= 0) {
+                  clearInterval(pomoIntervalId);
+                  pomoIntervalId = null;
+                  pomoIsRunning = false;
+                  updatePomodoroDisplay();
+                  playPomodoroBeep();
+                  dispatchPrumoNotification(
+                    '⏱️ Ciclo Pomodoro Concluído!',
+                    'Parabéns pelo bloco de foco! Hora de fazer uma breve pausa ou marcar sua tarefa como feita.',
+                    'prumo-pomo-done-' + Date.now(),
+                    { targetModule: 'mod1_plans' }
+                  );
+                  showToast('Ciclo Pomodoro concluído! Excelente foco! 🎉', '⏱️');
+                }
+              }, 1000);
+            }
+          });
+        }
+
+        const btnPomoReset = document.getElementById('btnPomodoroReset');
+        if (btnPomoReset) {
+          btnPomoReset.addEventListener('click', () => {
+            if (pomoIntervalId) {
+              clearInterval(pomoIntervalId);
+              pomoIntervalId = null;
+            }
+            pomoIsRunning = false;
+            pomoRemainingSeconds = pomoTotalSeconds;
+            updatePomodoroDisplay();
+          });
+        }
+
+        // 4. Exportar Lista de Compras para WhatsApp / Área de Transferência (Módulo 2)
+        const btnShareWa = document.getElementById('btnShareShoppingWhatsapp');
+        if (btnShareWa) {
+          btnShareWa.addEventListener('click', async () => {
+            if (state.shoppingItems.length === 0) {
+              showToast('Sua Lista de Compras está vazia no momento!', '🛒');
+              return;
+            }
+            const lines = [`🛒 *Lista de Compras — Prumo* (${formatPtDate(TODAY_STR)})`, ''];
+            const byStore = {};
+            let totalEst = 0;
+            state.shoppingItems.forEach(item => {
+              const st = item.store || 'Supermercado';
+              if (!byStore[st]) byStore[st] = [];
+              byStore[st].push(item);
+              totalEst += (Number(item.qty) || 1) * (Number(item.price) || 0);
+            });
+            Object.keys(byStore).forEach(st => {
+              lines.push(`📍 *${st}*`);
+              byStore[st].forEach(it => {
+                const check = it.inCart ? '✅' : '⬜';
+                const priceTag = Number(it.price) > 0 ? ` — ${formatCurrencyBRL((Number(it.qty) || 1) * Number(it.price))}` : '';
+                lines.push(`${check} ${it.name} (${it.qty} ${it.unit})${priceTag}`);
+              });
+              lines.push('');
+            });
+            lines.push(`💰 *Total Estimado:* ${formatCurrencyBRL(totalEst)}`);
+            const textPayload = lines.join('\n');
+            try {
+              await navigator.clipboard.writeText(textPayload);
+              showToast('Lista copiada para a área de transferência! Abrindo WhatsApp...', '📲');
+            } catch (e) {}
+            const waUrl = 'https://wa.me/?text=' + encodeURIComponent(textPayload);
+            window.open(waUrl, '_blank', 'noopener,noreferrer');
+          });
+        }
+
+        // 5. Filtro de Tarefas por Tempo Disponível (Módulo 3)
+        const selTaskDur = document.getElementById('selectTaskDurationFilter');
+        if (selTaskDur) {
+          selTaskDur.addEventListener('change', (e) => {
+            state.taskFilterDuration = e.target.value;
+            saveState();
+            renderTasksModule();
+          });
+        }
+
+        // 6. Exportar Planilha de Gastos em CSV (Módulo 4)
+        const btnExportCsv = document.getElementById('btnExportFinanceCsv');
+        if (btnExportCsv) {
+          btnExportCsv.addEventListener('click', () => {
+            if (state.transactions.length === 0) {
+              showToast('Não há lançamentos na planilha para exportar.', '⚠️');
+              return;
+            }
+            const activeMonth = state.selectedFinanceMonth || TODAY_STR.slice(0, 7);
+            const rows = [
+              ['Data', 'Descricao', 'Tipo', 'Categoria', 'Valor_BRL', 'Origem']
+            ];
+            const pool = state.transactions
+              .slice()
+              .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+            pool.forEach(tx => {
+              const safeDesc = String(tx.desc || '').replace(/"/g, '""');
+              const safeCat = String(tx.category || '').replace(/"/g, '""');
+              const safeOrig = String(tx.origin || 'Manual').replace(/"/g, '""');
+              const valStr = Number(tx.amount || 0).toFixed(2).replace('.', ',');
+              rows.push([
+                tx.date || '',
+                `"${safeDesc}"`,
+                tx.type || 'Despesa',
+                `"${safeCat}"`,
+                `"${valStr}"`,
+                `"${safeOrig}"`
+              ]);
+            });
+            const csvContent = '\uFEFF' + rows.map(r => r.join(';')).join('\r\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `planilha_gastos_prumo_${activeMonth}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Planilha CSV exportada com sucesso (compatível com Excel e Google Sheets)!', '📊');
+          });
+        }
 
         // Inicializa o Firebase e escuta a sessão permanente (nunca expira após 1 hora!)
         if (currentUser && currentUser.email) {
