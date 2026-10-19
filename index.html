@@ -317,7 +317,7 @@
   </header>
 
   <!-- Main Container (Adapts width when simulating Android Mode) -->
-  <main id="appContainer" class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 transition-all duration-300">
+  <main id="appContainer" class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 pb-24 md:pb-6 transition-all duration-300">
 
 
 
@@ -449,9 +449,21 @@
           </button>
           <button id="pillBackupStatus" type="button" class="text-left bg-slate-50 hover:bg-sky-50/60 p-3 rounded-xl border border-slate-200/80 transition cursor-pointer">
             <p class="text-[11px] font-medium text-slate-500">Tarefas da Casa</p>
-            <p id="metricBackupStatus" class="text-base font-bold text-sky-600 mt-0.5">0 pendentes</p>
+            <p id="metricBackupStatus" class="text-base font-bold text-sky-600 mt-0.5">0 hoje • 0 no total</p>
           </button>
         </div>
+      </div>
+
+      <!-- Central de Alertas Inteligentes (Boletos, Validades, Estoque, Manutenções e Preço Alvo) -->
+      <div id="homeSmartAlertsBanner" class="hidden rounded-2xl bg-amber-50/90 p-4 border border-amber-200 shadow-2xs space-y-2.5">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="text-base">🔔</span>
+            <h2 class="text-xs sm:text-sm font-bold text-amber-900 uppercase tracking-wider">Central de Atenção &amp; Oportunidades</h2>
+          </div>
+          <span id="homeSmartAlertsCount" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-200/80 text-amber-900">0 alertas</span>
+        </div>
+        <div id="homeSmartAlertsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2"></div>
       </div>
 
       <!-- Quick Today Check-in Card (Habits, Daily Plans & Household Tasks scheduled for Today) -->
@@ -593,17 +605,22 @@
 
         <!-- Windows/Linux Desktop Manager Form: Add/Edit Daily Plan -->
         <div id="desktopPlanEditorCard" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-          <div class="flex items-center justify-between mb-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
             <div>
               <h3 id="planFormTitle" class="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <span>📅</span>
                 <span>Cadastrar Novo Plano / Compromisso</span>
               </h3>
-              <p class="text-xs text-slate-500">Preencha os detalhes para organizar sua rotina por turno e horário</p>
+              <p class="text-xs text-slate-500">Preencha os detalhes para organizar sua rotina por turno, horário e repetição</p>
             </div>
-            <button id="btnCancelPlanEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800">
-              Cancelar Edição
-            </button>
+            <div class="flex items-center gap-2">
+              <button id="btnCancelPlanEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800 cursor-pointer">
+                Cancelar Edição
+              </button>
+              <button type="button" data-collapse-target="formAddPlan" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer">
+                ➖ Recolher
+              </button>
+            </div>
           </div>
 
           <form id="formAddPlan" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
@@ -641,12 +658,20 @@
                 <option value="Baixa">🟢 Baixa</option>
               </select>
             </div>
-            <div class="sm:col-span-2 lg:col-span-5">
+            <div class="sm:col-span-2 lg:col-span-3">
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Observações / Detalhes</label>
               <input id="planNotesInput" type="text" placeholder="Ex.: Levar exames, separar documentos na pasta azul..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
+            <div class="sm:col-span-1 lg:col-span-2">
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Repetir Compromisso</label>
+              <select id="planRepeatInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
+                <option value="none">📌 Único (Apenas nesta data)</option>
+                <option value="daily_7">🔁 Diário (Próximos 7 dias)</option>
+                <option value="weekly_4">📅 Semanal (Próximas 4 semanas)</option>
+              </select>
+            </div>
             <div class="flex items-end">
-              <button id="btnSubmitPlan" type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm">
+              <button id="btnSubmitPlan" type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
                 + Salvar Plano
               </button>
             </div>
@@ -719,9 +744,14 @@
               <h3 id="habitFormTitle" class="text-sm font-bold text-slate-900">🔥 Configurar Hábito ou Rotina Programada</h3>
               <p class="text-xs text-slate-500">Diferencie hábitos que se repetem todos os dias (ex.: tomar creatina) de treinos ou rotinas com dias programados (ex.: abdominal 3x na semana) sem perder o streak nos dias de descanso</p>
             </div>
-            <button id="btnCancelHabitEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800 cursor-pointer">
-              Cancelar Edição
-            </button>
+            <div class="flex items-center gap-2">
+              <button id="btnCancelHabitEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800 cursor-pointer">
+                Cancelar Edição
+              </button>
+              <button type="button" data-collapse-target="formAddHabit" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer">
+                ➖ Recolher
+              </button>
+            </div>
           </div>
 
           <form id="formAddHabit" class="space-y-4">
@@ -791,11 +821,7 @@
               </div>
             </div>
 
-            <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
-              <div class="hidden">
-                <button type="button" id="btnQuickHabitCreatina"></button>
-                <button type="button" id="btnQuickHabitAbdominal"></button>
-              </div>
+            <div class="flex flex-wrap items-center justify-end gap-3 pt-2 border-t border-slate-100">
               <button id="btnSubmitHabit" type="submit" class="py-2 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
                 + Salvar Hábito
               </button>
@@ -909,20 +935,31 @@
         </div>
       </div>
 
-      <!-- Store Filter Pills -->
-      <div class="bg-white rounded-2xl p-3.5 border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
-        <div class="flex flex-wrap items-center gap-1.5" id="storeFilterButtons">
-          <button type="button" data-store-filter="ALL" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white">Todos os Locais</button>
-          <button type="button" data-store-filter="Supermercado" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">🛒 Supermercado</button>
-          <button type="button" data-store-filter="Feira / Hortifrúti" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">🥬 Feira / Hortifrúti</button>
-          <button type="button" data-store-filter="Farmácia" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">💊 Farmácia</button>
-          <button type="button" data-store-filter="Açougue / Padaria" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">🥖 Açougue / Padaria</button>
+      <!-- Store Filter Pills & Instant Search -->
+      <div class="bg-white rounded-2xl p-3.5 border border-slate-200 shadow-sm space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex flex-wrap items-center gap-1.5" id="storeFilterButtons">
+            <button type="button" data-store-filter="ALL" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white cursor-pointer">Todos os Locais</button>
+            <button type="button" data-store-filter="Supermercado" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">🛒 Supermercado</button>
+            <button type="button" data-store-filter="Feira / Hortifrúti" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">🥬 Feira / Hortifrúti</button>
+            <button type="button" data-store-filter="Farmácia" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">💊 Farmácia</button>
+            <button type="button" data-store-filter="Açougue / Padaria" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">🥖 Açougue / Padaria</button>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <input id="shopSearchInput" type="search" placeholder="🔍 Buscar produto na lista..." class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white w-48 sm:w-56" />
+            <button id="btnUncheckAllCart" type="button" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer">
+              🧹 Desmarcar Carrinho
+            </button>
+            <label class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 cursor-pointer">
+              <input id="chkHideCartItems" type="checkbox" class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
+              <span>Ocultar no carrinho</span>
+            </label>
+          </div>
         </div>
-        <div class="flex items-center gap-2">
-          <label class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 cursor-pointer">
-            <input id="chkHideCartItems" type="checkbox" class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
-            <span>Ocultar itens já no carrinho</span>
-          </label>
+
+        <!-- Catálogo Rápido de Itens Recorrentes / Favoritos -->
+        <div id="shoppingFavoritesBar" class="hidden pt-2.5 border-t border-slate-100 flex flex-wrap items-center gap-1.5">
+          <!-- Populated dynamically -->
         </div>
       </div>
 
@@ -933,9 +970,14 @@
             <h3 id="shopFormTitle" class="text-sm font-bold text-slate-900">🛒 Cadastrar Produto na Lista de Compras</h3>
             <p class="text-xs text-slate-500">Defina local, corredor/setor, quantidade e preço estimado para planejar o mercado</p>
           </div>
-          <button id="btnCancelShopEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800">
-            Cancelar Edição
-          </button>
+          <div class="flex items-center gap-2">
+            <button id="btnCancelShopEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800 cursor-pointer">
+              Cancelar Edição
+            </button>
+            <button type="button" data-collapse-target="formAddShoppingItem" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer">
+              ➖ Recolher
+            </button>
+          </div>
         </div>
 
         <form id="formAddShoppingItem" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
@@ -1075,11 +1117,14 @@
               <input id="pricePointValue" type="number" step="0.01" min="0.01" required placeholder="39.90" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
             <div class="flex items-end">
-              <button type="submit" class="w-full py-2 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm">
+              <button type="submit" class="w-full py-2 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
                 + Salvar Preço no Gráfico
               </button>
             </div>
           </form>
+
+          <!-- Lista de Pontos Registrados para o Produto Selecionado (Com opção de excluir erro de digitação) -->
+          <div id="productPricePointsList" class="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-2"></div>
         </div>
 
         <!-- Supermarket Trips History & Direct Trip Logger -->
@@ -1168,14 +1213,19 @@
 
       <!-- Desktop Manager Form: Add/Edit Household Task -->
       <div id="desktopTaskEditorCard" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-        <div class="flex items-center justify-between mb-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div>
             <h3 id="taskFormTitle" class="text-sm font-bold text-slate-900">🧹 Cadastrar Tarefa ou Rotina de Limpeza</h3>
             <p class="text-xs text-slate-500">Configure tarefas únicas ou rotinas domésticas que se repetem automaticamente</p>
           </div>
-          <button id="btnCancelTaskEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800">
-            Cancelar Edição
-          </button>
+          <div class="flex items-center gap-2">
+            <button id="btnCancelTaskEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800 cursor-pointer">
+              Cancelar Edição
+            </button>
+            <button type="button" data-collapse-target="formAddTask" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer">
+              ➖ Recolher
+            </button>
+          </div>
         </div>
 
         <form id="formAddTask" class="space-y-3.5">
@@ -1257,10 +1307,6 @@
             </div>
           </div>
 
-          <div class="hidden">
-            <button type="button" id="btnQuickTaskAspirar"></button>
-            <button type="button" id="btnQuickTaskLavarRoupa"></button>
-          </div>
         </form>
       </div>
 
@@ -1319,6 +1365,29 @@
         </div>
       </div>
 
+      <!-- Seletor de Mês/Ano Financeiro -->
+      <div class="bg-white rounded-2xl p-3.5 sm:px-5 border border-slate-200 shadow-2xs flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="text-base">🗓️</span>
+          <div>
+            <p class="text-xs font-bold text-slate-900">Período de Apuração Mensal</p>
+            <p class="text-[11px] text-slate-500">Filtra receitas, despesas, boletos pagos e barras de orçamento</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="btnPrevFinMonth" type="button" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer">
+            ◀ Mês Anterior
+          </button>
+          <input id="inputSelectedFinMonth" type="month" class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-bold text-slate-900 bg-white" />
+          <button id="btnCurrentFinMonth" type="button" class="px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-xs font-semibold transition cursor-pointer">
+            Mês Atual
+          </button>
+          <button id="btnNextFinMonth" type="button" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer">
+            Próximo Mês ▶
+          </button>
+        </div>
+      </div>
+
       <!-- Financial Summary KPIs (Includes Supermarket Spend Highlight!) -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
@@ -1326,15 +1395,15 @@
           <p id="finMetricIncome" class="text-lg sm:text-xl font-bold text-emerald-600 mt-0.5">R$ 0,00</p>
         </div>
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-          <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Total de Despesas</p>
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Despesas no Mês</p>
           <p id="finMetricExpense" class="text-lg sm:text-xl font-bold text-rose-600 mt-0.5">R$ 0,00</p>
         </div>
         <div class="bg-amber-50/90 p-4 rounded-2xl border border-amber-200 shadow-xs">
-          <p class="text-[11px] font-semibold uppercase tracking-wider text-amber-800">🛒 Gasto com Supermercado</p>
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-amber-800">🛒 Supermercado no Mês</p>
           <p id="finMetricSupermarket" class="text-lg sm:text-xl font-bold text-amber-900 mt-0.5">R$ 0,00</p>
         </div>
         <div class="bg-slate-900 text-white p-4 rounded-2xl border border-slate-800 shadow-xs">
-          <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Saldo Disponível</p>
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Saldo do Mês</p>
           <p id="finMetricBalance" class="text-lg sm:text-xl font-bold text-emerald-400 mt-0.5">R$ 0,00</p>
         </div>
       </div>
@@ -1342,12 +1411,25 @@
       <!-- SUBVIEW 4A: PLANILHA DE GASTOS (EXTRATO COMPLETO) -->
       <div id="subviewFinStatement" class="space-y-5">
 
-        <!-- Desktop Form: Add Expense or Income -->
+        <!-- Desktop Form: Add/Edit Expense or Income -->
         <div id="desktopFinanceEditorCard" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-          <h3 class="text-sm font-bold text-slate-900 mb-1">💰 Lançar Entrada ou Saída na Planilha</h3>
-          <p class="text-xs text-slate-500 mb-4">Compras finalizadas no Módulo 2 e Contas Fixas pagas já entram aqui automaticamente</p>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div>
+              <h3 id="finFormTitle" class="text-sm font-bold text-slate-900 mb-0.5">💰 Lançar Entrada ou Saída na Planilha</h3>
+              <p class="text-xs text-slate-500">Compras finalizadas no Módulo 2 e Contas Fixas pagas já entram aqui automaticamente</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="btnCancelFinEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800 cursor-pointer">
+                Cancelar Edição
+              </button>
+              <button type="button" data-collapse-target="formAddExpense" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer">
+                ➖ Recolher
+              </button>
+            </div>
+          </div>
 
           <form id="formAddExpense" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+            <input type="hidden" id="editFinTxId" value="" />
             <div class="sm:col-span-2">
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Descrição *</label>
               <input id="finDescInput" type="text" required placeholder="Ex.: Salário Mensal, Supermercado, Gasolina, Farmácia..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
@@ -1378,9 +1460,9 @@
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Valor (R$) *</label>
               <input id="finAmountInput" type="number" step="0.01" min="0.01" required placeholder="0.00" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
-            <div class="sm:col-span-2 lg:col-span-6 flex items-center justify-between pt-2 border-t border-slate-100">
-              <div class="flex items-center gap-2">
-                <label class="text-xs font-medium text-slate-600">Filtrar Extrato:</label>
+            <div class="sm:col-span-2 lg:col-span-6 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+              <div class="flex flex-wrap items-center gap-2">
+                <label class="text-xs font-medium text-slate-600">Filtrar:</label>
                 <select id="selectFinanceCategoryFilter" class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 bg-white">
                   <option value="ALL">Todas as Categorias</option>
                   <option value="Supermercado & Feira">🛒 Somente Supermercado & Feira</option>
@@ -1390,12 +1472,29 @@
                   <option value="Lazer & Outros">🎉 Lazer & Outros</option>
                   <option value="Renda / Salário">💵 Renda / Salário</option>
                 </select>
+                <input id="finSearchInput" type="search" placeholder="🔍 Buscar lançamento..." class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white w-44 sm:w-56" />
               </div>
-              <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm">
+              <button id="btnSubmitFinTx" type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
                 + Lançar na Planilha
               </button>
             </div>
           </form>
+        </div>
+
+        <!-- Distribuição de Despesas por Categoria no Mês -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900">📊 Distribuição de Despesas por Categoria no Mês</h4>
+              <p class="text-[11px] text-slate-500">Proporção dos gastos realizados no mês selecionado</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+            <div class="md:col-span-5 relative h-52 w-full">
+              <canvas id="canvasFinanceCategoryChart"></canvas>
+            </div>
+            <div id="financeCategoryBreakdownList" class="md:col-span-7 space-y-2 text-xs"></div>
+          </div>
         </div>
 
         <!-- Mobile Quick Expense Bar -->
@@ -1438,6 +1537,7 @@
           </div>
 
           <form id="formAddFixedBill" class="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2 border-t border-slate-100">
+            <input type="hidden" id="editFixedBillId" value="" />
             <div>
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Nome da Conta Fixa *</label>
               <input id="billNameInput" type="text" required placeholder="Ex.: Energia Elétrica, Condomínio, Internet Fibra..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
@@ -1450,9 +1550,12 @@
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Valor do Mês (R$) *</label>
               <input id="billAmountInput" type="number" step="0.01" min="0.01" required placeholder="150.00" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
-            <div class="flex items-end">
-              <button type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm">
+            <div class="flex items-end gap-1.5">
+              <button id="btnSubmitFixedBill" type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
                 + Cadastrar Conta Fixa
+              </button>
+              <button id="btnCancelBillEdit" type="button" class="hidden py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs cursor-pointer">
+                ✕
               </button>
             </div>
           </form>
@@ -1557,9 +1660,14 @@
               <h3 id="wishFormTitle" class="text-sm font-bold text-slate-900">🛍️ Cadastrar Produto Planejado para a Casa</h3>
               <p class="text-xs text-slate-500">Registre o link da loja, capture a miniatura do link ou envie uma imagem do computador/celular e defina seu Preço Alvo</p>
             </div>
-            <button id="btnCancelWishEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800">
-              Cancelar Edição
-            </button>
+            <div class="flex items-center gap-2">
+              <button id="btnCancelWishEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800 cursor-pointer">
+                Cancelar Edição
+              </button>
+              <button type="button" data-collapse-target="formAddWishlistItem" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer">
+                ➖ Recolher
+              </button>
+            </div>
           </div>
 
           <form id="formAddWishlistItem" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
@@ -1716,10 +1824,19 @@
             <p class="text-xs text-slate-500">Itens marcados como "Comprado" na aba anterior vêm para cá automaticamente, mas você também pode cadastrar itens já existentes na casa</p>
           </div>
 
-          <form id="formAddWarrantyItem" class="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-2 border-t border-slate-100">
+          <form id="formAddWarrantyItem" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 pt-2 border-t border-slate-100">
+            <input type="hidden" id="editWarrantyId" value="" />
             <div class="sm:col-span-2">
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Aparelho / Bem da Casa *</label>
               <input id="warNameInput" type="text" required placeholder="Ex.: Máquina de Lavar 12kg, TV 55 Polegadas..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Loja / Fabricante</label>
+              <input id="warStoreInput" type="text" placeholder="Ex.: Amazon, Fast Shop..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Valor Pago (R$)</label>
+              <input id="warPriceInput" type="number" step="0.01" min="0" placeholder="0.00" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
             <div>
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Data da Compra</label>
@@ -1727,12 +1844,15 @@
             </div>
             <div>
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Garantia (Meses)</label>
-              <input id="warMonthsInput" type="number" min="1" max="120" value="12" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
-            </div>
-            <div class="flex items-end">
-              <button type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm">
-                + Salvar Garantia
-              </button>
+              <div class="flex items-center gap-1.5">
+                <input id="warMonthsInput" type="number" min="1" max="120" value="12" required class="w-20 px-2.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+                <button id="btnSubmitWarranty" type="submit" class="flex-1 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-sm cursor-pointer">
+                  + Salvar
+                </button>
+                <button id="btnCancelWarrantyEdit" type="button" class="hidden py-2 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs cursor-pointer">
+                  ✕
+                </button>
+              </div>
             </div>
           </form>
 
@@ -1751,6 +1871,7 @@
           </div>
 
           <form id="formAddMaintenanceItem" class="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-2 border-t border-slate-100">
+            <input type="hidden" id="editMaintId" value="" />
             <div class="sm:col-span-2">
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Manutenção / Revisão *</label>
               <input id="maintTitleInput" type="text" required placeholder="Ex.: Trocar elemento filtrante do purificador, Limpar caixa d'água..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
@@ -1763,9 +1884,12 @@
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Ciclo (a cada X dias)</label>
               <input id="maintIntervalInput" type="number" min="7" max="730" value="180" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
-            <div class="flex items-end">
-              <button type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm">
+            <div class="flex items-end gap-1.5">
+              <button id="btnSubmitMaint" type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
                 + Criar Ciclo
+              </button>
+              <button id="btnCancelMaintEdit" type="button" class="hidden py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs cursor-pointer">
+                ✕
               </button>
             </div>
           </form>
@@ -1834,14 +1958,26 @@
       <!-- ==================== SUBVIEW 6A: CONTROLE DE DESPENSA E VALIDADES ==================== -->
       <div id="subviewMod6Pantry" class="space-y-5">
 
-        <!-- Desktop Manager Form: Add Pantry Item -->
+        <!-- Desktop Manager Form: Add/Edit Pantry Item -->
         <div id="desktopPantryEditorCard" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
-          <div>
-            <h3 class="text-sm font-bold text-slate-900">🥫 Cadastrar Item no Estoque da Casa</h3>
-            <p class="text-xs text-slate-500">Quando a quantidade chegar ao Estoque Mínimo, o aplicativo envia automaticamente o produto para a Lista de Compras (Módulo 2)</p>
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 id="pantryFormTitle" class="text-sm font-bold text-slate-900">🥫 Cadastrar Item no Estoque da Casa</h3>
+              <p class="text-xs text-slate-500">Quando a quantidade chegar ao Estoque Mínimo, o aplicativo envia automaticamente o produto para a Lista de Compras (Módulo 2)</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input id="pantrySearchInput" type="search" placeholder="🔍 Buscar na despensa..." class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white w-44 sm:w-52" />
+              <button id="btnCancelPantryEdit" type="button" class="hidden text-xs font-semibold text-slate-500 hover:text-slate-800 cursor-pointer">
+                Cancelar Edição
+              </button>
+              <button type="button" data-collapse-target="formAddPantryItem" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer">
+                ➖ Recolher
+              </button>
+            </div>
           </div>
 
           <form id="formAddPantryItem" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+            <input type="hidden" id="editPantryId" value="" />
             <div class="sm:col-span-2">
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Produto no Estoque *</label>
               <input id="pantryNameInput" type="text" required placeholder="Ex.: Arroz 5kg, Leite Integral, Feijão Carioca..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
@@ -1855,14 +1991,26 @@
                 <option value="Lavanderia">🧼 Lavanderia</option>
               </select>
             </div>
-            <div class="grid grid-cols-2 gap-2">
+            <div class="grid grid-cols-3 gap-1.5">
               <div>
-                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Qtd. Atual</label>
-                <input id="pantryQtyInput" type="number" step="0.5" min="0" value="2" required class="w-full px-2.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Atual</label>
+                <input id="pantryQtyInput" type="number" step="0.5" min="0" value="2" required class="w-full px-2 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
               </div>
               <div>
-                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Mínimo</label>
-                <input id="pantryMinInput" type="number" step="0.5" min="0" value="1" required class="w-full px-2.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Mín.</label>
+                <input id="pantryMinInput" type="number" step="0.5" min="0" value="1" required class="w-full px-2 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Unid.</label>
+                <select id="pantryUnitInput" class="w-full px-1.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
+                  <option value="un">un</option>
+                  <option value="kg">kg</option>
+                  <option value="g">g</option>
+                  <option value="L">L</option>
+                  <option value="ml">ml</option>
+                  <option value="pct">pct</option>
+                  <option value="cx">cx</option>
+                </select>
               </div>
             </div>
             <div>
@@ -1870,7 +2018,7 @@
               <input id="pantryExpiryInput" type="date" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
             <div class="flex items-end">
-              <button type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm">
+              <button id="btnSubmitPantry" type="submit" class="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
                 + Salvar no Estoque
               </button>
             </div>
@@ -1912,6 +2060,7 @@
           </div>
 
           <form id="formAddRecipe" class="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-2 border-t border-slate-100">
+            <input type="hidden" id="editRecipeId" value="" />
             <div class="sm:col-span-2">
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Nome do Prato / Receita *</label>
               <input id="recipeTitleInput" type="text" required placeholder="Ex.: Strogonoff de Frango, Macarrão à Bolonhesa..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
@@ -1920,9 +2069,12 @@
               <label class="block text-[11px] font-semibold uppercase text-slate-500 mb-1">Ingredientes Principais (separe por vírgula) *</label>
               <input id="recipeIngredientsInput" type="text" required placeholder="Ex.: Peito de Frango Resfriado, Arroz 5kg, Creme de Leite..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
-            <div class="flex items-end">
-              <button type="submit" class="w-full py-2 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm">
+            <div class="flex items-end gap-1.5">
+              <button id="btnSubmitRecipe" type="submit" class="w-full py-2 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm transition shadow-sm cursor-pointer">
                 + Salvar Receita
+              </button>
+              <button id="btnCancelRecipeEdit" type="button" class="hidden py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs cursor-pointer">
+                ✕
               </button>
             </div>
           </form>
@@ -2300,28 +2452,39 @@
     </div>
   </div>
 
-  <!-- ==================== MODAL 3: DETALHES DE MÓDULOS FUTUROS (FASES 2 A 5) ==================== -->
-  <div id="modalFutureModule" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 hidden items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-200 space-y-4">
-      <div class="flex items-center justify-between">
-        <span id="futureModuleBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800">Programado no Roteiro</span>
-        <button id="btnCloseFutureModal" type="button" class="text-slate-400 hover:text-slate-700 text-sm font-bold px-2 py-1">✕</button>
-      </div>
-      <div>
-        <h3 id="futureModuleTitle" class="text-lg font-bold text-slate-900">Módulo</h3>
-        <p id="futureModuleDesc" class="text-xs sm:text-sm text-slate-600 mt-1"></p>
-      </div>
-      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1">
-        <p class="font-semibold text-slate-800">Como este módulo já está preparado na arquitetura:</p>
-        <p id="futureModuleIntegration"></p>
-      </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button id="btnFutureGoModule1" type="button" class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-500">
-          Ir para Módulo 1 (Fase 1)
-        </button>
-      </div>
+  <!-- ==================== BARRA DE NAVEGAÇÃO INFERIOR FIXA (MOBILE < 768px) ==================== -->
+  <nav id="mobileBottomNav" class="hidden md:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 px-1.5 py-1 shadow-lg">
+    <div class="grid grid-cols-7 gap-0.5 max-w-lg mx-auto text-[10px] font-semibold">
+      <button type="button" data-bottom-nav="home" class="flex flex-col items-center justify-center py-1 rounded-xl text-slate-900 bg-slate-100 cursor-pointer transition">
+        <span class="text-sm leading-none">🏠</span>
+        <span class="mt-0.5 truncate">Início</span>
+      </button>
+      <button type="button" data-bottom-nav="mod1" class="flex flex-col items-center justify-center py-1 rounded-xl text-slate-600 hover:bg-slate-100 cursor-pointer transition">
+        <span class="text-sm leading-none">📅</span>
+        <span class="mt-0.5 truncate">Rotina</span>
+      </button>
+      <button type="button" data-bottom-nav="mod2" class="flex flex-col items-center justify-center py-1 rounded-xl text-slate-600 hover:bg-slate-100 cursor-pointer transition">
+        <span class="text-sm leading-none">🛒</span>
+        <span class="mt-0.5 truncate">Compras</span>
+      </button>
+      <button type="button" data-bottom-nav="mod3" class="flex flex-col items-center justify-center py-1 rounded-xl text-slate-600 hover:bg-slate-100 cursor-pointer transition">
+        <span class="text-sm leading-none">🧹</span>
+        <span class="mt-0.5 truncate">Tarefas</span>
+      </button>
+      <button type="button" data-bottom-nav="mod4" class="flex flex-col items-center justify-center py-1 rounded-xl text-slate-600 hover:bg-slate-100 cursor-pointer transition">
+        <span class="text-sm leading-none">💰</span>
+        <span class="mt-0.5 truncate">Gastos</span>
+      </button>
+      <button type="button" data-bottom-nav="mod5" class="flex flex-col items-center justify-center py-1 rounded-xl text-slate-600 hover:bg-slate-100 cursor-pointer transition">
+        <span class="text-sm leading-none">🏠</span>
+        <span class="mt-0.5 truncate">Desejos</span>
+      </button>
+      <button type="button" data-bottom-nav="mod6" class="flex flex-col items-center justify-center py-1 rounded-xl text-slate-600 hover:bg-slate-100 cursor-pointer transition">
+        <span class="text-sm leading-none">🍲</span>
+        <span class="mt-0.5 truncate">Estoque</span>
+      </button>
     </div>
-  </div>
+  </nav>
 
   <!-- Toast Notification -->
   <div id="toastContainer" class="fixed bottom-5 right-5 z-50 hidden">
@@ -2531,6 +2694,11 @@
         ],
         recipes: [],
         backups: [],
+        favoriteShoppingItems: [],
+        selectedFinanceMonth: TODAY_STR.slice(0, 7),
+        shopSearchQuery: '',
+        finSearchQuery: '',
+        pantrySearchQuery: '',
         homeTodayFilter: 'ALL',
         homeShowCompletedToday: true,
         hidePastCompletedOneOffTasks: true,
@@ -2874,6 +3042,10 @@
           if (!Array.isArray(merged.maintenanceCycles)) merged.maintenanceCycles = [];
           if (!Array.isArray(merged.pantryItems)) merged.pantryItems = [];
           if (!Array.isArray(merged.recipes)) merged.recipes = [];
+          if (!Array.isArray(merged.favoriteShoppingItems)) merged.favoriteShoppingItems = [];
+          if (!merged.selectedFinanceMonth || !/^\d{4}-\d{2}$/.test(merged.selectedFinanceMonth)) {
+            merged.selectedFinanceMonth = TODAY_STR.slice(0, 7);
+          }
           if (!Array.isArray(merged.fcmTokens)) merged.fcmTokens = [];
           if (typeof merged.homeShowCompletedToday !== 'boolean') merged.homeShowCompletedToday = true;
           if (typeof merged.hidePastCompletedOneOffTasks !== 'boolean') merged.hidePastCompletedOneOffTasks = true;
@@ -2954,6 +3126,10 @@
         targetObj.taskFilterType = state.taskFilterType || 'ALL';
         targetObj.taskFilterRoom = state.taskFilterRoom || 'ALL';
         targetObj.financeCategoryFilter = state.financeCategoryFilter || 'ALL';
+        targetObj.selectedFinanceMonth = state.selectedFinanceMonth || TODAY_STR.slice(0, 7);
+        targetObj.shopSearchQuery = state.shopSearchQuery || '';
+        targetObj.finSearchQuery = state.finSearchQuery || '';
+        targetObj.pantrySearchQuery = state.pantrySearchQuery || '';
         targetObj.homeTodayFilter = state.homeTodayFilter || 'ALL';
         // Preserva también os logs de notificações já disparadas hoje neste aparelho
         if (state.notificationSettings && state.notificationSettings.dispatchedLog) {
@@ -3226,6 +3402,22 @@
             ? 'px-3 py-1 rounded-lg font-semibold whitespace-nowrap transition cursor-pointer bg-white text-slate-900 shadow-2xs'
             : 'px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer text-white/80 hover:bg-white/10 hover:text-white';
         });
+        document.querySelectorAll('#mobileBottomNav [data-bottom-nav]').forEach(btn => {
+          const bCat = btn.getAttribute('data-bottom-nav');
+          btn.className = bCat === key
+            ? 'flex flex-col items-center justify-center py-1 rounded-xl text-white bg-slate-900 cursor-pointer transition shadow-2xs'
+            : 'flex flex-col items-center justify-center py-1 rounded-xl text-slate-600 hover:bg-slate-100 cursor-pointer transition';
+        });
+      }
+
+      function expandFormIfCollapsed(formId) {
+        const formEl = document.getElementById(formId);
+        if (!formEl) return;
+        formEl.classList.remove('hidden');
+        const toggleBtn = document.querySelector(`[data-collapse-target="${formId}"]`);
+        if (toggleBtn) {
+          toggleBtn.textContent = '➖ Recolher';
+        }
       }
 
       function hideAllViews() {
@@ -3240,6 +3432,8 @@
         applyCategoryTheme('home');
         const navBar = document.getElementById('minimalCategoryNav');
         if (navBar) navBar.classList.add('hidden');
+        const mobNav = document.getElementById('mobileBottomNav');
+        if (mobNav) mobNav.classList.add('hidden');
         const pill = document.getElementById('activeCategoryHeaderPill');
         if (pill) pill.classList.add('hidden');
         document.getElementById('viewWelcomeAuth').classList.remove('hidden');
@@ -3499,6 +3693,8 @@
         hideAllViews();
         const navBar = document.getElementById('minimalCategoryNav');
         if (navBar) navBar.classList.remove('hidden');
+        const mobNav = document.getElementById('mobileBottomNav');
+        if (mobNav) mobNav.classList.remove('hidden');
         applyCategoryTheme('home');
         document.getElementById('viewHome').classList.remove('hidden');
         renderAll();
@@ -3595,7 +3791,7 @@
         const desktopHabitCard = document.getElementById('desktopHabitEditorCard');
 
         // Todas as funcionalidades completas ficam liberadas em Celular, Tablet e Desktop!
-        appContainer.className = 'flex-1 max-w-7xl w-full mx-auto px-3 sm:px-4 py-4 sm:py-6 transition-all duration-300';
+        appContainer.className = 'flex-1 max-w-7xl w-full mx-auto px-3 sm:px-4 py-4 sm:py-6 pb-24 md:pb-6 transition-all duration-300';
         desktopPlanCard.classList.remove('hidden');
         mobileQuickPlan.classList.add('hidden');
         desktopHabitCard.classList.remove('hidden');
@@ -3633,10 +3829,12 @@
           if (h.streak > bestStreak) bestStreak = h.streak;
         });
 
+        const tasksScheduledTodayPending = state.tasks.filter(t => isTaskScheduledForToday(t) && !t.done).length;
+        const totalPendingTasks = state.tasks.filter(t => !t.done).length;
         document.getElementById('metricPlansToday').textContent = `${pendingToday} pendentes (${doneToday} concluídos)`;
         document.getElementById('metricHabitsToday').textContent = `${completedHabitsToday}/${scheduledHabitsTodayCount} hoje`;
         document.getElementById('metricBestStreak').textContent = `🔥 ${bestStreak} dias seguidos`;
-        document.getElementById('metricBackupStatus').textContent = `${state.tasks.filter(t => !t.done).length} pendente(s)`;
+        document.getElementById('metricBackupStatus').textContent = `${tasksScheduledTodayPending} p/ hoje (${totalPendingTasks} no total)`;
 
         const summarySubtitle = document.getElementById('smartSummarySubtitle');
         if (pendingToday === 0 && todayPlans.length > 0) {
@@ -3731,13 +3929,115 @@
               openModule5View('wishlist');
             } else if (modId === 'mod6') {
               openModule6View('pantry');
-            } else {
-              openFutureModuleModal(modId);
             }
           });
         });
 
+        renderHomeSmartAlertsBanner();
         renderHomeTodayQuickCheck();
+      }
+
+      function isFixedBillPaidInMonth(bill, monthYm) {
+        if (!bill) return false;
+        const ym = monthYm || TODAY_STR.slice(0, 7);
+        if (bill.paidMonths && typeof bill.paidMonths === 'object') {
+          return Boolean(bill.paidMonths[ym]);
+        }
+        return ym === TODAY_STR.slice(0, 7) ? Boolean(bill.paid) : false;
+      }
+
+      function renderHomeSmartAlertsBanner() {
+        const banner = document.getElementById('homeSmartAlertsBanner');
+        const countBadge = document.getElementById('homeSmartAlertsCount');
+        const listEl = document.getElementById('homeSmartAlertsList');
+        if (!banner || !countBadge || !listEl) return;
+
+        const alerts = [];
+        const currentYm = TODAY_STR.slice(0, 7);
+        const todayDayNum = new Date().getDate();
+
+        // 1. Boletos vencendo hoje ou atrasados no mês atual
+        const dueOrOverdueBills = state.fixedBills.filter(b => !isFixedBillPaidInMonth(b, currentYm) && Number(b.dueDay) <= todayDayNum);
+        if (dueOrOverdueBills.length > 0) {
+          alerts.push({
+            icon: '📄',
+            title: `${dueOrOverdueBills.length} boleto(s) vencendo ou em aberto`,
+            sub: dueOrOverdueBills.slice(0, 2).map(b => `${b.name} (dia ${b.dueDay})`).join(', '),
+            action: 'mod4_bills',
+            style: 'bg-rose-50 border-rose-200 text-rose-900'
+          });
+        }
+
+        // 2. Despensa: vencendo em <= 7 dias ou estoque baixo
+        const sevenDaysAhead = addDaysStr(TODAY_STR, 7);
+        const expiringPantry = state.pantryItems.filter(p => p.expiry && p.expiry <= sevenDaysAhead);
+        const lowPantry = state.pantryItems.filter(p => Number(p.qty) <= Number(p.minQty));
+        if (expiringPantry.length > 0 || lowPantry.length > 0) {
+          alerts.push({
+            icon: '🥫',
+            title: `${lowPantry.length} em falta • ${expiringPantry.length} vencendo`,
+            sub: [...expiringPantry, ...lowPantry].slice(0, 2).map(p => p.name).join(', '),
+            action: 'mod6_pantry',
+            style: 'bg-amber-50 border-amber-200 text-amber-900'
+          });
+        }
+
+        // 3. Manutenções preventivas vencidas (nextDue <= TODAY_STR)
+        const dueMaint = state.maintenanceCycles.filter(m => m.nextDue && m.nextDue <= TODAY_STR);
+        if (dueMaint.length > 0) {
+          alerts.push({
+            icon: '🔧',
+            title: `${dueMaint.length} revisão(ões) da casa no prazo`,
+            sub: dueMaint.slice(0, 2).map(m => m.title).join(', '),
+            action: 'mod5_maint',
+            style: 'bg-sky-50 border-sky-200 text-sky-900'
+          });
+        }
+
+        // 4. Produtos planejados que atingiram o Preço Alvo
+        const readyWishlist = state.wishlistItems.filter(w => {
+          const quotes = w.quotes || [];
+          if (quotes.length === 0 || !w.targetPrice) return false;
+          const latest = quotes[quotes.length - 1];
+          return Number(latest.price) <= Number(w.targetPrice);
+        });
+        if (readyWishlist.length > 0) {
+          alerts.push({
+            icon: '🎯',
+            title: `${readyWishlist.length} desejo(s) no Preço Alvo!`,
+            sub: readyWishlist.slice(0, 2).map(w => w.name).join(', '),
+            action: 'mod5_wish',
+            style: 'bg-emerald-50 border-emerald-200 text-emerald-900'
+          });
+        }
+
+        if (alerts.length === 0) {
+          banner.classList.add('hidden');
+          listEl.innerHTML = '';
+          return;
+        }
+
+        banner.classList.remove('hidden');
+        countBadge.textContent = `${alerts.length} destaque(s)`;
+        listEl.innerHTML = alerts.map((a, idx) => `
+          <button type="button" data-smart-alert-act="${a.action}" class="p-3 rounded-xl border text-left transition hover:shadow-xs cursor-pointer flex items-start gap-2.5 ${a.style}">
+            <span class="text-base shrink-0 mt-0.5">${a.icon}</span>
+            <div class="min-w-0 flex-1">
+              <p class="text-xs font-bold truncate">${a.title}</p>
+              <p class="text-[11px] opacity-80 truncate mt-0.5">${a.sub}</p>
+            </div>
+          </button>
+        `).join('');
+
+        listEl.querySelectorAll('[data-smart-alert-act]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const act = btn.getAttribute('data-smart-alert-act');
+            if (act === 'mod4_bills') openModule4View('bills');
+            else if (act === 'mod6_pantry') openModule6View('pantry');
+            else if (act === 'mod5_maint') openModule5View('maintenance');
+            else if (act === 'mod5_wish') openModule5View('wishlist');
+          });
+        });
       }
 
       function isTaskCompletedToday(task) {
@@ -4199,10 +4499,10 @@
             }
 
             return `
-              <div class="flex-1 py-1.5 px-1 rounded-lg border text-center ${cellStyle}">
+              <button type="button" data-habit-day-toggle="${habit.id}|${dStr}" title="Clique para marcar ou desmarcar em ${formatPtDate(dStr)}" class="flex-1 py-1.5 px-1 rounded-lg border text-center cursor-pointer hover:opacity-85 transition ${cellStyle}">
                 <p class="text-[10px] uppercase leading-none">${WEEKDAY_NAMES_SHORT[dIdx]}</p>
                 <p class="text-[10px] mt-1 leading-none">${statusSymbol}</p>
-              </div>
+              </button>
             `;
           }).join('');
 
@@ -4290,6 +4590,31 @@
         document.querySelectorAll('[data-habit-del]').forEach(btn => {
           btn.addEventListener('click', () => deleteHabit(btn.getAttribute('data-habit-del')));
         });
+        document.querySelectorAll('[data-habit-day-toggle]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const [hId, dStr] = btn.getAttribute('data-habit-day-toggle').split('|');
+            toggleHabitProgressOnDate(hId, dStr);
+          });
+        });
+      }
+
+      function toggleHabitProgressOnDate(habitId, dateStr) {
+        const habit = state.habits.find(h => h.id === habitId);
+        if (!habit || !dateStr) return;
+        if (!habit.progressByDate) habit.progressByDate = {};
+        const target = Number(habit.target) || 1;
+        const prev = Number(habit.progressByDate[dateStr]) || 0;
+        const next = prev >= target ? 0 : target;
+        habit.progressByDate[dateStr] = next;
+        recalculateHabitStreak(habit);
+        saveState();
+        renderAll();
+        showToast(
+          next >= target
+            ? `Check-in de "${habit.title}" marcado em ${formatPtDate(dateStr)}! 🔥`
+            : `Check-in de "${habit.title}" desmarcado em ${formatPtDate(dateStr)}.`,
+          '📅'
+        );
       }
 
       function adjustHabitProgress(habitId, delta) {
@@ -4361,6 +4686,7 @@
       function startEditHabit(habitId) {
         const habit = state.habits.find(h => h.id === habitId);
         if (!habit) return;
+        expandFormIfCollapsed('formAddHabit');
         document.getElementById('editHabitId').value = habit.id;
         document.getElementById('habitTitleInput').value = habit.title;
         document.getElementById('habitIconInput').value = habit.icon || '🏋️';
@@ -4481,18 +4807,19 @@
                   }
                 </div>
               </div>
-              <div class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                <button type="button" data-plan-postpone-one="${plan.id}" class="font-semibold text-amber-700 hover:text-amber-900">
-                  ⏭️ Adiar para amanhã
-                </button>
-                ${
-                  true
-                    ? `<div class="flex items-center gap-2">
-                        <button type="button" data-plan-edit="${plan.id}" class="font-semibold text-indigo-600 hover:text-indigo-800">Editar</button>
-                        <button type="button" data-plan-del="${plan.id}" class="font-semibold text-rose-600 hover:text-rose-800">Excluir</button>
-                      </div>`
-                    : ''
-                }
+              <div class="mt-3 pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+                <div class="flex items-center gap-2.5">
+                  <button type="button" data-plan-postpone-one="${plan.id}" class="font-semibold text-amber-700 hover:text-amber-900 cursor-pointer">
+                    ⏭️ Adiar
+                  </button>
+                  <button type="button" data-plan-dup-one="${plan.id}" class="font-semibold text-emerald-700 hover:text-emerald-900 cursor-pointer">
+                    📋 Duplicar p/ Amanhã
+                  </button>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button type="button" data-plan-edit="${plan.id}" class="font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">Editar</button>
+                  <button type="button" data-plan-del="${plan.id}" class="font-semibold text-rose-600 hover:text-rose-800 cursor-pointer">Excluir</button>
+                </div>
               </div>
             `;
             container.appendChild(itemEl);
@@ -4508,9 +4835,32 @@
         document.querySelectorAll('[data-plan-edit]').forEach(btn => {
           btn.addEventListener('click', () => startEditPlan(btn.getAttribute('data-plan-edit')));
         });
+        document.querySelectorAll('[data-plan-dup-one]').forEach(btn => {
+          btn.addEventListener('click', () => duplicateSinglePlanToTomorrow(btn.getAttribute('data-plan-dup-one')));
+        });
         document.querySelectorAll('[data-plan-del]').forEach(btn => {
           btn.addEventListener('click', () => deletePlan(btn.getAttribute('data-plan-del')));
         });
+      }
+
+      function duplicateSinglePlanToTomorrow(planId) {
+        const plan = state.plans.find(p => p.id === planId);
+        if (!plan) return;
+        const nextDate = getTomorrowStr(plan.date);
+        state.plans.push({
+          id: 'p_' + Date.now() + Math.random().toString(36).slice(2, 5),
+          title: plan.title,
+          date: nextDate,
+          shift: plan.shift,
+          time: plan.time || '',
+          category: plan.category,
+          priority: plan.priority,
+          notes: plan.notes || '',
+          done: false
+        });
+        saveState();
+        renderAll();
+        showToast(`Compromisso duplicado para ${formatPtDate(nextDate)}!`, '📋');
       }
 
       function togglePlanDone(planId) {
@@ -4549,6 +4899,7 @@
       function startEditPlan(planId) {
         const plan = state.plans.find(p => p.id === planId);
         if (!plan) return;
+        expandFormIfCollapsed('formAddPlan');
         document.getElementById('editPlanId').value = plan.id;
         document.getElementById('planTitleInput').value = plan.title;
         document.getElementById('planShiftInput').value = plan.shift;
@@ -4692,20 +5043,29 @@
         renderHomeScreen();
       }
 
-      // Future Module Preview Modal
-      function openFutureModuleModal(modId) {
-        const mod = state.modules.find(m => m.id === modId);
-        if (!mod) return;
-        document.getElementById('futureModuleBadge').textContent = `Programado para a ${mod.phase}`;
-        document.getElementById('futureModuleTitle').textContent = `${mod.icon} ${mod.title}`;
-        document.getElementById('futureModuleDesc').textContent = mod.subtitle;
-        document.getElementById('futureModuleIntegration').textContent = mod.integrationNote;
-        const modal = document.getElementById('modalFutureModule');
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+      function saveItemToShoppingFavorites(itemObj) {
+        if (!itemObj || !itemObj.name) return;
+        if (!Array.isArray(state.favoriteShoppingItems)) state.favoriteShoppingItems = [];
+        const cleanName = itemObj.name.trim();
+        const existing = state.favoriteShoppingItems.find(f => f.name.toLowerCase() === cleanName.toLowerCase());
+        if (existing) {
+          existing.store = itemObj.store || existing.store || 'Supermercado';
+          existing.aisle = itemObj.aisle || existing.aisle || 'Mercearia & Grãos';
+          existing.unit = itemObj.unit || existing.unit || 'un';
+          if (Number(itemObj.price) > 0) existing.price = Number(itemObj.price);
+        } else {
+          state.favoriteShoppingItems.unshift({
+            name: cleanName,
+            store: itemObj.store || 'Supermercado',
+            aisle: itemObj.aisle || 'Mercearia & Grãos',
+            unit: itemObj.unit || 'un',
+            price: Number(itemObj.price) || 0
+          });
+          if (state.favoriteShoppingItems.length > 18) {
+            state.favoriteShoppingItems = state.favoriteShoppingItems.slice(0, 18);
+          }
+        }
       }
-
-      function renderBackupSnapshots() {}
 
       function downloadBackupJson() {
         const emailSlug = currentUser && currentUser.email ? currentUser.email.split('@')[0].replace(/[^a-z0-9]/gi, '_') : 'geral';
@@ -4727,7 +5087,6 @@
           label: `${filename} (Exportado para Drive/PC)`
         });
         saveState();
-        renderBackupSnapshots();
         renderHomeScreen();
         showToast(`Arquivo ${filename} baixado com sucesso!`, '💾');
       }
@@ -4763,10 +5122,76 @@
             : 'px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200';
         });
 
+        // Render Favorites Quick-Add Bar
+        const favBar = document.getElementById('shoppingFavoritesBar');
+        if (favBar) {
+          const favs = Array.isArray(state.favoriteShoppingItems) ? state.favoriteShoppingItems : [];
+          if (favs.length === 0) {
+            favBar.classList.add('hidden');
+            favBar.innerHTML = '';
+          } else {
+            favBar.classList.remove('hidden');
+            favBar.innerHTML = `<span class="text-[11px] font-bold text-slate-500 mr-1">⚡ Recomprar rápido:</span>` +
+              favs.map((f, idx) => `
+                <div class="inline-flex items-center rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-semibold overflow-hidden">
+                  <button type="button" data-fav-shop-add="${idx}" class="px-2.5 py-1 hover:bg-amber-100 transition cursor-pointer">
+                    + ${f.name}
+                  </button>
+                  <button type="button" data-fav-shop-del="${idx}" title="Remover dos favoritos" class="px-1.5 py-1 text-amber-600 hover:bg-amber-200/70 hover:text-rose-700 transition cursor-pointer">
+                    ×
+                  </button>
+                </div>
+              `).join('');
+            favBar.querySelectorAll('[data-fav-shop-add]').forEach(btn => {
+              btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-fav-shop-add'), 10);
+                const fav = state.favoriteShoppingItems[idx];
+                if (!fav) return;
+                const existing = state.shoppingItems.find(s => s.name.toLowerCase() === fav.name.toLowerCase());
+                if (existing) {
+                  existing.qty = Math.round((Number(existing.qty) + 1) * 10) / 10;
+                  showToast(`Quantidade de "${fav.name}" aumentada para ${existing.qty}!`, '🛒');
+                } else {
+                  state.shoppingItems.push({
+                    id: 'sh_' + Date.now() + Math.random().toString(36).slice(2, 5),
+                    name: fav.name,
+                    store: fav.store || 'Supermercado',
+                    aisle: fav.aisle || 'Mercearia & Grãos',
+                    qty: 1,
+                    unit: fav.unit || 'un',
+                    price: Number(fav.price) || 0,
+                    inCart: false
+                  });
+                  showToast(`"${fav.name}" adicionado à Lista de Compras!`, '⚡');
+                }
+                saveState();
+                renderAll();
+              });
+            });
+            favBar.querySelectorAll('[data-fav-shop-del]').forEach(btn => {
+              btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-fav-shop-del'), 10);
+                state.favoriteShoppingItems.splice(idx, 1);
+                saveState();
+                renderShoppingModule();
+              });
+            });
+          }
+        }
+
+        const searchQ = (state.shopSearchQuery || '').trim().toLowerCase();
+        const shopSearchEl = document.getElementById('shopSearchInput');
+        if (shopSearchEl && document.activeElement !== shopSearchEl) {
+          shopSearchEl.value = state.shopSearchQuery || '';
+        }
+
         const filtered = state.shoppingItems.filter(item => {
           const storeOk = state.shoppingFilterStore === 'ALL' || item.store === state.shoppingFilterStore;
           const cartOk = !state.hideCartItems || !item.inCart;
-          return storeOk && cartOk;
+          const searchOk = !searchQ ||
+            (item.name && item.name.toLowerCase().includes(searchQ)) ||
+            (item.aisle && item.aisle.toLowerCase().includes(searchQ));
+          return storeOk && cartOk && searchOk;
         });
 
         const container = document.getElementById('shoppingAislesContainer');
@@ -4883,6 +5308,7 @@
             const id = btn.getAttribute('data-shop-edit');
             const item = state.shoppingItems.find(i => i.id === id);
             if (!item) return;
+            expandFormIfCollapsed('formAddShoppingItem');
             document.getElementById('editShopItemId').value = item.id;
             document.getElementById('shopNameInput').value = item.name;
             document.getElementById('shopStoreInput').value = item.store;
@@ -4918,7 +5344,11 @@
         });
 
         renderSupermarketTripsHistory();
-        renderProductPriceChart();
+        const mod2Visible = !document.getElementById('viewModule2').classList.contains('hidden');
+        const analyticsVisible = !document.getElementById('subviewShopAnalytics').classList.contains('hidden');
+        if (mod2Visible && analyticsVisible) {
+          renderProductPriceChart();
+        }
       }
 
       let priceChartInstance = null;
@@ -5055,6 +5485,36 @@
             }
           }
         });
+
+        // Render individual price points with delete button
+        const pointsListEl = document.getElementById('productPricePointsList');
+        if (pointsListEl) {
+          if (series.length === 0) {
+            pointsListEl.innerHTML = '<span class="text-xs text-slate-400">Nenhum ponto de preço registrado para este produto.</span>';
+          } else {
+            pointsListEl.innerHTML = '<span class="text-[11px] font-bold text-slate-500 mr-1">Histórico do produto:</span>' +
+              series.map((pt, idx) => `
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-[11px] text-slate-700">
+                  <strong>${formatCurrencyBRL(pt.price)}</strong>
+                  <span class="text-slate-400">(${formatPtDate(pt.date)})</span>
+                  <button type="button" data-del-price-pt="${idx}" title="Excluir este registro de preço" class="text-rose-500 hover:text-rose-700 font-bold cursor-pointer">×</button>
+                </span>
+              `).join('');
+            pointsListEl.querySelectorAll('[data-del-price-pt]').forEach(btn => {
+              btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-del-price-pt'), 10);
+                const prod = state.selectedChartProduct;
+                if (prod && Array.isArray(state.productPriceHistory[prod])) {
+                  state.productPriceHistory[prod].sort((a, b) => a.date.localeCompare(b.date));
+                  state.productPriceHistory[prod].splice(idx, 1);
+                  saveState();
+                  renderProductPriceChart();
+                  showToast('Registro de preço removido do gráfico.', '🗑️');
+                }
+              });
+            });
+          }
+        }
       }
 
       function renderSupermarketTripsHistory() {
@@ -5078,11 +5538,22 @@
               </div>
               <p class="text-xs text-slate-500 mt-0.5">Data: <strong>${formatPtDate(trip.date)}</strong> • ${trip.itemsCount} item(ns) • ${trip.payment || 'PIX / Cartão'}</p>
             </div>
-            <div class="text-right">
+            <div class="flex items-center gap-3">
               <p class="text-sm font-bold text-slate-900">${formatCurrencyBRL(trip.total)}</p>
+              <button type="button" data-trip-del="${trip.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800 cursor-pointer">Excluir</button>
             </div>
           `;
           listEl.appendChild(row);
+        });
+
+        listEl.querySelectorAll('[data-trip-del]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-trip-del');
+            state.supermarketTrips = state.supermarketTrips.filter(t => t.id !== id);
+            saveState();
+            renderSupermarketTripsHistory();
+            showToast('Registro removido do histórico de idas ao mercado.', '🗑️');
+          });
         });
       }
 
@@ -5199,6 +5670,15 @@
         }
 
         const todayWeekday = getDayOfWeekIndex(TODAY_STR);
+        const prioRank = { 'Alta': 1, 'Média': 2, 'Baixa': 3 };
+
+        filtered.sort((a, b) => {
+          if (a.done !== b.done) return a.done ? 1 : -1;
+          const aSched = isTaskScheduledForToday(a) ? 0 : 1;
+          const bSched = isTaskScheduledForToday(b) ? 0 : 1;
+          if (aSched !== bSched) return aSched - bSched;
+          return (prioRank[a.priority] || 9) - (prioRank[b.priority] || 9);
+        });
 
         filtered.forEach(task => {
           const intervalDays = getTaskIntervalDays(task);
@@ -5257,8 +5737,14 @@
                </div>`
             : '';
 
-          const subtasksHtml = Array.isArray(task.subtasks) && task.subtasks.length > 0
+          const totalSubs = Array.isArray(task.subtasks) ? task.subtasks.length : 0;
+          const doneSubs = totalSubs > 0 ? task.subtasks.filter(s => s.done).length : 0;
+          const subtasksHtml = totalSubs > 0
             ? `<div class="mt-3 pt-2.5 border-t border-slate-100 space-y-1.5">
+                <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1">
+                  <span class="font-semibold">Checklist de passos</span>
+                  <span class="font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">${doneSubs}/${totalSubs} concluídos</span>
+                </div>
                 ${task.subtasks.map((st, idx) => `
                   <label class="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
                     <input type="checkbox" data-subtask-toggle="${task.id}|${idx}" ${st.done ? 'checked' : ''} class="rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
@@ -5332,6 +5818,11 @@
             const idx = parseInt(idxStr, 10);
             if (task.subtasks[idx]) {
               task.subtasks[idx].done = chk.checked;
+              const allSubsDone = task.subtasks.length > 0 && task.subtasks.every(s => s.done);
+              if (allSubsDone && !task.done) {
+                toggleTaskDoneById(task.id);
+                return;
+              }
               saveState();
               renderTasksModule();
             }
@@ -5343,6 +5834,7 @@
             const id = btn.getAttribute('data-task-edit');
             const task = state.tasks.find(t => t.id === id);
             if (!task) return;
+            expandFormIfCollapsed('formAddTask');
             document.getElementById('editTaskId').value = task.id;
             document.getElementById('taskTitleInput').value = task.title;
             document.getElementById('taskTypeInput').value = task.type;
@@ -5386,15 +5878,103 @@
       }
 
       // ==================== MODULE 4: FINANCE, BILLS & BUDGETS LOGIC ====================
+      let financeCategoryChartInstance = null;
+
+      function shiftYearMonthStr(ymStr, deltaMonths) {
+        const parts = (ymStr || TODAY_STR.slice(0, 7)).split('-').map(Number);
+        const dt = new Date(parts[0] || 2026, (parts[1] || 1) - 1 + deltaMonths, 1);
+        const y = dt.getFullYear();
+        const m = String(dt.getMonth() + 1).padStart(2, '0');
+        return `${y}-${m}`;
+      }
+
+      function renderFinanceCategoryChart(monthExpenses) {
+        const canvas = document.getElementById('canvasFinanceCategoryChart');
+        const breakdownEl = document.getElementById('financeCategoryBreakdownList');
+        if (!canvas || !breakdownEl) return;
+
+        const byCat = {};
+        let totalExp = 0;
+        monthExpenses.forEach(t => {
+          const cat = t.category || 'Outros';
+          const val = Number(t.amount) || 0;
+          byCat[cat] = (byCat[cat] || 0) + val;
+          totalExp += val;
+        });
+
+        const entries = Object.entries(byCat).sort((a, b) => b[1] - a[1]);
+        const palette = ['#4f46e5', '#059669', '#d97706', '#e11d48', '#0284c7', '#0d9488', '#7c3aed'];
+
+        if (entries.length === 0) {
+          breakdownEl.innerHTML = '<p class="text-xs text-slate-400 py-4">Nenhuma despesa registrada neste mês para exibir o gráfico por categoria.</p>';
+          if (financeCategoryChartInstance) {
+            financeCategoryChartInstance.destroy();
+            financeCategoryChartInstance = null;
+          }
+          return;
+        }
+
+        breakdownEl.innerHTML = entries.map(([cat, val], idx) => {
+          const pct = totalExp > 0 ? Math.round((val / totalExp) * 100) : 0;
+          const color = palette[idx % palette.length];
+          return `
+            <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-slate-50 border border-slate-100">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: ${color}"></span>
+                <span class="font-semibold text-slate-800 truncate">${cat}</span>
+              </div>
+              <div class="text-right shrink-0">
+                <span class="font-bold text-slate-900">${formatCurrencyBRL(val)}</span>
+                <span class="text-[11px] text-slate-500 ml-1">(${pct}%)</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        const mod4Visible = !document.getElementById('viewModule4').classList.contains('hidden');
+        if (!mod4Visible || typeof Chart === 'undefined') return;
+
+        if (financeCategoryChartInstance) {
+          financeCategoryChartInstance.destroy();
+          financeCategoryChartInstance = null;
+        }
+
+        financeCategoryChartInstance = new Chart(canvas.getContext('2d'), {
+          type: 'doughnut',
+          data: {
+            labels: entries.map(e => e[0]),
+            datasets: [{
+              data: entries.map(e => e[1]),
+              backgroundColor: entries.map((_, i) => palette[i % palette.length]),
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+      }
+
       function renderFinanceModule() {
-        const incomeTotal = state.transactions
+        const activeMonth = state.selectedFinanceMonth || TODAY_STR.slice(0, 7);
+        const monthInput = document.getElementById('inputSelectedFinMonth');
+        if (monthInput && monthInput.value !== activeMonth) {
+          monthInput.value = activeMonth;
+        }
+
+        const monthTransactions = state.transactions.filter(t => (t.date || '').startsWith(activeMonth));
+        const incomeTotal = monthTransactions
           .filter(t => t.type === 'Receita')
           .reduce((acc, t) => acc + Number(t.amount || 0), 0);
-        const expenseTotal = state.transactions
-          .filter(t => t.type === 'Despesa')
+        const monthExpenses = monthTransactions.filter(t => t.type === 'Despesa');
+        const expenseTotal = monthExpenses
           .reduce((acc, t) => acc + Number(t.amount || 0), 0);
-        const supermarketTotal = state.transactions
-          .filter(t => t.type === 'Despesa' && t.category === 'Supermercado & Feira')
+        const supermarketTotal = monthExpenses
+          .filter(t => t.category === 'Supermercado & Feira')
           .reduce((acc, t) => acc + Number(t.amount || 0), 0);
         const balance = incomeTotal - expenseTotal;
 
@@ -5405,18 +5985,32 @@
         balEl.textContent = formatCurrencyBRL(balance);
         balEl.className = `text-lg sm:text-xl font-bold mt-0.5 ${balance >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
 
-        // 1. Transactions List
-        const filteredTx = state.transactions
-          .filter(t => state.financeCategoryFilter === 'ALL' || t.category === state.financeCategoryFilter)
+        renderFinanceCategoryChart(monthExpenses);
+
+        const searchQ = (state.finSearchQuery || '').trim().toLowerCase();
+        const finSearchEl = document.getElementById('finSearchInput');
+        if (finSearchEl && document.activeElement !== finSearchEl) {
+          finSearchEl.value = state.finSearchQuery || '';
+        }
+
+        // 1. Transactions List (Filtered by Selected Month, Category, and Search Query)
+        const filteredTx = monthTransactions
+          .filter(t => {
+            const catOk = state.financeCategoryFilter === 'ALL' || t.category === state.financeCategoryFilter;
+            const searchOk = !searchQ ||
+              (t.desc && t.desc.toLowerCase().includes(searchQ)) ||
+              (t.category && t.category.toLowerCase().includes(searchQ));
+            return catOk && searchOk;
+          })
           .slice()
           .sort((a, b) => b.date.localeCompare(a.date));
 
-        document.getElementById('finStatementCount').textContent = `${filteredTx.length} lançamento(s)`;
+        document.getElementById('finStatementCount').textContent = `${filteredTx.length} lançamento(s) em ${activeMonth}`;
         const txList = document.getElementById('financeTransactionsList');
         txList.innerHTML = '';
 
         if (filteredTx.length === 0) {
-          txList.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">Nenhum lançamento encontrado para esta categoria.</div>`;
+          txList.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">Nenhum lançamento encontrado neste mês/filtro.</div>`;
         } else {
           filteredTx.forEach(tx => {
             const isIncome = tx.type === 'Receita';
@@ -5439,16 +6033,32 @@
                 <span class="text-sm font-bold ${isIncome ? 'text-emerald-600' : 'text-rose-600'}">
                   ${isIncome ? '+' : '-'} ${formatCurrencyBRL(tx.amount)}
                 </span>
-                ${
-                  true
-                    ? `<button type="button" data-tx-del="${tx.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
-                    : ''
-                }
+                <button type="button" data-tx-edit="${tx.id}" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">Editar</button>
+                <button type="button" data-tx-del="${tx.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800 cursor-pointer">Excluir</button>
               </div>
             `;
             txList.appendChild(row);
           });
         }
+
+        txList.querySelectorAll('[data-tx-edit]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-tx-edit');
+            const tx = state.transactions.find(t => t.id === id);
+            if (!tx) return;
+            expandFormIfCollapsed('formAddExpense');
+            document.getElementById('editFinTxId').value = tx.id;
+            document.getElementById('finDescInput').value = tx.desc;
+            document.getElementById('finTypeInput').value = tx.type;
+            document.getElementById('finCategoryInput').value = tx.category;
+            document.getElementById('finDateInput').value = tx.date;
+            document.getElementById('finAmountInput').value = tx.amount;
+            document.getElementById('finFormTitle').textContent = '✏️ Editando Lançamento da Planilha';
+            document.getElementById('btnSubmitFinTx').textContent = 'Salvar Alterações';
+            document.getElementById('btnCancelFinEdit').classList.remove('hidden');
+            document.getElementById('desktopFinanceEditorCard').scrollIntoView({ behavior: 'smooth' });
+          });
+        });
 
         txList.querySelectorAll('[data-tx-del]').forEach(btn => {
           btn.addEventListener('click', () => {
@@ -5488,34 +6098,55 @@
           finCatFilterSelect.value = baseFinCategories.includes(curFilter) ? curFilter : 'ALL';
         }
 
-        // 2. Fixed Bills List (with Delete button)
+        // 2. Fixed Bills List (Monthly paidMonths[activeMonth], Overdue Alert, Edit & Delete)
         const billsList = document.getElementById('fixedBillsList');
         billsList.innerHTML = '';
         if (state.fixedBills.length === 0) {
           billsList.innerHTML = `<div class="md:col-span-2 p-6 text-center text-xs text-slate-400 border border-dashed border-slate-200 rounded-xl">Nenhuma conta fixa cadastrada. Use o formulário acima para adicionar seus boletos mensais.</div>`;
         }
+        const currentYm = TODAY_STR.slice(0, 7);
+        const todayDayNum = new Date().getDate();
+
         state.fixedBills.forEach(bill => {
+          const isPaid = isFixedBillPaidInMonth(bill, activeMonth);
+          const isOverdue = !isPaid && (activeMonth < currentYm || (activeMonth === currentYm && Number(bill.dueDay) < todayDayNum));
+          const isDueToday = !isPaid && activeMonth === currentYm && Number(bill.dueDay) === todayDayNum;
+
+          let statusBadgeClass = 'bg-amber-100 text-amber-800';
+          let statusLabel = `Vence dia ${bill.dueDay}`;
+          if (isPaid) {
+            statusBadgeClass = 'bg-emerald-100 text-emerald-800';
+            statusLabel = `✓ Paga em ${activeMonth}`;
+          } else if (isOverdue) {
+            statusBadgeClass = 'bg-rose-100 text-rose-800 font-bold';
+            statusLabel = `🔴 Em atraso (Dia ${bill.dueDay})`;
+          } else if (isDueToday) {
+            statusBadgeClass = 'bg-amber-200 text-amber-950 font-bold';
+            statusLabel = `⚠️ Vence Hoje (Dia ${bill.dueDay})`;
+          }
+
           const card = document.createElement('div');
           card.className = `p-4 rounded-xl border flex flex-wrap items-center justify-between gap-3 ${
-            bill.paid ? 'bg-emerald-50/50 border-emerald-200' : 'bg-white border-slate-200'
+            isPaid ? 'bg-emerald-50/50 border-emerald-200' : isOverdue ? 'bg-rose-50/40 border-rose-300' : 'bg-white border-slate-200'
           }`;
           card.innerHTML = `
             <div>
-              <div class="flex items-center gap-2">
+              <div class="flex flex-wrap items-center gap-2">
                 <h4 class="text-xs sm:text-sm font-bold text-slate-900">${bill.name}</h4>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full ${
-                  bill.paid ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
-                }">${bill.paid ? '✓ Paga' : `Vence dia ${bill.dueDay}`}</span>
+                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full ${statusBadgeClass}">${statusLabel}</span>
               </div>
               <p class="text-sm font-bold text-slate-800 mt-1">${formatCurrencyBRL(bill.amount)}</p>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
               <button type="button" data-bill-toggle="${bill.id}" class="px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
-                bill.paid
+                isPaid
                   ? 'bg-slate-200 text-slate-700 hover:bg-slate-300'
                   : 'bg-emerald-600 text-white hover:bg-emerald-500 shadow-xs'
               }">
-                ${bill.paid ? 'Reabrir' : 'Marcar como Pago'}
+                ${isPaid ? 'Reabrir no Mês' : 'Marcar como Pago'}
+              </button>
+              <button type="button" data-bill-edit="${bill.id}" class="px-2.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold transition cursor-pointer">
+                Editar
               </button>
               <button type="button" data-bill-del="${bill.id}" class="px-2.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold transition cursor-pointer">
                 Excluir
@@ -5530,21 +6161,47 @@
             const id = btn.getAttribute('data-bill-toggle');
             const bill = state.fixedBills.find(b => b.id === id);
             if (!bill) return;
-            bill.paid = !bill.paid;
-            if (bill.paid) {
+            if (!bill.paidMonths || typeof bill.paidMonths !== 'object') {
+              bill.paidMonths = {};
+              if (bill.paid) bill.paidMonths[currentYm] = true;
+            }
+            const nextPaid = !bill.paidMonths[activeMonth];
+            bill.paidMonths[activeMonth] = nextPaid;
+            if (activeMonth === currentYm) {
+              bill.paid = nextPaid;
+            }
+            if (nextPaid) {
+              const txDate = activeMonth === currentYm ? TODAY_STR : `${activeMonth}-${String(bill.dueDay || 10).padStart(2, '0')}`;
               state.transactions.unshift({
                 id: 'tx_bill_' + Date.now(),
-                date: TODAY_STR,
+                date: txDate,
                 desc: `📄 Conta Fixa: ${bill.name}`,
                 type: 'Despesa',
                 category: 'Moradia & Contas',
                 amount: Number(bill.amount),
                 origin: 'Automático • Conta Fixa'
               });
-              showToast(`Conta "${bill.name}" paga e lançada na Planilha de Gastos!`, '💰');
+              showToast(`Conta "${bill.name}" marcada como paga em ${activeMonth} e lançada na Planilha!`, '💰');
+            } else {
+              showToast(`Conta "${bill.name}" reaberta em ${activeMonth}.`, '🔄');
             }
             saveState();
             renderAll();
+          });
+        });
+
+        billsList.querySelectorAll('[data-bill-edit]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-bill-edit');
+            const bill = state.fixedBills.find(b => b.id === id);
+            if (!bill) return;
+            document.getElementById('editFixedBillId').value = bill.id;
+            document.getElementById('billNameInput').value = bill.name;
+            document.getElementById('billDueDayInput').value = bill.dueDay;
+            document.getElementById('billAmountInput').value = bill.amount;
+            document.getElementById('btnSubmitFixedBill').textContent = 'Salvar Alterações';
+            document.getElementById('btnCancelBillEdit').classList.remove('hidden');
+            document.getElementById('formAddFixedBill').scrollIntoView({ behavior: 'smooth' });
           });
         });
 
@@ -5558,15 +6215,15 @@
           });
         });
 
-        // 3. Budget Progress Bars (with inline Limit Edit & Category Delete)
+        // 3. Budget Progress Bars (Filtered by Selected Month, with inline Limit Edit & Category Delete)
         const budgetsEl = document.getElementById('budgetBarsContainer');
         budgetsEl.innerHTML = '';
         if (state.budgets.length === 0) {
           budgetsEl.innerHTML = `<div class="p-6 text-center text-xs text-slate-400 border border-dashed border-slate-200 rounded-xl">Nenhuma categoria de orçamento cadastrada. Crie suas categorias e tetos mensais acima.</div>`;
         }
         state.budgets.forEach((b, idx) => {
-          const spent = state.transactions
-            .filter(t => t.type === 'Despesa' && t.category === b.category)
+          const spent = monthExpenses
+            .filter(t => t.category === b.category)
             .reduce((acc, t) => acc + Number(t.amount || 0), 0);
           const pct = b.limit > 0 ? Math.min(100, Math.round((spent / b.limit) * 100)) : 0;
           const barColor = pct > 90 ? 'bg-rose-600' : pct > 70 ? 'bg-amber-500' : 'bg-emerald-500';
@@ -5852,14 +6509,40 @@
                   ✅ Comprei!
                 </button>
               </div>
-              ${
-                true
-                  ? `<button type="button" data-wish-del="${item.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
-                  : ''
-              }
+              <div class="flex items-center gap-2">
+                <button type="button" data-wish-edit="${item.id}" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">Editar</button>
+                <button type="button" data-wish-del="${item.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800 cursor-pointer">Excluir</button>
+              </div>
             </div>
           `;
           gridEl.appendChild(card);
+        });
+
+        gridEl.querySelectorAll('[data-wish-edit]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-wish-edit');
+            const item = state.wishlistItems.find(w => w.id === id);
+            if (!item) return;
+            expandFormIfCollapsed('formAddWishlistItem');
+            const quotes = (item.quotes || []).slice().sort((a, b) => a.date.localeCompare(b.date));
+            const latest = quotes.length > 0 ? quotes[quotes.length - 1] : { price: item.targetPrice || 0, link: '', store: '', date: TODAY_STR };
+            document.getElementById('editWishItemId').value = item.id;
+            document.getElementById('wishNameInput').value = item.name || '';
+            document.getElementById('wishCategoryInput').value = item.category || 'Eletrodoméstico';
+            document.getElementById('wishRoomInput').value = item.room || 'Cozinha';
+            document.getElementById('wishPriceInput').value = latest.price || '';
+            document.getElementById('wishTargetPriceInput').value = item.targetPrice || '';
+            document.getElementById('wishLinkInput').value = latest.link || 'https://www.google.com';
+            document.getElementById('wishStoreInput').value = latest.store || '';
+            document.getElementById('wishDateInput').value = latest.date || TODAY_STR;
+            document.getElementById('wishPriorityInput').value = item.priority || 'Média';
+            document.getElementById('wishImageUrlInput').value = item.image || '';
+            document.getElementById('wishSpecsInput').value = item.specs || '';
+            document.getElementById('wishFormTitle').textContent = '✏️ Editando Produto Planejado';
+            document.getElementById('btnSubmitWishItem').textContent = 'Salvar Alterações';
+            document.getElementById('btnCancelWishEdit').classList.remove('hidden');
+            document.getElementById('desktopWishlistEditorCard').scrollIntoView({ behavior: 'smooth' });
+          });
         });
 
         gridEl.querySelectorAll('[data-wish-focus-chart]').forEach(btn => {
@@ -5924,35 +6607,52 @@
           });
         });
 
-        // 2. Render Warranties (Subtab 5B)
+        // 2. Render Warranties (Subtab 5B with Remaining Days & Edit)
         const warGrid = document.getElementById('warrantiesGridContainer');
         warGrid.innerHTML = '';
         state.warranties.forEach(w => {
           const expDate = addDaysStr(w.purchaseDate || TODAY_STR, (Number(w.warrantyMonths) || 12) * 30);
           const isActive = expDate >= TODAY_STR;
+          const remDays = daysBetweenDatesStr(TODAY_STR, expDate);
           const card = document.createElement('div');
           card.className = 'p-4 rounded-2xl border border-slate-200 bg-white flex flex-col justify-between gap-2 shadow-2xs';
           card.innerHTML = `
             <div>
-              <div class="flex items-center justify-between gap-2">
+              <div class="flex flex-wrap items-center justify-between gap-2">
                 <h4 class="text-sm font-bold text-slate-900">${w.name}</h4>
                 <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-                  isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
-                }">${isActive ? '🟢 Garantia Ativa' : '⚪ Expirada'}</span>
+                  isActive ? (remDays <= 30 ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800') : 'bg-slate-100 text-slate-600'
+                }">${isActive ? `🟢 Ativa (${remDays}d restantes)` : '⚪ Expirada'}</span>
               </div>
-              <p class="text-xs text-slate-500 mt-1">Compra: <strong>${formatPtDate(w.purchaseDate)}</strong> • Loja: ${w.store || '—'}</p>
+              <p class="text-xs text-slate-500 mt-1">Compra: <strong>${formatPtDate(w.purchaseDate)}</strong> • Loja: <strong>${w.store || '—'}</strong></p>
               <p class="text-xs text-slate-600 mt-0.5">Válida até: <strong>${formatPtDate(expDate)}</strong> (${w.warrantyMonths} meses)</p>
             </div>
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
               <span class="font-bold text-slate-800">${formatCurrencyBRL(w.pricePaid || 0)}</span>
-              ${
-                true
-                  ? `<button type="button" data-war-del="${w.id}" class="text-rose-600 hover:text-rose-800 font-semibold">Remover</button>`
-                  : ''
-              }
+              <div class="flex items-center gap-2.5">
+                <button type="button" data-war-edit="${w.id}" class="text-indigo-600 hover:text-indigo-800 font-semibold cursor-pointer">Editar</button>
+                <button type="button" data-war-del="${w.id}" class="text-rose-600 hover:text-rose-800 font-semibold cursor-pointer">Remover</button>
+              </div>
             </div>
           `;
           warGrid.appendChild(card);
+        });
+
+        warGrid.querySelectorAll('[data-war-edit]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-war-edit');
+            const w = state.warranties.find(x => x.id === id);
+            if (!w) return;
+            document.getElementById('editWarrantyId').value = w.id;
+            document.getElementById('warNameInput').value = w.name || '';
+            document.getElementById('warStoreInput').value = w.store || '';
+            document.getElementById('warPriceInput').value = w.pricePaid || '';
+            document.getElementById('warDateInput').value = w.purchaseDate || TODAY_STR;
+            document.getElementById('warMonthsInput').value = w.warrantyMonths || 12;
+            document.getElementById('btnSubmitWarranty').textContent = 'Salvar';
+            document.getElementById('btnCancelWarrantyEdit').classList.remove('hidden');
+            document.getElementById('formAddWarrantyItem').scrollIntoView({ behavior: 'smooth' });
+          });
         });
 
         warGrid.querySelectorAll('[data-war-del]').forEach(btn => {
@@ -5965,16 +6665,27 @@
           });
         });
 
-        // 3. Render Maintenance Cycles (Subtab 5C)
+        // 3. Render Maintenance Cycles (Subtab 5C with Overdue Highlight & Edit)
         const maintGrid = document.getElementById('maintenanceGridContainer');
         maintGrid.innerHTML = '';
         state.maintenanceCycles.forEach(m => {
+          const isDueOrOverdue = Boolean(m.nextDue && m.nextDue <= TODAY_STR);
+          const remDays = m.nextDue ? daysBetweenDatesStr(TODAY_STR, m.nextDue) : 0;
           const card = document.createElement('div');
-          card.className = 'p-4 rounded-2xl border border-slate-200 bg-white flex flex-col justify-between gap-3 shadow-2xs';
+          card.className = `p-4 rounded-2xl border bg-white flex flex-col justify-between gap-3 shadow-2xs ${
+            isDueOrOverdue ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200'
+          }`;
           card.innerHTML = `
             <div>
-              <div class="flex items-center justify-between gap-2 mb-1">
-                <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-semibold">A cada ${m.intervalDays} dias</span>
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                <div class="flex items-center gap-1.5">
+                  <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-semibold">A cada ${m.intervalDays} dias</span>
+                  ${
+                    isDueOrOverdue
+                      ? `<span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[10px] font-bold">🔴 Revisão no Prazo / Vencida!</span>`
+                      : `<span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold">Faltam ${remDays} dia(s)</span>`
+                  }
+                </div>
                 <span class="text-xs font-semibold text-slate-500">${m.room}</span>
               </div>
               <h4 class="text-sm font-bold text-slate-900">${m.title}</h4>
@@ -5989,12 +6700,28 @@
                   📌 Enviar p/ Tarefas
                 </button>
               </div>
-              <button type="button" data-maint-del="${m.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800 cursor-pointer">
-                Excluir
-              </button>
+              <div class="flex items-center gap-2">
+                <button type="button" data-maint-edit="${m.id}" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">Editar</button>
+                <button type="button" data-maint-del="${m.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800 cursor-pointer">Excluir</button>
+              </div>
             </div>
           `;
           maintGrid.appendChild(card);
+        });
+
+        maintGrid.querySelectorAll('[data-maint-edit]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-maint-edit');
+            const m = state.maintenanceCycles.find(x => x.id === id);
+            if (!m) return;
+            document.getElementById('editMaintId').value = m.id;
+            document.getElementById('maintTitleInput').value = m.title || '';
+            document.getElementById('maintRoomInput').value = m.room || '';
+            document.getElementById('maintIntervalInput').value = m.intervalDays || 180;
+            document.getElementById('btnSubmitMaint').textContent = 'Salvar';
+            document.getElementById('btnCancelMaintEdit').classList.remove('hidden');
+            document.getElementById('formAddMaintenanceItem').scrollIntoView({ behavior: 'smooth' });
+          });
         });
 
         maintGrid.querySelectorAll('[data-maint-del]').forEach(btn => {
@@ -6043,7 +6770,11 @@
           });
         });
 
-        renderWishlistPriceChart();
+        const mod5Visible = !document.getElementById('viewModule5').classList.contains('hidden');
+        const wishVisible = !document.getElementById('subviewMod5Wishlist').classList.contains('hidden');
+        if (mod5Visible && wishVisible) {
+          renderWishlistPriceChart();
+        }
       }
 
       // ==================== MODULE 6: PANTRY, EXPIRY & WEEKLY MENU LOGIC ====================
@@ -6070,6 +6801,16 @@
         return true;
       }
 
+      function findPantryItemMatchingIngredient(ingName) {
+        const cleanIng = (ingName || '').trim().toLowerCase();
+        if (!cleanIng) return null;
+        return state.pantryItems.find(p => {
+          const pName = (p.name || '').trim().toLowerCase();
+          if (!pName) return false;
+          return pName === cleanIng || pName.includes(cleanIng) || cleanIng.includes(pName);
+        }) || null;
+      }
+
       function renderModule6() {
         const sevenDaysAhead = addDaysStr(TODAY_STR, 7);
         const lowStockItems = state.pantryItems.filter(p => Number(p.qty) <= Number(p.minQty));
@@ -6080,11 +6821,23 @@
         document.getElementById('mod6MetricExpiring').textContent = `${expiringItems.length} alerta(s)`;
         document.getElementById('mod6MetricRecipes').textContent = `${state.recipes.length} receita(s)`;
 
-        // 1. Render Pantry Cards
+        // 1. Render Pantry Cards (Filtered by Search Query)
         const pantryGrid = document.getElementById('pantryGridContainer');
         pantryGrid.innerHTML = '';
 
-        state.pantryItems.forEach(item => {
+        const searchQ = (state.pantrySearchQuery || '').trim().toLowerCase();
+        const pantrySearchEl = document.getElementById('pantrySearchInput');
+        if (pantrySearchEl && document.activeElement !== pantrySearchEl) {
+          pantrySearchEl.value = state.pantrySearchQuery || '';
+        }
+
+        const filteredPantry = state.pantryItems.filter(item => {
+          if (!searchQ) return true;
+          return (item.name && item.name.toLowerCase().includes(searchQ)) ||
+                 (item.location && item.location.toLowerCase().includes(searchQ));
+        });
+
+        filteredPantry.forEach(item => {
           const isLow = Number(item.qty) <= Number(item.minQty);
           const isExpiring = item.expiry && item.expiry <= sevenDaysAhead;
           const card = document.createElement('div');
@@ -6122,14 +6875,11 @@
                 <button type="button" data-pantry-inc="${item.id}" class="w-7 h-7 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white">+</button>
               </div>
               <div class="flex items-center gap-2">
-                <button type="button" data-pantry-to-shop="${item.id}" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">
+                <button type="button" data-pantry-to-shop="${item.id}" class="text-xs font-semibold text-emerald-700 hover:text-emerald-900 cursor-pointer">
                   🛒 +Lista
                 </button>
-                ${
-                  true
-                    ? `<button type="button" data-pantry-del="${item.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
-                    : ''
-                }
+                <button type="button" data-pantry-edit="${item.id}" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">Editar</button>
+                <button type="button" data-pantry-del="${item.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800 cursor-pointer">Excluir</button>
               </div>
             </div>
           `;
@@ -6175,6 +6925,26 @@
             saveState();
             renderAll();
             showToast(added ? `"${item.name}" enviado para a Lista de Compras!` : `"${item.name}" já consta na Lista de Compras.`, '🛒');
+          });
+        });
+
+        pantryGrid.querySelectorAll('[data-pantry-edit]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-pantry-edit');
+            const item = state.pantryItems.find(p => p.id === id);
+            if (!item) return;
+            expandFormIfCollapsed('formAddPantryItem');
+            document.getElementById('editPantryId').value = item.id;
+            document.getElementById('pantryNameInput').value = item.name || '';
+            document.getElementById('pantryLocationInput').value = item.location || 'Armário / Despensa';
+            document.getElementById('pantryQtyInput').value = item.qty;
+            document.getElementById('pantryMinInput').value = item.minQty;
+            document.getElementById('pantryUnitInput').value = item.unit || 'un';
+            document.getElementById('pantryExpiryInput').value = item.expiry || '';
+            document.getElementById('pantryFormTitle').textContent = '✏️ Editando Item do Estoque';
+            document.getElementById('btnSubmitPantry').textContent = 'Salvar Alterações';
+            document.getElementById('btnCancelPantryEdit').classList.remove('hidden');
+            document.getElementById('desktopPantryEditorCard').scrollIntoView({ behavior: 'smooth' });
           });
         });
 
@@ -6251,14 +7021,15 @@
           });
         });
 
-        // 3. Render Recipes Bank
+        // 3. Render Recipes Bank (with Smart Pantry Match, Cook Deduction & Edit)
         const recipesGrid = document.getElementById('recipesListGrid');
         recipesGrid.innerHTML = '';
         state.recipes.forEach(rc => {
           const card = document.createElement('div');
           card.className = 'p-4 rounded-2xl border border-slate-200 bg-white flex flex-col justify-between gap-3 shadow-2xs';
           const ingBadges = (rc.ingredients || []).map(ing => {
-            const inPantry = state.pantryItems.find(p => p.name.toLowerCase() === ing.toLowerCase() && Number(p.qty) > 0);
+            const matchedPantry = findPantryItemMatchingIngredient(ing);
+            const inPantry = Boolean(matchedPantry && Number(matchedPantry.qty) > 0);
             return `<span class="px-2 py-0.5 rounded text-[11px] font-medium border ${
               inPantry
                 ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
@@ -6272,15 +7043,19 @@
               <p class="text-[11px] text-slate-400 mt-0.5">Verde = Em estoque na Despensa • Amarelo = Falta comprar</p>
               <div class="flex flex-wrap gap-1.5 mt-2.5">${ingBadges}</div>
             </div>
-            <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between">
-              <button type="button" data-recipe-buy-missing="${rc.id}" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition">
-                🛒 Enviar Faltantes p/ Lista de Compras
-              </button>
-              ${
-                true
-                  ? `<button type="button" data-recipe-del="${rc.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800">Excluir</button>`
-                  : ''
-              }
+            <div class="pt-2.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button type="button" data-recipe-buy-missing="${rc.id}" class="px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition cursor-pointer">
+                  🛒 +Faltantes
+                </button>
+                <button type="button" data-recipe-cook="${rc.id}" title="Descontar 1 unidade dos ingredientes disponíveis na Despensa" class="px-2.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-semibold transition cursor-pointer">
+                  🍳 Cozinhar (-1 Estoque)
+                </button>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" data-recipe-edit="${rc.id}" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">Editar</button>
+                <button type="button" data-recipe-del="${rc.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-800 cursor-pointer">Excluir</button>
+              </div>
             </div>
           `;
           recipesGrid.appendChild(card);
@@ -6293,8 +7068,8 @@
             if (!rc) return;
             let addedCount = 0;
             (rc.ingredients || []).forEach(ing => {
-              const inPantry = state.pantryItems.find(p => p.name.toLowerCase() === ing.toLowerCase() && Number(p.qty) > 0);
-              if (!inPantry) {
+              const matched = findPantryItemMatchingIngredient(ing);
+              if (!matched || Number(matched.qty) <= 0) {
                 if (ensureItemInShoppingList(ing, 1, 'un')) addedCount++;
               }
             });
@@ -6306,6 +7081,50 @@
                 : `Você já tem todos os ingredientes de "${rc.title}" na Despensa ou na Lista!`,
               '🛒'
             );
+          });
+        });
+
+        recipesGrid.querySelectorAll('[data-recipe-cook]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-recipe-cook');
+            const rc = state.recipes.find(r => r.id === id);
+            if (!rc) return;
+            let deducted = 0;
+            let sentToShop = 0;
+            (rc.ingredients || []).forEach(ing => {
+              const matched = findPantryItemMatchingIngredient(ing);
+              if (matched && Number(matched.qty) > 0) {
+                matched.qty = Math.max(0, Math.round((Number(matched.qty) - 1) * 10) / 10);
+                deducted++;
+                if (matched.qty <= Number(matched.minQty)) {
+                  if (ensureItemInShoppingList(matched.name, Math.max(1, Number(matched.minQty) - matched.qty + 1), matched.unit || 'un')) {
+                    sentToShop++;
+                  }
+                }
+              }
+            });
+            saveState();
+            renderAll();
+            showToast(
+              deducted > 0
+                ? `Receita "${rc.title}" preparada! ${deducted} item(ns) baixado(s) da Despensa${sentToShop > 0 ? ` e ${sentToShop} enviado(s) p/ Compras` : ''}.`
+                : `Nenhum ingrediente de "${rc.title}" tinha saldo disponível na Despensa para baixar.`,
+              '🍳'
+            );
+          });
+        });
+
+        recipesGrid.querySelectorAll('[data-recipe-edit]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-recipe-edit');
+            const rc = state.recipes.find(r => r.id === id);
+            if (!rc) return;
+            document.getElementById('editRecipeId').value = rc.id;
+            document.getElementById('recipeTitleInput').value = rc.title || '';
+            document.getElementById('recipeIngredientsInput').value = (rc.ingredients || []).join(', ');
+            document.getElementById('btnSubmitRecipe').textContent = 'Salvar';
+            document.getElementById('btnCancelRecipeEdit').classList.remove('hidden');
+            document.getElementById('formAddRecipe').scrollIntoView({ behavior: 'smooth' });
           });
         });
 
@@ -6351,7 +7170,6 @@
         renderModule5();
         renderModule6();
         renderCustomizeModal();
-        renderBackupSnapshots();
         if (typeof updateNotificationSettingsUIRef === 'function') {
           updateNotificationSettingsUIRef();
         }
@@ -7099,7 +7917,9 @@
 
           const pendingTaskObjs = state.tasks.filter(t => isTaskScheduledForToday(t) && !t.done);
           const todayDayNum = new Date().getDate();
-          const dueBillsObjs = state.fixedBills.filter(b => !b.paid && Number(b.dueDay) === todayDayNum);
+          const currentYm = nowStr.slice(0, 7);
+          const dueBillsObjs = state.fixedBills.filter(b => !isFixedBillPaidInMonth(b, currentYm) && Number(b.dueDay) === todayDayNum);
+          const dueMaintObjs = state.maintenanceCycles.filter(m => m.nextDue && m.nextDue <= nowStr);
 
           const parts = [];
           if (shiftLabel && shiftPlans.length > 0) {
@@ -7119,6 +7939,9 @@
           }
           if (dueBillsObjs.length > 0) {
             parts.push(`${dueBillsObjs.length} boleto(s) vencendo hoje`);
+          }
+          if (dueMaintObjs.length > 0) {
+            parts.push(`${dueMaintObjs.length} revisão(ões) preventiva(s) no prazo`);
           }
 
           if (parts.length === 0) {
@@ -7690,7 +8513,18 @@
         });
         document.getElementById('btnPostponePending').addEventListener('click', postponeAllPendingForSelectedDate);
 
-        // Desktop Form: Add/Edit Plan
+        // Collapsible Creation Forms Toggle Buttons
+        document.querySelectorAll('[data-collapse-target]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-collapse-target');
+            const formEl = document.getElementById(targetId);
+            if (!formEl) return;
+            const isHidden = formEl.classList.toggle('hidden');
+            btn.textContent = isHidden ? '➕ Novo Cadastro' : '➖ Recolher';
+          });
+        });
+
+        // Desktop Form: Add/Edit Plan (with Repeat option)
         document.getElementById('formAddPlan').addEventListener('submit', (e) => {
           e.preventDefault();
           const editId = document.getElementById('editPlanId').value;
@@ -7701,6 +8535,7 @@
           const category = document.getElementById('planCategoryInput').value;
           const priority = document.getElementById('planPriorityInput').value;
           const notes = document.getElementById('planNotesInput').value.trim();
+          const repeatMode = (document.getElementById('planRepeatInput') && document.getElementById('planRepeatInput').value) || 'none';
 
           if (editId) {
             const existing = state.plans.find(p => p.id === editId);
@@ -7714,18 +8549,31 @@
               showToast('Plano atualizado com sucesso!', '✏️');
             }
           } else {
-            state.plans.push({
-              id: 'p_' + Date.now(),
-              title,
-              date: state.selectedDate,
-              shift,
-              time,
-              category,
-              priority,
-              notes,
-              done: false
+            const datesToCreate = [state.selectedDate];
+            if (repeatMode === 'daily_7') {
+              for (let d = 1; d < 7; d++) datesToCreate.push(addDaysStr(state.selectedDate, d));
+            } else if (repeatMode === 'weekly_4') {
+              for (let w = 1; w < 4; w++) datesToCreate.push(addDaysStr(state.selectedDate, w * 7));
+            }
+            datesToCreate.forEach((dStr, idx) => {
+              state.plans.push({
+                id: 'p_' + Date.now() + '_' + idx,
+                title,
+                date: dStr,
+                shift,
+                time,
+                category,
+                priority,
+                notes,
+                done: false
+              });
             });
-            showToast('Novo plano adicionado para ' + formatPtDate(state.selectedDate), '📅');
+            showToast(
+              datesToCreate.length > 1
+                ? `Compromisso agendado para ${datesToCreate.length} datas com sucesso!`
+                : 'Novo plano adicionado para ' + formatPtDate(state.selectedDate),
+              '📅'
+            );
           }
           resetPlanForm();
           saveState();
@@ -7785,42 +8633,6 @@
             saveState();
             renderHabits();
           });
-        });
-
-        document.getElementById('btnQuickHabitCreatina').addEventListener('click', () => {
-          state.habits.unshift({
-            id: 'h_' + Date.now(),
-            title: 'Tomar Creatina (5g)',
-            icon: '💊',
-            target: 1,
-            freqType: 'daily',
-            scheduledDays: [0, 1, 2, 3, 4, 5, 6],
-            weeklyGoal: 7,
-            progressByDate: { [TODAY_STR]: 0 },
-            streak: 1,
-            bestStreak: 1
-          });
-          saveState();
-          renderAll();
-          showToast('Hábito diário "Tomar Creatina (5g)" adicionado!', '💊');
-        });
-
-        document.getElementById('btnQuickHabitAbdominal').addEventListener('click', () => {
-          state.habits.unshift({
-            id: 'h_' + Date.now(),
-            title: 'Treino de Abdominal',
-            icon: '🏋️',
-            target: 1,
-            freqType: 'specific_days',
-            scheduledDays: [1, 3, 5],
-            weeklyGoal: 3,
-            progressByDate: { [TODAY_STR]: 0 },
-            streak: 1,
-            bestStreak: 1
-          });
-          saveState();
-          renderAll();
-          showToast('Hábito programado "Treino de Abdominal (3x/sem: Seg, Qua, Sex)" adicionado!', '🏋️');
         });
 
         document.getElementById('btnCancelHabitEdit').addEventListener('click', resetHabitForm);
@@ -7922,18 +8734,6 @@
           reader.readAsText(file);
         });
 
-        // Future Module Modal
-        const modalFut = document.getElementById('modalFutureModule');
-        const closeFut = () => {
-          modalFut.classList.add('hidden');
-          modalFut.classList.remove('flex');
-        };
-        document.getElementById('btnCloseFutureModal').addEventListener('click', closeFut);
-        document.getElementById('btnFutureGoModule1').addEventListener('click', () => {
-          closeFut();
-          openModule1View('plans');
-        });
-
         // Module 2 & 3 Back Buttons and Shortcuts
         document.getElementById('btnBackFromMod2').addEventListener('click', openHomeView);
         document.getElementById('btnBackFromMod3').addEventListener('click', openHomeView);
@@ -8032,12 +8832,13 @@
           const paymentMethod = document.getElementById('selectShoppingPayment').value || 'PIX / Débito';
           const totalSpent = inCart.reduce((acc, i) => acc + (Number(i.qty) || 1) * (Number(i.price) || 0), 0);
 
-          // 1. Save each purchased product's unit price into the historical price chart & replenish Pantry (Module 6)
+          // 1. Save each purchased product's unit price into historical chart, Favorites Catalog & replenish Pantry (Module 6)
           inCart.forEach(item => {
+            saveItemToShoppingFavorites(item);
             if (Number(item.price) > 0) {
               recordProductPricePoint(item.name, tripDate, Number(item.price), item.store || 'Supermercado');
             }
-            const pantryMatch = state.pantryItems.find(p => p.name.toLowerCase() === item.name.toLowerCase());
+            const pantryMatch = findPantryItemMatchingIngredient(item.name);
             if (pantryMatch) {
               pantryMatch.qty = Math.round((Number(pantryMatch.qty) + (Number(item.qty) || 1)) * 10) / 10;
             }
@@ -8086,6 +8887,30 @@
           saveState();
           renderShoppingModule();
         });
+
+        const shopSearchInputEl = document.getElementById('shopSearchInput');
+        if (shopSearchInputEl) {
+          shopSearchInputEl.addEventListener('input', (e) => {
+            state.shopSearchQuery = e.target.value;
+            renderShoppingModule();
+          });
+        }
+
+        const btnUncheckCart = document.getElementById('btnUncheckAllCart');
+        if (btnUncheckCart) {
+          btnUncheckCart.addEventListener('click', () => {
+            let count = 0;
+            state.shoppingItems.forEach(i => {
+              if (i.inCart) {
+                i.inCart = false;
+                count++;
+              }
+            });
+            saveState();
+            renderShoppingModule();
+            showToast(count > 0 ? `${count} item(ns) desmarcado(s) do carrinho.` : 'Nenhum item estava marcado no carrinho.', '🧹');
+          });
+        }
 
         document.querySelectorAll('[data-quick-item]').forEach(btn => {
           btn.addEventListener('click', () => {
@@ -8141,6 +8966,7 @@
             });
             showToast('Produto adicionado à Lista de Compras!', '🛒');
           }
+          saveItemToShoppingFavorites({ name, store, aisle, unit, price });
           if (price > 0) {
             recordProductPricePoint(name, TODAY_STR, price, store);
           }
@@ -8214,18 +9040,21 @@
           showToast(`Rodízio semanal reiniciado para ${count} tarefa(s) doméstica(s)!`, '🔄');
         });
 
-        // Minimalist Category Bar Navigation
+        // Minimalist Category Bar & Mobile Bottom Navigation
+        function navigateByCategoryKey(cat) {
+          if (cat === 'home') openHomeView();
+          else if (cat === 'mod1') openModule1View('plans');
+          else if (cat === 'mod2') openModule2View();
+          else if (cat === 'mod3') openModule3View();
+          else if (cat === 'mod4') openModule4View('statement');
+          else if (cat === 'mod5') openModule5View('wishlist');
+          else if (cat === 'mod6') openModule6View('pantry');
+        }
         document.querySelectorAll('#minimalCategoryNav [data-nav-cat]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const cat = btn.getAttribute('data-nav-cat');
-            if (cat === 'home') openHomeView();
-            else if (cat === 'mod1') openModule1View('plans');
-            else if (cat === 'mod2') openModule2View();
-            else if (cat === 'mod3') openModule3View();
-            else if (cat === 'mod4') openModule4View('statement');
-            else if (cat === 'mod5') openModule5View('wishlist');
-            else if (cat === 'mod6') openModule6View('pantry');
-          });
+          btn.addEventListener('click', () => navigateByCategoryKey(btn.getAttribute('data-nav-cat')));
+        });
+        document.querySelectorAll('#mobileBottomNav [data-bottom-nav]').forEach(btn => {
+          btn.addEventListener('click', () => navigateByCategoryKey(btn.getAttribute('data-bottom-nav')));
         });
 
         // Module 3 Custom Weekday Selector & Quick Presets
@@ -8250,44 +9079,6 @@
             updateTaskCustomDaysPanelUI();
             setSelectedTaskWeekdays(days);
           });
-        });
-
-        document.getElementById('btnQuickTaskAspirar').addEventListener('click', () => {
-          state.tasks.unshift({
-            id: 'tk_' + Date.now(),
-            title: 'Aspirar a casa',
-            type: 'Recorrente',
-            room: 'Sala',
-            frequency: 'Customizado (Seg, Sex)',
-            customDays: [1, 5],
-            priority: 'Média',
-            lastDone: '—',
-            nextDue: getNextScheduledDateForCustomDays([1, 5], addDaysStr(TODAY_STR, -1)),
-            done: false,
-            subtasks: []
-          });
-          saveState();
-          renderAll();
-          showToast('Tarefa "Aspirar a casa (Seg, Sex)" adicionada!', '🧹');
-        });
-
-        document.getElementById('btnQuickTaskLavarRoupa').addEventListener('click', () => {
-          state.tasks.unshift({
-            id: 'tk_' + Date.now(),
-            title: 'Lavar roupa',
-            type: 'Recorrente',
-            room: 'Lavanderia / Externa',
-            frequency: 'Customizado (Seg, Qui)',
-            customDays: [1, 4],
-            priority: 'Alta',
-            lastDone: '—',
-            nextDue: getNextScheduledDateForCustomDays([1, 4], addDaysStr(TODAY_STR, -1)),
-            done: false,
-            subtasks: []
-          });
-          saveState();
-          renderAll();
-          showToast('Tarefa "Lavar roupa (Seg, Qui)" adicionada!', '🧺');
         });
 
         document.getElementById('formAddTask').addEventListener('submit', (e) => {
@@ -8386,11 +9177,34 @@
           showToast('Tarefa rápida criada!', '📱');
         });
 
-        // Module 4 Navigation & Listeners
+        // Module 4 Navigation, Month Selector & Listeners
         document.getElementById('btnBackFromMod4').addEventListener('click', openHomeView);
         document.getElementById('tabBtnFinStatement').addEventListener('click', () => switchModule4Tab('statement'));
         document.getElementById('tabBtnFinBills').addEventListener('click', () => switchModule4Tab('bills'));
         document.getElementById('tabBtnFinBudgets').addEventListener('click', () => switchModule4Tab('budgets'));
+
+        document.getElementById('btnPrevFinMonth').addEventListener('click', () => {
+          state.selectedFinanceMonth = shiftYearMonthStr(state.selectedFinanceMonth || TODAY_STR.slice(0, 7), -1);
+          saveState();
+          renderFinanceModule();
+        });
+        document.getElementById('btnNextFinMonth').addEventListener('click', () => {
+          state.selectedFinanceMonth = shiftYearMonthStr(state.selectedFinanceMonth || TODAY_STR.slice(0, 7), 1);
+          saveState();
+          renderFinanceModule();
+        });
+        document.getElementById('btnCurrentFinMonth').addEventListener('click', () => {
+          state.selectedFinanceMonth = TODAY_STR.slice(0, 7);
+          saveState();
+          renderFinanceModule();
+        });
+        document.getElementById('inputSelectedFinMonth').addEventListener('change', (e) => {
+          if (e.target.value) {
+            state.selectedFinanceMonth = e.target.value;
+            saveState();
+            renderFinanceModule();
+          }
+        });
 
         document.getElementById('selectFinanceCategoryFilter').addEventListener('change', (e) => {
           state.financeCategoryFilter = e.target.value;
@@ -8398,8 +9212,29 @@
           renderFinanceModule();
         });
 
+        const finSearchInputEl = document.getElementById('finSearchInput');
+        if (finSearchInputEl) {
+          finSearchInputEl.addEventListener('input', (e) => {
+            state.finSearchQuery = e.target.value;
+            renderFinanceModule();
+          });
+        }
+
+        function resetFinanceForm() {
+          document.getElementById('editFinTxId').value = '';
+          document.getElementById('finDescInput').value = '';
+          document.getElementById('finAmountInput').value = '';
+          document.getElementById('finDateInput').value = TODAY_STR;
+          document.getElementById('finFormTitle').textContent = '💰 Lançar Entrada ou Saída na Planilha';
+          document.getElementById('btnSubmitFinTx').textContent = '+ Lançar na Planilha';
+          document.getElementById('btnCancelFinEdit').classList.add('hidden');
+        }
+
+        document.getElementById('btnCancelFinEdit').addEventListener('click', resetFinanceForm);
+
         document.getElementById('formAddExpense').addEventListener('submit', (e) => {
           e.preventDefault();
+          const editId = document.getElementById('editFinTxId').value;
           const desc = document.getElementById('finDescInput').value.trim();
           const type = document.getElementById('finTypeInput').value;
           const category = document.getElementById('finCategoryInput').value;
@@ -8407,20 +9242,32 @@
           const amount = parseFloat(document.getElementById('finAmountInput').value);
           if (!desc || !amount || amount <= 0) return;
 
-          state.transactions.unshift({
-            id: 'tx_' + Date.now(),
-            date,
-            desc,
-            type,
-            category,
-            amount,
-            origin: 'Manual'
-          });
-          document.getElementById('finDescInput').value = '';
-          document.getElementById('finAmountInput').value = '';
+          if (editId) {
+            const tx = state.transactions.find(t => t.id === editId);
+            if (tx) {
+              tx.desc = desc;
+              tx.type = type;
+              tx.category = category;
+              tx.date = date;
+              tx.amount = amount;
+              showToast('Lançamento atualizado com sucesso!', '✏️');
+            }
+          } else {
+            state.transactions.unshift({
+              id: 'tx_' + Date.now(),
+              date,
+              desc,
+              type,
+              category,
+              amount,
+              origin: 'Manual'
+            });
+            showToast('Lançamento adicionado à Planilha de Gastos!', '💰');
+          }
+          state.selectedFinanceMonth = date.slice(0, 7);
+          resetFinanceForm();
           saveState();
           renderAll();
-          showToast('Lançamento adicionado à Planilha de Gastos!', '💰');
         });
 
         document.getElementById('formMobileQuickExpense').addEventListener('submit', (e) => {
@@ -8468,25 +9315,47 @@
           });
         }
 
+        function resetFixedBillForm() {
+          document.getElementById('editFixedBillId').value = '';
+          document.getElementById('billNameInput').value = '';
+          document.getElementById('billDueDayInput').value = '10';
+          document.getElementById('billAmountInput').value = '';
+          document.getElementById('btnSubmitFixedBill').textContent = '+ Cadastrar Conta Fixa';
+          document.getElementById('btnCancelBillEdit').classList.add('hidden');
+        }
+
+        document.getElementById('btnCancelBillEdit').addEventListener('click', resetFixedBillForm);
+
         document.getElementById('formAddFixedBill').addEventListener('submit', (e) => {
           e.preventDefault();
+          const editId = document.getElementById('editFixedBillId').value;
           const name = document.getElementById('billNameInput').value.trim();
           const dueDay = parseInt(document.getElementById('billDueDayInput').value, 10) || 10;
           const amount = parseFloat(document.getElementById('billAmountInput').value);
           if (!name || !amount || amount <= 0) return;
 
-          state.fixedBills.push({
-            id: 'fb_' + Date.now(),
-            name,
-            dueDay,
-            amount,
-            paid: false
-          });
-          document.getElementById('billNameInput').value = '';
-          document.getElementById('billAmountInput').value = '';
+          if (editId) {
+            const existing = state.fixedBills.find(b => b.id === editId);
+            if (existing) {
+              existing.name = name;
+              existing.dueDay = dueDay;
+              existing.amount = amount;
+              showToast(`Conta fixa "${name}" atualizada!`, '✏️');
+            }
+          } else {
+            state.fixedBills.push({
+              id: 'fb_' + Date.now(),
+              name,
+              dueDay,
+              amount,
+              paid: false,
+              paidMonths: {}
+            });
+            showToast('Nova Conta Fixa cadastrada!', '📄');
+          }
+          resetFixedBillForm();
           saveState();
           renderAll();
-          showToast('Nova Conta Fixa cadastrada!', '📄');
         });
 
         // Module 5 Navigation & Listeners
@@ -8522,21 +9391,61 @@
           showToast('Miniatura visual e identificação da loja capturadas pelo link!', '🖼️');
         });
 
-        // Manual Image File Upload (converts to Base64 data URI)
+        // Automatic Canvas Image Compression (protects 1MB Firestore document limit)
         document.getElementById('wishImageFileInput').addEventListener('change', (e) => {
           const file = e.target.files && e.target.files[0];
           if (!file) return;
           const reader = new FileReader();
           reader.onload = (ev) => {
-            document.getElementById('wishImageUrlInput').value = ev.target.result;
-            showToast('Imagem do seu dispositivo carregada com sucesso!', '📷');
+            const rawDataUrl = ev.target.result;
+            const img = new Image();
+            img.onload = () => {
+              try {
+                const maxW = 480;
+                const maxH = 320;
+                let w = img.width || maxW;
+                let h = img.height || maxH;
+                if (w > maxW || h > maxH) {
+                  const ratio = Math.min(maxW / w, maxH / h);
+                  w = Math.max(1, Math.round(w * ratio));
+                  h = Math.max(1, Math.round(h * ratio));
+                }
+                const canvas = document.createElement('canvas');
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, w, h);
+                ctx.drawImage(img, 0, 0, w, h);
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.76);
+                document.getElementById('wishImageUrlInput').value = compressedDataUrl;
+                showToast('Foto otimizada e pronta para sincronizar na nuvem!', '📷');
+              } catch (err) {
+                document.getElementById('wishImageUrlInput').value = rawDataUrl;
+                showToast('Imagem carregada com sucesso!', '📷');
+              }
+            };
+            img.onerror = () => {
+              document.getElementById('wishImageUrlInput').value = rawDataUrl;
+            };
+            img.src = rawDataUrl;
           };
           reader.readAsDataURL(file);
         });
 
-        // Add New Planned Product to Wishlist
+        function resetWishlistForm() {
+          document.getElementById('editWishItemId').value = '';
+          document.getElementById('formAddWishlistItem').reset();
+          document.getElementById('wishDateInput').value = TODAY_STR;
+          document.getElementById('wishFormTitle').textContent = '🛍️ Cadastrar Produto Planejado para a Casa';
+          document.getElementById('btnSubmitWishItem').textContent = '+ Cadastrar Produto';
+          document.getElementById('btnCancelWishEdit').classList.add('hidden');
+        }
+
+        // Add or Edit Planned Product in Wishlist
         document.getElementById('formAddWishlistItem').addEventListener('submit', (e) => {
           e.preventDefault();
+          const editId = document.getElementById('editWishItemId').value;
           const name = document.getElementById('wishNameInput').value.trim();
           const category = document.getElementById('wishCategoryInput').value;
           const room = document.getElementById('wishRoomInput').value;
@@ -8551,32 +9460,51 @@
 
           if (!name || !price) return;
 
-          const newId = 'w_' + Date.now();
-          state.wishlistItems.unshift({
-            id: newId,
-            name,
-            category,
-            room,
-            priority,
-            targetPrice,
-            specs,
-            image,
-            quotes: [
-              { date, store, link, price, note: 'Cadastro inicial' }
-            ]
-          });
-          state.selectedWishlistChartId = newId;
-          document.getElementById('formAddWishlistItem').reset();
-          document.getElementById('wishDateInput').value = TODAY_STR;
+          if (editId) {
+            const existing = state.wishlistItems.find(w => w.id === editId);
+            if (existing) {
+              existing.name = name;
+              existing.category = category;
+              existing.room = room;
+              existing.priority = priority;
+              existing.targetPrice = targetPrice;
+              existing.specs = specs;
+              existing.image = image;
+              if (!Array.isArray(existing.quotes) || existing.quotes.length === 0) {
+                existing.quotes = [{ date, store, link, price, note: 'Cotação atualizada' }];
+              } else {
+                const lastQ = existing.quotes[existing.quotes.length - 1];
+                lastQ.price = price;
+                lastQ.store = store;
+                lastQ.link = link;
+                lastQ.date = date;
+              }
+              showToast(`"${name}" atualizado com sucesso!`, '✏️');
+            }
+          } else {
+            const newId = 'w_' + Date.now();
+            state.wishlistItems.unshift({
+              id: newId,
+              name,
+              category,
+              room,
+              priority,
+              targetPrice,
+              specs,
+              image,
+              quotes: [
+                { date, store, link, price, note: 'Cadastro inicial' }
+              ]
+            });
+            state.selectedWishlistChartId = newId;
+            showToast(`"${name}" adicionado ao monitoramento de aquisições!`, '🛍️');
+          }
+          resetWishlistForm();
           saveState();
           renderAll();
-          showToast(`"${name}" adicionado ao monitoramento de aquisições!`, '🛍️');
         });
 
-        document.getElementById('btnCancelWishEdit').addEventListener('click', () => {
-          document.getElementById('formAddWishlistItem').reset();
-          document.getElementById('btnCancelWishEdit').classList.add('hidden');
-        });
+        document.getElementById('btnCancelWishEdit').addEventListener('click', resetWishlistForm);
 
         document.getElementById('selectWishlistChartItem').addEventListener('change', (e) => {
           state.selectedWishlistChartId = e.target.value;
@@ -8611,55 +9539,113 @@
           showToast(`Nova cotação (${formatCurrencyBRL(price)} em ${store}) registrada para "${item.name}"!`, '📈');
         });
 
-        // Add Warranty
+        // Add or Edit Warranty
+        function resetWarrantyForm() {
+          document.getElementById('editWarrantyId').value = '';
+          document.getElementById('warNameInput').value = '';
+          document.getElementById('warStoreInput').value = '';
+          document.getElementById('warPriceInput').value = '';
+          document.getElementById('warDateInput').value = TODAY_STR;
+          document.getElementById('warMonthsInput').value = '12';
+          document.getElementById('btnSubmitWarranty').textContent = '+ Salvar';
+          document.getElementById('btnCancelWarrantyEdit').classList.add('hidden');
+        }
+
+        document.getElementById('btnCancelWarrantyEdit').addEventListener('click', resetWarrantyForm);
+
         document.getElementById('formAddWarrantyItem').addEventListener('submit', (e) => {
           e.preventDefault();
+          const editId = document.getElementById('editWarrantyId').value;
           const name = document.getElementById('warNameInput').value.trim();
+          const store = document.getElementById('warStoreInput').value.trim() || 'Cadastro Direto';
+          const pricePaid = parseFloat(document.getElementById('warPriceInput').value) || 0;
           const purchaseDate = document.getElementById('warDateInput').value || TODAY_STR;
           const warrantyMonths = parseInt(document.getElementById('warMonthsInput').value, 10) || 12;
           if (!name) return;
 
-          state.warranties.unshift({
-            id: 'wr_' + Date.now(),
-            name,
-            purchaseDate,
-            warrantyMonths,
-            store: 'Cadastro Direto',
-            pricePaid: 0
-          });
-          document.getElementById('warNameInput').value = '';
+          if (editId) {
+            const existing = state.warranties.find(w => w.id === editId);
+            if (existing) {
+              existing.name = name;
+              existing.store = store;
+              existing.pricePaid = pricePaid;
+              existing.purchaseDate = purchaseDate;
+              existing.warrantyMonths = warrantyMonths;
+              showToast(`Garantia de "${name}" atualizada!`, '✏️');
+            }
+          } else {
+            state.warranties.unshift({
+              id: 'wr_' + Date.now(),
+              name,
+              purchaseDate,
+              warrantyMonths,
+              store,
+              pricePaid
+            });
+            showToast('Garantia registrada no patrimônio da casa!', '🛡️');
+          }
+          resetWarrantyForm();
           saveState();
           renderAll();
-          showToast('Garantia registrada no patrimônio da casa!', '🛡️');
         });
 
-        // Add Maintenance Cycle
+        // Add or Edit Maintenance Cycle
+        function resetMaintForm() {
+          document.getElementById('editMaintId').value = '';
+          document.getElementById('maintTitleInput').value = '';
+          document.getElementById('maintRoomInput').value = '';
+          document.getElementById('maintIntervalInput').value = '180';
+          document.getElementById('btnSubmitMaint').textContent = '+ Criar Ciclo';
+          document.getElementById('btnCancelMaintEdit').classList.add('hidden');
+        }
+
+        document.getElementById('btnCancelMaintEdit').addEventListener('click', resetMaintForm);
+
         document.getElementById('formAddMaintenanceItem').addEventListener('submit', (e) => {
           e.preventDefault();
+          const editId = document.getElementById('editMaintId').value;
           const title = document.getElementById('maintTitleInput').value.trim();
           const room = document.getElementById('maintRoomInput').value.trim();
           const intervalDays = parseInt(document.getElementById('maintIntervalInput').value, 10) || 180;
           if (!title || !room) return;
 
-          state.maintenanceCycles.push({
-            id: 'mt_' + Date.now(),
-            title,
-            room,
-            intervalDays,
-            lastDone: TODAY_STR,
-            nextDue: addDaysStr(TODAY_STR, intervalDays)
-          });
-          document.getElementById('maintTitleInput').value = '';
-          document.getElementById('maintRoomInput').value = '';
+          if (editId) {
+            const existing = state.maintenanceCycles.find(m => m.id === editId);
+            if (existing) {
+              existing.title = title;
+              existing.room = room;
+              existing.intervalDays = intervalDays;
+              existing.nextDue = addDaysStr(existing.lastDone || TODAY_STR, intervalDays);
+              showToast(`Ciclo "${title}" atualizado!`, '✏️');
+            }
+          } else {
+            state.maintenanceCycles.push({
+              id: 'mt_' + Date.now(),
+              title,
+              room,
+              intervalDays,
+              lastDone: TODAY_STR,
+              nextDue: addDaysStr(TODAY_STR, intervalDays)
+            });
+            showToast('Novo ciclo de manutenção preventiva criado!', '🔧');
+          }
+          resetMaintForm();
           saveState();
           renderAll();
-          showToast('Novo ciclo de manutenção preventiva criado!', '🔧');
         });
 
         // Module 6 Navigation & Listeners
         document.getElementById('btnBackFromMod6').addEventListener('click', openHomeView);
         document.getElementById('tabBtnMod6Pantry').addEventListener('click', () => switchModule6Tab('pantry'));
         document.getElementById('tabBtnMod6Menu').addEventListener('click', () => switchModule6Tab('menu'));
+
+        const pantrySearchInputEl = document.getElementById('pantrySearchInput');
+        if (pantrySearchInputEl) {
+          pantrySearchInputEl.addEventListener('input', (e) => {
+            state.pantrySearchQuery = e.target.value;
+            renderModule6();
+          });
+        }
 
         document.getElementById('btnSyncLowStockToShopping').addEventListener('click', () => {
           let addedCount = 0;
@@ -8681,39 +9667,83 @@
           );
         });
 
+        function resetPantryForm() {
+          document.getElementById('editPantryId').value = '';
+          document.getElementById('formAddPantryItem').reset();
+          document.getElementById('pantryUnitInput').value = 'un';
+          document.getElementById('pantryFormTitle').textContent = '🥫 Cadastrar Item no Estoque da Casa';
+          document.getElementById('btnSubmitPantry').textContent = '+ Salvar no Estoque';
+          document.getElementById('btnCancelPantryEdit').classList.add('hidden');
+        }
+
+        document.getElementById('btnCancelPantryEdit').addEventListener('click', resetPantryForm);
+
         document.getElementById('formAddPantryItem').addEventListener('submit', (e) => {
           e.preventDefault();
+          const editId = document.getElementById('editPantryId').value;
           const name = document.getElementById('pantryNameInput').value.trim();
           const location = document.getElementById('pantryLocationInput').value;
           const qty = parseFloat(document.getElementById('pantryQtyInput').value) || 0;
           const minQty = parseFloat(document.getElementById('pantryMinInput').value) || 1;
+          const unit = document.getElementById('pantryUnitInput').value || 'un';
           const expiry = document.getElementById('pantryExpiryInput').value;
           if (!name) return;
 
-          state.pantryItems.push({
-            id: 'pt_' + Date.now(),
-            name,
-            location,
-            qty,
-            minQty,
-            unit: 'un',
-            expiry
-          });
-          if (qty <= minQty) {
-            ensureItemInShoppingList(name, Math.max(1, minQty - qty + 1), 'un');
+          if (editId) {
+            const existing = state.pantryItems.find(p => p.id === editId);
+            if (existing) {
+              existing.name = name;
+              existing.location = location;
+              existing.qty = qty;
+              existing.minQty = minQty;
+              existing.unit = unit;
+              existing.expiry = expiry;
+              showToast(`"${name}" atualizado na Despensa!`, '✏️');
+            }
+          } else {
+            state.pantryItems.push({
+              id: 'pt_' + Date.now(),
+              name,
+              location,
+              qty,
+              minQty,
+              unit,
+              expiry
+            });
+            showToast(`"${name}" cadastrado no Controle de Despensa!`, '🥫');
           }
-          document.getElementById('formAddPantryItem').reset();
+          if (qty <= minQty) {
+            ensureItemInShoppingList(name, Math.max(1, minQty - qty + 1), unit);
+          }
+          resetPantryForm();
           saveState();
           renderAll();
-          showToast(`"${name}" cadastrado no Controle de Despensa!`, '🥫');
         });
 
+        // Smart Weekly Menu Missing Ingredients Generator (reads scheduled meals in state.weeklyMenu)
         document.getElementById('btnGenerateMenuShopping').addEventListener('click', () => {
+          const scheduledTitles = new Set();
+          (state.weeklyMenu || []).forEach(dayObj => {
+            ['breakfast', 'lunch', 'snack', 'dinner'].forEach(slotKey => {
+              const val = (dayObj[slotKey] || '').trim();
+              if (val) scheduledTitles.add(val.toLowerCase());
+            });
+          });
+
+          const targetRecipes = scheduledTitles.size > 0
+            ? state.recipes.filter(rc => scheduledTitles.has((rc.title || '').trim().toLowerCase()))
+            : state.recipes;
+
+          if (targetRecipes.length === 0) {
+            showToast('Selecione refeições na grade da semana ou cadastre receitas abaixo primeiro!', '🍽️');
+            return;
+          }
+
           let addedCount = 0;
-          state.recipes.forEach(rc => {
+          targetRecipes.forEach(rc => {
             (rc.ingredients || []).forEach(ing => {
-              const inPantry = state.pantryItems.find(p => p.name.toLowerCase() === ing.toLowerCase() && Number(p.qty) > 0);
-              if (!inPantry) {
+              const matched = findPantryItemMatchingIngredient(ing);
+              if (!matched || Number(matched.qty) <= 0) {
                 if (ensureItemInShoppingList(ing, 1, 'un')) addedCount++;
               }
             });
@@ -8722,29 +9752,48 @@
           renderAll();
           showToast(
             addedCount > 0
-              ? `${addedCount} ingrediente(s) que faltavam na Despensa foram enviados para a Lista de Compras!`
-              : 'Todos os ingredientes das receitas já estão na Despensa ou na Lista de Compras!',
+              ? `${addedCount} ingrediente(s) faltante(s) das refeições da semana enviado(s) para Compras!`
+              : 'Todos os ingredientes das refeições escaladas já estão na Despensa ou na Lista de Compras!',
             '🍽️'
           );
         });
 
+        function resetRecipeForm() {
+          document.getElementById('editRecipeId').value = '';
+          document.getElementById('recipeTitleInput').value = '';
+          document.getElementById('recipeIngredientsInput').value = '';
+          document.getElementById('btnSubmitRecipe').textContent = '+ Salvar Receita';
+          document.getElementById('btnCancelRecipeEdit').classList.add('hidden');
+        }
+
+        document.getElementById('btnCancelRecipeEdit').addEventListener('click', resetRecipeForm);
+
         document.getElementById('formAddRecipe').addEventListener('submit', (e) => {
           e.preventDefault();
+          const editId = document.getElementById('editRecipeId').value;
           const title = document.getElementById('recipeTitleInput').value.trim();
           const rawIngs = document.getElementById('recipeIngredientsInput').value.trim();
           if (!title || !rawIngs) return;
           const ingredients = rawIngs.split(',').map(s => s.trim()).filter(Boolean);
 
-          state.recipes.push({
-            id: 'rc_' + Date.now(),
-            title,
-            ingredients
-          });
-          document.getElementById('recipeTitleInput').value = '';
-          document.getElementById('recipeIngredientsInput').value = '';
+          if (editId) {
+            const existing = state.recipes.find(r => r.id === editId);
+            if (existing) {
+              existing.title = title;
+              existing.ingredients = ingredients;
+              showToast(`Receita "${title}" atualizada!`, '✏️');
+            }
+          } else {
+            state.recipes.push({
+              id: 'rc_' + Date.now(),
+              title,
+              ingredients
+            });
+            showToast(`Receita "${title}" salva com sucesso!`, '📖');
+          }
+          resetRecipeForm();
           saveState();
           renderAll();
-          showToast(`Receita "${title}" salva com sucesso!`, '📖');
         });
 
         // Theme Mode (Light / Dark) Persistence & Toggle
@@ -8759,8 +9808,7 @@
           try {
             localStorage.setItem(THEME_STORAGE_KEY, isDark ? 'dark' : 'light');
           } catch (e) {}
-          renderProductPriceChart();
-          renderWishlistPriceChart();
+          renderAll();
         }
 
         const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'light';
