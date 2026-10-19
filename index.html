@@ -149,6 +149,10 @@
       background-color: #111827 !important;
       color: #f1f5f9;
     }
+    html.dark #mobileBottomNav {
+      background-color: rgba(17, 24, 39, 0.96) !important;
+      border-color: #334155 !important;
+    }
     html.dark .bg-slate-50,
     html.dark .bg-slate-50\/60,
     html.dark .bg-slate-50\/50,
@@ -262,7 +266,7 @@
             <div class="flex items-center gap-2">
               <div class="flex items-baseline gap-1.5">
                 <span class="font-bold text-sm sm:text-base tracking-tight">Prumo</span>
-                <span id="appVersionBadge" class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-white/10 text-white/75 tracking-normal">v1.0.0</span>
+                <span id="appVersionBadge" class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-white/10 text-white/75 tracking-normal">v1.0.1</span>
               </div>
               <span id="activeCategoryHeaderPill" class="hidden text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-white/15 text-white">Início</span>
             </div>
@@ -291,9 +295,9 @@
       </div>
     </div>
 
-    <!-- Minimalist Category Bar (Changes site theme color per category) -->
+    <!-- Minimalist Category Bar (Desktop/Tablet only >= 768px; hidden on mobile phones) -->
     <div id="minimalCategoryNav" class="hidden bg-black/15 border-t border-white/10">
-      <div class="max-w-7xl mx-auto px-4 py-1.5 flex items-center gap-1.5 overflow-x-auto custom-scroll text-xs">
+      <div class="hidden md:flex max-w-7xl mx-auto px-4 py-1.5 items-center gap-1.5 overflow-x-auto custom-scroll text-xs">
         <button type="button" data-nav-cat="home" class="px-3 py-1 rounded-lg font-medium whitespace-nowrap transition cursor-pointer bg-white text-slate-900">
           🏠 Início
         </button>
@@ -2437,7 +2441,7 @@
 
       <!-- Rodapé do Modal -->
       <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
-        <span id="settingsModalFooterSummary">Prumo v1.0.0</span>
+        <span id="settingsModalFooterSummary">Prumo v1.0.1</span>
         <button id="btnDoneBackupModal" type="button" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold hover:bg-slate-800 cursor-pointer">
           Fechar
         </button>
@@ -2489,7 +2493,7 @@
 
   <script>
     (function () {
-      const APP_VERSION = 'v1.0.0';
+      const APP_VERSION = 'v1.0.1';
       const STORAGE_KEY = 'prumo_state_v1';
       const ACCOUNTS_REGISTRY_KEY = 'prumo_google_accounts_v1';
       const ACTIVE_SESSION_KEY = 'prumo_active_google_user_v1';
@@ -3407,7 +3411,10 @@
         hideAllViews();
         applyCategoryTheme('home');
         const navBar = document.getElementById('minimalCategoryNav');
-        if (navBar) navBar.classList.add('hidden');
+        if (navBar) {
+          navBar.classList.add('hidden');
+          navBar.classList.remove('md:block');
+        }
         const mobNav = document.getElementById('mobileBottomNav');
         if (mobNav) mobNav.classList.add('hidden');
         const pill = document.getElementById('activeCategoryHeaderPill');
@@ -3668,7 +3675,9 @@
         }
         hideAllViews();
         const navBar = document.getElementById('minimalCategoryNav');
-        if (navBar) navBar.classList.remove('hidden');
+        if (navBar) {
+          navBar.classList.add('hidden', 'md:block');
+        }
         const mobNav = document.getElementById('mobileBottomNav');
         if (mobNav) mobNav.classList.remove('hidden');
         applyCategoryTheme('home');
@@ -4920,13 +4929,21 @@
         };
 
         state.modules.forEach(mod => {
-          // Mantém o nome fixo da categoria na barra de abas superior (controlando apenas visibilidade)
+          // Mantém o nome fixo da categoria na barra de abas superior e inferior (controlando apenas visibilidade)
           const navBtn = document.querySelector(`#minimalCategoryNav [data-nav-cat="${mod.id}"]`);
           if (navBtn) {
             if (mod.visible === false) {
               navBtn.classList.add('hidden');
             } else {
               navBtn.classList.remove('hidden');
+            }
+          }
+          const mobBtn = document.querySelector(`#mobileBottomNav [data-bottom-nav="${mod.id}"]`);
+          if (mobBtn) {
+            if (mod.visible === false) {
+              mobBtn.classList.add('hidden');
+            } else {
+              mobBtn.classList.remove('hidden');
             }
           }
           // Atualiza apenas o H1 interno do módulo (e o card na tela inicial via renderHomeScreen)
